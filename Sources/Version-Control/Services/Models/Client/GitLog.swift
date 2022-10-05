@@ -83,8 +83,8 @@ public func getCommits(directoryURL: URL,
                 authorEmail: String(parameters[4]),
                 commiter: String(parameters[6]),
                 commiterEmail: String(parameters[7]),
-                remoteURL: URL(string: try Remote().getRemoteURL(directoryURL: directoryURL,
-                                                                 name: "origin")!),
+                remoteURL: URL(string: try getRemoteURL(directoryURL: directoryURL,
+                                                        name: "origin")!),
                 date: Date().gitDateFormat(commitDate: String(parameters[5])) ?? Date(),
                 isMerge: parameters[2].contains("Merge pull request")
             )
