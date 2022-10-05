@@ -29,4 +29,4 @@ The AuroraEditor Version Control Logo is copyright of AuroraEditor and Aurora Co
 
 ### GNU Affero General Public License v3.0
 
-AuroraEditor Version Control Kit follows uses the [GNU AGL V3 License](https://github.com/AuroraEditor/AE-Version-Control/blob/main/LICENSE) 
+AuroraEditor Version Control Kit uses the [GNU AGL V3 License](https://github.com/AuroraEditor/AE-Version-Control/blob/main/LICENSE) 
