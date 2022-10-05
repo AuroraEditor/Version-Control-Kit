@@ -1,0 +1,20 @@
+name: Build & Lint
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+jobs:
+  build:
+    runs-on: macos-12
+    timeout-minutes: 10 # If a build exceeds 10 mins, it probably isn't ever going to complete
+    steps:
+      - uses: actions/checkout@v2
+      - name: MacOS Version
+        run: sw_vers
+      - name: Toolchain version
+        run: swift -version
+      - name: SwiftLint (version)
+        run: swiftlint version
+      - name: SwiftLint (GH Actions)
+        run: swiftlint --reporter github-actions-logging --strict
