@@ -28,7 +28,7 @@ public class ShellClient {
     /// - Parameter args: command to run
     /// - Returns: command output
     @discardableResult
-    func run(_ args: String...) throws -> String {
+    public func run(_ args: String...) throws -> String {
         let (task, pipe) = generateProcessAndPipe(args)
         try task.run()
         let data = pipe.fileHandleForReading.readDataToEndOfFile()
@@ -39,7 +39,7 @@ public class ShellClient {
     /// - Parameter args: command to run
     /// - Returns: command output
     @discardableResult
-    func runLive(_ args: String...) -> AnyPublisher<String, Never> {
+    public func runLive(_ args: String...) -> AnyPublisher<String, Never> {
         let subject = PassthroughSubject<String, Never>()
         let (task, pipe) = generateProcessAndPipe(args)
         let outputHandler = pipe.fileHandleForReading
@@ -74,7 +74,7 @@ public class ShellClient {
 
     /// Shell client
     /// - Returns: description
-    static func live() -> ShellClient {
+    public static func live() -> ShellClient {
         return ShellClient()
     }
 }
