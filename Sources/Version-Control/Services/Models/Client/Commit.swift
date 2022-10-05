@@ -16,9 +16,9 @@ public struct Commit {
     /// @param files files to commit
     /// @returns the commit SHA
     public func createCommit(directoryURL: URL,
-                      message: String,
-                      files: [GitFileItem],
-                      amend: Bool = false) throws -> String {
+                             message: String,
+                             files: [GitFileItem],
+                             amend: Bool = false) throws -> String {
 
         // Clear the staging area, our diffs reflect the difference between the
         // working directory and the last commit (if any) so our commits should

@@ -55,16 +55,16 @@ public func getCommitDiff(directoryURL: URL,
         "--",
         file.url.absoluteString
     ] as [Any]
-    
+
     if file.gitStatus == .renamed || file.gitStatus == .copied {
         // TODO: Change this to old path instead
         args.append(file.url.absoluteString)
     }
-    
+
     let output = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)"
     )
-    
+
     return try buildDiff(directoryURL: directoryURL,
                          file: file,
                          oldestCommitish: commitish,
@@ -79,10 +79,10 @@ public func getCommitRangeDiff(directoryURL: URL,
     if commits.isEmpty {
         throw DiffErrors.noCommits("No commits to diff...")
     }
-    
+
     let oldestCommitRef = useNillTreeSHA ? nilTreeSHA : "\(commits[0])^"
     let latestCommit = commits[-1]
-    
+
     var args = [
         "diff",
         oldestCommitRef,
@@ -94,16 +94,16 @@ public func getCommitRangeDiff(directoryURL: URL,
         "--",
         file.url.absoluteString
     ] as [Any]
-    
+
     if file.gitStatus == .renamed || file.gitStatus == .copied {
         // TODO: Change this to old path instead
         args.append(file.url.absoluteString)
     }
-    
+
     let result = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)"
     )
-    
+
     return try buildDiff(directoryURL: directoryURL,
                          file: file,
                          oldestCommitish: latestCommit,
@@ -113,7 +113,7 @@ public func getCommitRangeDiff(directoryURL: URL,
 public func getCommitRangeChangeFiles(directoryURL: URL,
                                       shas: [String],
                                       useNillTreeSHA: Bool = false) {
-    
+
 }
 
 /// Render the diff for a file within the repository working directory. The file will be
@@ -130,7 +130,7 @@ public func getWorkingDirectoryDiff(workspaceURL: URL,
         "-z",
         "--no-color"
     ]
-    
+
     if file.gitStatus == .added || file.gitStatus == .unknown {
         args.append("--no-index")
         args.append("--")
@@ -153,7 +153,7 @@ private let lineEndingsChangeRegex = "warning: (CRLF|CR|LF) will be replaced by 
 public func getBinaryPaths(directoryURL: URL, ref: String) throws -> [String] {
     let output = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git diff --numstat -z \(ref)")
-    
+
     return [""]
 }
 
@@ -163,7 +163,7 @@ public func convertDiff(directoryURL: URL,
                         oldestCommitish: String,
                         lineEndignsChange: LineEndingsChange?) -> IDiffTypes {
     let fileExtension = file.url.lastPathComponent.lowercased()
-    
+
     return IDiffTypes.text(ITextDiff(text: diff.contents,
                                      hunks: diff.hunks,
                                      lineEndingsChange: lineEndignsChange,
@@ -182,14 +182,14 @@ public func buildDiff(directoryURL: URL,
                       file: GitFileItem,
                       oldestCommitish: String,
                       lineEndingsChange: LineEndingsChange?) throws -> IDiffTypes {
-    
+
     let diff: IRawDiff = IRawDiff(header: "",
                                   contents: "",
                                   hunks: [],
                                   isBinary: false,
                                   maxLineNumber: 0,
                                   hasHiddenBidiChars: false)
-    
+
     if isDiffToLarge(diff: diff) {
         let largeTextDiff: ILargeTextDiff = ILargeTextDiff(text: diff.contents,
                                                            hunks: diff.hunks,
@@ -197,7 +197,7 @@ public func buildDiff(directoryURL: URL,
                                                            maxLineNumber: diff.maxLineNumber,
                                                            hasHiddenBidiChars: diff.hasHiddenBidiChars)
     }
-    
+
     return convertDiff(directoryURL: directoryURL,
                        file: file,
                        diff: diff,

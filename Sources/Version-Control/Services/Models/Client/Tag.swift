@@ -16,8 +16,8 @@ public struct Tag {
     /// @param name - The name of the new tag.
     /// @param targetCommitSha  - The SHA of the commit where the new tag will live on.
     public func createTag(directoryURL: URL,
-                   name: String,
-                   targetCommitSha: String) throws {
+                          name: String,
+                          targetCommitSha: String) throws {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git tag -a -m \(name) \(targetCommitSha) "
         )
@@ -47,8 +47,8 @@ public struct Tag {
     /// @param remote - The remote to check for unpushed tags
     /// @param branchName  - The branch that will be used on the push command
     public func fetchTagsToPush(directoryURL: URL,
-                         remote: GitRemote,
-                         branchName: String) throws -> [String] {
+                                remote: GitRemote,
+                                branchName: String) throws -> [String] {
         let args: [Any] = [
             gitNetworkArguments,
             "push",

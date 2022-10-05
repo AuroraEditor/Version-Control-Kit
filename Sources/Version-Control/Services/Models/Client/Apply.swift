@@ -10,7 +10,7 @@
 import Foundation
 
 public func applyPatchToIndex(directoryURL: URL,
-                       file: GitFileItem) throws {
+                              file: GitFileItem) throws {
     // If the file was a rename we have to recreate that rename since we've
     // just blown away the index. Think of this block of weird looking commands
     // as running `git mv`.
@@ -22,8 +22,8 @@ public func applyPatchToIndex(directoryURL: URL,
         // partial stages vs full-file stages happen. By using git add the
         // worst that could happen is that we re-stage a file already staged
         // by updateIndex.
-      try ShellClient().run(
-        "cd \(directoryURL.relativePath.escapedWhiteSpaces());git add --u \(file.url)")
+        try ShellClient().run(
+            "cd \(directoryURL.relativePath.escapedWhiteSpaces());git add --u \(file.url)")
 
         // Figure out the blob oid of the removed file
         // <mode> SP <type> SP <object> TAB <file>

@@ -39,8 +39,8 @@ public struct Reset {
 
     /// Reset with the mode to the ref.
     public func reset(directoryURL: URL,
-               mode: GitResetMode,
-               ref: String) throws -> Bool {
+                      mode: GitResetMode,
+                      ref: String) throws -> Bool {
         let args = resetModeToArgs(mode: mode,
                                    ref: ref)
         try ShellClient().run(
@@ -63,9 +63,9 @@ public struct Reset {
     /// @param paths - The paths that should be updated in the index with information
     /// from the given tree
     public func resetPaths(directoryURL: URL,
-                    mode: GitResetMode,
-                    ref: String,
-                    paths: [String]) throws {
+                           mode: GitResetMode,
+                           ref: String,
+                           paths: [String]) throws {
 
         let baseArgs = resetModeToArgs(mode: mode,
                                        ref: ref)

@@ -63,7 +63,7 @@ class DiffParser {
             return false
         }
 
-//        self.le = self.text.index(of: "\n")
+        //        self.le = self.text.index(of: "\n")
 
         // If we can't find the next newline character we'll put our
         // end pointer at the end of the diff string

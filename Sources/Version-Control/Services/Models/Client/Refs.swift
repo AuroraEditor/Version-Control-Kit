@@ -46,7 +46,7 @@ public struct Refs {
     /// @returns - the canonical ref, if found, or `nil` if `ref` cannot be found or
     /// is not a symbolic ref
     public func getSymbolicRef(directoryURL: URL,
-                        ref: String) throws -> String? {
+                               ref: String) throws -> String? {
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git symbolic-ref -q \(ref)"
         )

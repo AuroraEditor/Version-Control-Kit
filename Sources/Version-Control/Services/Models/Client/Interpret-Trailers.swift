@@ -75,7 +75,7 @@ public func getTrailerSeparatorCharacters(directoryURL: URL) -> String {
 /// The trailers returned here are unfolded, i.e. they've had their
 /// whitespace continuation removed and are all on one line.
 public func parseTrailers(directoryURL: URL,
-                   commitMessage: String) throws -> [ITrailer] {
+                          commitMessage: String) throws -> [ITrailer] {
     let result = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git interpret-trailers --parse")
 
@@ -117,9 +117,9 @@ public func parseTrailers(directoryURL: URL,
 /// configuration settings for trailers in the provided
 /// repository.
 public func mergeTrailers(directoryURL: URL,
-                   commitMessage: String,
-                   trailers: [ITrailer],
-                   unfold: Bool = false) throws -> String {
+                          commitMessage: String,
+                          trailers: [ITrailer],
+                          unfold: Bool = false) throws -> String {
     var args = ["interpret-trailers"]
 
     args.append("--no-divider")

@@ -22,7 +22,7 @@ public func installGlobalLFSFilters(force: Bool) throws {
 
 /// Install LFS hooks in the project
 public func installLFSHooks(directoryURL: URL,
-                     force: Bool) throws {
+                            force: Bool) throws {
     var args = ["lfs", "install"]
 
     if force {
@@ -43,7 +43,7 @@ public func isUsingLFS(directoryURL: URL) throws -> Bool {
 
 /// Is the repository configured to track any paths with LFS?
 public func isTrackedByLFS(directoryURL: URL,
-                    path: String) throws -> Bool {
+                           path: String) throws -> Bool {
     let result = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git check-attr filter \(path)")
 
@@ -72,7 +72,7 @@ public func isTrackedByLFS(directoryURL: URL,
 ///
 /// @param filePaths List of relative paths in the repository
 public func filesNotTrackedByLFS(directoryURL: URL,
-                          filePaths: [String]) throws -> [String] {
+                                 filePaths: [String]) throws -> [String] {
     var filesNotTrackedByGitLFS: [String] = []
 
     for filePath in filePaths {

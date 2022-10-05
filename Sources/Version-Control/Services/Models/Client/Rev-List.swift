@@ -44,7 +44,7 @@ private func revSymmetricDifference(from: String, to: String) -> String {
 
 /// Calculate the number of commits the range is ahead and behind.
 public func getAheadBehind(directoryURL: URL,
-                    range: String) throws -> AheadBehind? {
+                           range: String) throws -> AheadBehind? {
     // `--left-right` annotates the list of commits in the range with which side
     // they're coming from. When used with `--count`, it tells us how many
     // commits we have from the two different sides of the range.
@@ -80,7 +80,7 @@ public func getAheadBehind(directoryURL: URL,
 }
 
 public func getBranchAheadBehind(directoryURL: URL,
-                          branch: String) {
+                                 branch: String) {
 }
 
 /// Get a list of commits from the target branch that do not exist on the base
@@ -93,8 +93,8 @@ public func getBranchAheadBehind(directoryURL: URL,
 /// Returns `nil` when the rebase is not possible to perform, because of a
 /// missing commit ID
 public func getCommitsBetweenCommits(directoryURL: URL,
-                              baseBranchSha: String,
-                              targetBranchSha: String) throws -> [CommitOneLine]? {
+                                     baseBranchSha: String,
+                                     targetBranchSha: String) throws -> [CommitOneLine]? {
     let range = revRange(from: baseBranchSha, to: targetBranchSha)
     return try getCommitsInRange(directoryURL: directoryURL, range: range)
 }
@@ -103,7 +103,7 @@ public func getCommitsBetweenCommits(directoryURL: URL,
 ///
 /// Returns `nil` when it is not possible to perform because of a bad range.
 public func getCommitsInRange(directoryURL: URL,
-                       range: String) throws -> [CommitOneLine]? {
+                              range: String) throws -> [CommitOneLine]? {
 
     let args = [
         "rev-list",

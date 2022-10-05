@@ -64,8 +64,8 @@ public class UpdateIndexOptions: IUpdateIndexOptions {
 }
 
 public func updateIndex(directoryURL: URL,
-                 paths: [String],
-                 options: UpdateIndexOptions?) throws {
+                        paths: [String],
+                        options: UpdateIndexOptions?) throws {
 
     if paths.isEmpty {
         return
@@ -96,7 +96,7 @@ public func updateIndex(directoryURL: URL,
 }
 
 public func stageFiles(directoryURL: URL,
-                files: [GitFileItem]) throws {
+                       files: [GitFileItem]) throws {
     var normal: [String] = []
     var oldRenamed: [String] = []
     var partial: [String] = []

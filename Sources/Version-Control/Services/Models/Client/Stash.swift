@@ -62,7 +62,7 @@ public struct Stash {
 
     /// Returns the last AE created stash entry for the given branch
     public func getLastAEStashEntryForBranch(directoryURL: URL,
-                                      branch: String) throws {
+                                             branch: String) throws {
         let stash = try getStashes(directoryURL: directoryURL)
         let branchName = branch
     }
@@ -74,8 +74,8 @@ public struct Stash {
 
     /// Stash the working directory changes for the current branch
     public func createAEStashEntry(directoryURL: URL,
-                            branch: String,
-                            untrackedFilesToStage: [GitFileItem]) throws -> Bool {
+                                   branch: String,
+                                   untrackedFilesToStage: [GitFileItem]) throws -> Bool {
 
         try stageFiles(directoryURL: directoryURL, files: untrackedFilesToStage)
 

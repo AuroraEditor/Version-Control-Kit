@@ -95,9 +95,9 @@ class DiffSelection {
         }
 
         // If we know which lines are selectable we need to check that
-            // all lines are divergent and return the inverse of default selection.
-            // To avoid looping through the set that often our happy path is
-            // if there's a size mismatch.
+        // all lines are divergent and return the inverse of default selection.
+        // To avoid looping through the set that often our happy path is
+        // if there's a size mismatch.
         if (selectableLines != nil) && selectableLines?.count == divergingLines?.count {
             var allSelectableLinesAreDivergent: Bool = false
 
@@ -111,8 +111,8 @@ class DiffSelection {
         }
 
         // Note that without any selectable lines we'll report partial selection
-            // as long as we have any diverging lines since we have no way of knowing
-            // if _all_ lines are divergent or not
+        // as long as we have any diverging lines since we have no way of knowing
+        // if _all_ lines are divergent or not
         return .partial
     }
 
@@ -146,8 +146,8 @@ class DiffSelection {
     /// as selected or not.
     public func withLineSection(lineIndex: Int, selected: Bool) throws -> DiffSelection {
         return try self.withRangeSelection(from: lineIndex,
-                                       length: 1,
-                                       selected: selected)
+                                           length: 1,
+                                           selected: selected)
     }
 
     /// Returns a copy of this selection instance with the provided
@@ -175,7 +175,7 @@ class DiffSelection {
         let to = from + length
 
         if try typeMatchesSelection(selectionType: computedSelectionType,
-                                selected: selected) {
+                                    selected: selected) {
             return self
         }
 
@@ -183,7 +183,7 @@ class DiffSelection {
             var newDivergingLines: Set<Int> = self.divergingLines!
 
             if try typeMatchesSelection(selectionType: self.defaultSelectionType,
-                                    selected: selected) {
+                                        selected: selected) {
                 // swiftlint:disable:next identifier_name
                 for i in stride(from: from, to: to, by: 1) {
                     newDivergingLines.remove(i)
@@ -222,7 +222,7 @@ class DiffSelection {
     /// of the specified line has been toggled (inverted).
     public func withToggleLineSelection(lineIindex: Int) throws -> DiffSelection {
         return try self.withLineSection(lineIndex: lineIindex,
-                                    selected: !self.isSelected(lineIndex: lineIindex))
+                                        selected: !self.isSelected(lineIndex: lineIindex))
     }
 
     /// Returns a copy of this selection instance with all lines selected.

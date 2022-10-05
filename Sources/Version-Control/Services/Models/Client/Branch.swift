@@ -39,9 +39,9 @@ public struct Branches {
     /// on, or undefined if the branch should be created based
     /// off of the current state of HEAD
     public func createBranch(directoryURL: URL,
-                      name: String,
-                      startPoint: String?,
-                      noTrack: Bool?) throws {
+                             name: String,
+                             startPoint: String?,
+                             noTrack: Bool?) throws {
         var args: [String] = startPoint != nil ? ["branch", name, startPoint!] : ["branch", name]
 
         if noTrack != nil {
@@ -54,15 +54,15 @@ public struct Branches {
 
     /// Rename the given branch to a new name.
     public func renameBranch(directoryURL: URL,
-                      branch: String,
-                      newName: String) throws {
+                             branch: String,
+                             newName: String) throws {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git branch -m \(branch) \(newName)")
     }
 
     /// Delete the branch locally.
     public func deleteLocalBranch(directoryURL: URL,
-                           branchName: String) throws -> Bool {
+                                  branchName: String) throws -> Bool {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git branch -D \(branchName)")
         return true
@@ -72,8 +72,8 @@ public struct Branches {
     /// @param remoteName - the name of the remote to delete the branch from
     /// @param remoteBranchName - the name of the branch on the remote
     public func deleteRemoteBranch(directoryURL: URL,
-                            remoteName: String,
-                            remoteBranchName: String) throws {
+                                   remoteName: String,
+                                   remoteBranchName: String) throws {
         let args: [Any] = [
             "push",
             remoteName,
@@ -98,7 +98,7 @@ public struct Branches {
     /// @param commitish - a sha, HEAD, etc that the branch(es) tip should be
     /// @returns - list branch names. null if an error is encountered
     public func getBranchesPointedAt(directoryURL: URL,
-                              commitsh: String) throws -> [String]? {
+                                     commitsh: String) throws -> [String]? {
         let args = [
             "branch",
             "--points-at=\(commitsh)",

@@ -16,12 +16,12 @@ public enum CommitDate: String {
 
 /// Get the repository's commits using `revisionRange` and limited to `limit`
 public func getCommits(directoryURL: URL,
-                revisionRange: String = "",
-                limit: Int,
-                skip: Int = 0,
-                additionalArgs: [String] = [],
-                commitsSince: CommitDate? = nil,
-                getMerged: Bool = true) throws -> [CommitHistory] {
+                       revisionRange: String = "",
+                       limit: Int,
+                       skip: Int = 0,
+                       additionalArgs: [String] = [],
+                       commitsSince: CommitDate? = nil,
+                       getMerged: Bool = true) throws -> [CommitHistory] {
     var args: [String] = ["log"]
 
     if !getMerged {
@@ -74,19 +74,19 @@ public func getCommits(directoryURL: URL,
 
     return try result.split(separator: "\n")
         .map { line -> CommitHistory in
-        let parameters = line.components(separatedBy: "¦")
-        return CommitHistory(
-            hash: String(parameters[1]),
-            commitHash: String(parameters[0]),
-            message: String(parameters[2]),
-            author: String(parameters[3]),
-            authorEmail: String(parameters[4]),
-            commiter: String(parameters[6]),
-            commiterEmail: String(parameters[7]),
-            remoteURL: URL(string: try Remote().getRemoteURL(directoryURL: directoryURL,
-                                                         name: "origin")!),
-            date: Date().gitDateFormat(commitDate: String(parameters[5])) ?? Date(),
-            isMerge: parameters[2].contains("Merge pull request")
-        )
-    }
+            let parameters = line.components(separatedBy: "¦")
+            return CommitHistory(
+                hash: String(parameters[1]),
+                commitHash: String(parameters[0]),
+                message: String(parameters[2]),
+                author: String(parameters[3]),
+                authorEmail: String(parameters[4]),
+                commiter: String(parameters[6]),
+                commiterEmail: String(parameters[7]),
+                remoteURL: URL(string: try Remote().getRemoteURL(directoryURL: directoryURL,
+                                                                 name: "origin")!),
+                date: Date().gitDateFormat(commitDate: String(parameters[5])) ?? Date(),
+                isMerge: parameters[2].contains("Merge pull request")
+            )
+        }
 }

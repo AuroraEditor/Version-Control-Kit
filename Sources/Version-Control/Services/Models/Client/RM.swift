@@ -26,7 +26,7 @@ public func unstageAllFiles(directoryURL: URL) {
 
 /// Remove conflicted file from  working tree and index
 public func removeConflictedFile(directoryURL: URL,
-                          file: GitFileItem) throws {
+                                 file: GitFileItem) throws {
     try ShellClient().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git rm --\(file.url)")
 }

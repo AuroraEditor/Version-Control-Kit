@@ -20,10 +20,10 @@ import Foundation
 /// @param newValue - The new value for the ref.
 /// @param reason - The reflog entry.
 public func updateRef(directoryURL: URL,
-               ref: String,
-               oldValue: String,
-               newValue: String,
-               reason: String) throws {
+                      ref: String,
+                      oldValue: String,
+                      newValue: String,
+                      reason: String) throws {
     try ShellClient().run(
         // swiftlint:disable:next line_length
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git update-ref \(ref) \(newValue) \(oldValue) -m \(reason)")
@@ -35,8 +35,8 @@ public func updateRef(directoryURL: URL,
 /// deleting the HEAD reference as deleting any other reference will
 /// implicitly delete the reflog file for that reference as well.
 public func deleteRef(directoryURL: URL,
-               ref: String,
-               reason: String?) throws {
+                      ref: String,
+                      reason: String?) throws {
     var args = ["update-ref", "-d", ref]
 
     if reason != nil {

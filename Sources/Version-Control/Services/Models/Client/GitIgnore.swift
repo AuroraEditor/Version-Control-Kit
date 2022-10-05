@@ -27,7 +27,7 @@ public struct GitIgnore {
     /// If the repository root doesn't contain a .gitignore file one
     /// will be created, otherwise the current file will be overwritten.
     public func saveGitIgnore(directoryURL: URL,
-                       text: String) throws {
+                              text: String) throws {
         let ignorePath = try String(contentsOf: directoryURL) + ".gitignore"
 
         if text.isEmpty {
@@ -57,7 +57,7 @@ public struct GitIgnore {
     ///
     /// The file path will be escaped before adding.
     public func appendIgnoreFile(directoryURL: URL,
-                          filePath: [String]) throws {
+                                 filePath: [String]) throws {
         let escapedFilePaths = filePath.map {
             escapeGitSpecialCharacters(pattern: $0)
         }
@@ -82,7 +82,7 @@ public struct GitIgnore {
     /// @param directoryURL - The project url
     @discardableResult
     public func formatGitIgnoreContents(text: String,
-                                 directoryURL: URL) throws -> String {
+                                        directoryURL: URL) throws -> String {
 
         return ""
     }

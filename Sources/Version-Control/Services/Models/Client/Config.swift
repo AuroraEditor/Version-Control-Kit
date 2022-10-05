@@ -16,8 +16,8 @@ import Foundation
 /// is equivalent to using the `--local` argument in the
 /// `git config` invocation.
 public func getConfigValue(directoryURL: URL,
-                    name: String,
-                    onlyLocal: Bool = false) throws -> String? {
+                           name: String,
+                           onlyLocal: Bool = false) throws -> String? {
     return try getConfigValueInPath(name: name,
                                     path: String(contentsOf: directoryURL),
                                     onlyLocal: onlyLocal,
@@ -60,9 +60,9 @@ public func getGlobalBooleanConfigValue(name: String) throws -> Bool? {
 ///  @param type - Canonicalize configuration values according to the
 ///  expected type (i.e. 0 -> false, "on" -> true etc).
 public func getConfigValueInPath(name: String,
-                          path: String?,
-                          onlyLocal: Bool = false,
-                          type: Any?) throws -> String? {
+                                 path: String?,
+                                 onlyLocal: Bool = false,
+                                 type: Any?) throws -> String? {
 
     var gitCommand: String
 
@@ -119,8 +119,8 @@ public func getGlobalConfig() throws -> String? {
 
 /// Set the local config value by name.
 public func setConfigValue(directoryURL: URL,
-                    name: String,
-                    value: String) throws {
+                           name: String,
+                           value: String) throws {
     try setConfigValueInPath(name: name,
                              value: value,
                              path: String(contentsOf: directoryURL))
@@ -128,7 +128,7 @@ public func setConfigValue(directoryURL: URL,
 
 /// Set the global config value by name.
 public func setGlobalConfigValue(name: String,
-                          value: String) throws -> String {
+                                 value: String) throws -> String {
     return try setConfigValueInPath(name: name,
                                     value: value,
                                     path: nil)
@@ -136,7 +136,7 @@ public func setGlobalConfigValue(name: String,
 
 /// Set the global config value by name.
 public func addGlobalConfigValue(name: String,
-                          value: String) throws {
+                                 value: String) throws {
     try ShellClient().run(
         "git config --global --add \(name) \(value)"
     )
@@ -152,7 +152,7 @@ public func addSafeDirectory(path: String) throws {
 
 /// Set the global config value by name.
 public func addGlobalConfigValueIfMissing(name: String,
-                                   value: String) throws {
+                                          value: String) throws {
     let result = try ShellClient.live().run(
         "git config --global -z --get-all \(name) \(value)"
     )
@@ -170,8 +170,8 @@ public func addGlobalConfigValueIfMissing(name: String,
 ///  Aurora Editor is installed in.
 @discardableResult
 public func setConfigValueInPath(name: String,
-                          value: String,
-                          path: String?) throws -> String {
+                                 value: String,
+                                 path: String?) throws -> String {
 
     var gitCommand: String
 
@@ -196,9 +196,9 @@ public func setConfigValueInPath(name: String,
 
 /// Remove the local config value by name.
 public func removeConfigValue(directoryURL: URL,
-                       name: String) throws {
+                              name: String) throws {
     try removeConfigValueInPath(name: name,
-                            path: String(contentsOf: directoryURL))
+                                path: String(contentsOf: directoryURL))
 }
 
 /// Remove the global config value by name.
@@ -207,7 +207,7 @@ public func removeGlobalConfigValue(name: String) throws {
 }
 
 public func removeConfigValueInPath(name: String,
-                             path: String?) throws {
+                                    path: String?) throws {
 
     var gitCommand: String
 

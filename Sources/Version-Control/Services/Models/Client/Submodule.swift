@@ -10,7 +10,7 @@
 import Foundation
 
 public func listSubmodules(directoryURL: URL,
-                    paths: [String]) throws -> [SubmoduleEntry] {
+                           paths: [String]) throws -> [SubmoduleEntry] {
     let submodulesFile = FileManager.default.fileExists(atPath: "\(directoryURL).gitmodules")
     var isDirectory: ObjCBool = true
     let submodulesDir = FileManager.default.fileExists(atPath: "\(directoryURL).git/modules", isDirectory: &isDirectory)
@@ -66,7 +66,7 @@ public func listSubmodules(directoryURL: URL,
 }
 
 public func resetSubmodulePaths(directoryURL: URL,
-                         paths: [String]) throws {
+                                paths: [String]) throws {
     if paths.isEmpty {
         return
     }
