@@ -11,5 +11,5 @@ public var sharedShellClient: LiveShellClient = .init()
 
 // Inspired by: https://vimeo.com/291588126
 public struct LiveShellClient {
-    var shellClient: ShellClient = .live()
+    public var shellClient: ShellClient = .live()
 }
