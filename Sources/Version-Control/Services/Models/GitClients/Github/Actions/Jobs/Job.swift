@@ -9,8 +9,8 @@
 import Foundation
 
 public struct Job: Codable {
-    let totalCount: Int
-    let jobs: [Jobs]
+    public let totalCount: Int
+    public let jobs: [Jobs]
 
     enum CodingKeys: String, CodingKey {
         case totalCount = "total_count"

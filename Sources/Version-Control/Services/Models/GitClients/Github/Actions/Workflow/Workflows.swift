@@ -9,8 +9,8 @@
 import Foundation
 
 public struct Workflows: Codable {
-    let totalCount: Int
-    let workflows: [Workflow]
+    public let totalCount: Int
+    public let workflows: [Workflow]
 
     enum CodingKeys: String, CodingKey {
         case totalCount = "total_count"

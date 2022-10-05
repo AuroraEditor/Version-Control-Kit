@@ -9,19 +9,19 @@
 import Foundation
 
 public struct WorkflowRun: Codable {
-    let id: Int
-    let name: String
-    let nodeId: String
-    let headBranch: String
-    let runNumber: Int
-    let status: String
-    let conclusion: String
-    let workflowId: Int
-    let url: String
-    let htmlURL: String
-    let createdAt: String
-    let updatedAt: String
-    let headCommit: WorkflowRunCommit
+    public let id: Int
+    public let name: String
+    public let nodeId: String
+    public let headBranch: String
+    public let runNumber: Int
+    public let status: String
+    public let conclusion: String
+    public let workflowId: Int
+    public let url: String
+    public let htmlURL: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let headCommit: WorkflowRunCommit
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -41,11 +41,11 @@ public struct WorkflowRun: Codable {
 }
 
 public struct WorkflowRunCommit: Codable {
-    let id: String
-    let treeId: String
-    let message: String
-    let timestamp: String
-    let author: CommitAuthor
+    public let id: String
+    public let treeId: String
+    public let message: String
+    public let timestamp: String
+    public let author: CommitAuthor
 
     enum CodingKeys: String, CodingKey {
         case id
@@ -57,6 +57,6 @@ public struct WorkflowRunCommit: Codable {
 }
 
 public struct CommitAuthor: Codable {
-    let name: String
-    let email: String
+    public let name: String
+    public let email: String
 }

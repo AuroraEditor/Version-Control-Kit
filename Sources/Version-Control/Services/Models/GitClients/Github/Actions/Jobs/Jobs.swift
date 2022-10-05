@@ -9,20 +9,20 @@
 import Foundation
 
 public struct Jobs: Codable {
-    let id: Int
-    let runId: Int
-    let runURL: String
-    let runAttempt: Int
-    let url: String
-    let htmlURL: String
-    let status: String
-    let conclusion: String
-    let startedAt: String
-    let completedAt: String
-    let name: String
-    let steps: [JobSteps]
-    let runnerName: String?
-    let runnerGroupName: String?
+    public let id: Int
+    public let runId: Int
+    public let runURL: String
+    public let runAttempt: Int
+    public let url: String
+    public let htmlURL: String
+    public let status: String
+    public let conclusion: String
+    public let startedAt: String
+    public let completedAt: String
+    public let name: String
+    public let steps: [JobSteps]
+    public let runnerName: String?
+    public let runnerGroupName: String?
 
     enum CodingKeys: String, CodingKey {
         case id

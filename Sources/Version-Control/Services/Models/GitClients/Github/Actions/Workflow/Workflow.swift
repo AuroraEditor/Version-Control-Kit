@@ -15,14 +15,14 @@ public struct Workflow: Codable, Hashable, Identifiable, Comparable {
     }
 
     public let id: Int
-    let nodeId: String
-    let name: String
-    let path: String
-    let state: String
-    let createdAt: String
-    let updatedAt: String
-    let url: String
-    let htmlURL: String
+    public let nodeId: String
+    public let name: String
+    public let path: String
+    public let state: String
+    public let createdAt: String
+    public let updatedAt: String
+    public let url: String
+    public let htmlURL: String
 
     enum CodingKeys: String, CodingKey {
         case id

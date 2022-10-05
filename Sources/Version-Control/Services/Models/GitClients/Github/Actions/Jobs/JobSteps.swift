@@ -9,12 +9,12 @@
 import Foundation
 
 public struct JobSteps: Codable {
-    let name: String
-    let status: String
-    let conclusion: String
-    let number: Int
-    let startedAt: String
-    let completedAt: String
+    public let name: String
+    public let status: String
+    public let conclusion: String
+    public let number: Int
+    public let startedAt: String
+    public let completedAt: String
 
     enum CodingKeys: String, CodingKey {
         case name
