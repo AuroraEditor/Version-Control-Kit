@@ -8,6 +8,7 @@
 import Foundation
 
 extension String {
+
     /// Removes all `new-line` characters in a `String`
     /// - Returns: A String
     func removingNewLines() -> String {
@@ -50,6 +51,7 @@ extension String {
 }
 
 extension StringProtocol where Index == String.Index {
+
     func ranges<T: StringProtocol>(
         of substring: T,
         options: String.CompareOptions = [],
@@ -66,4 +68,3 @@ extension StringProtocol where Index == String.Index {
         return ranges
     }
 }
-
