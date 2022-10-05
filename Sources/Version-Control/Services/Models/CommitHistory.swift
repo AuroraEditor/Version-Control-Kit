@@ -21,6 +21,28 @@ public struct CommitHistory: Equatable, Hashable, Identifiable {
     public let date: Date
     public let isMerge: Bool?
 
+    public init(hash: String,
+                commitHash: String,
+                message: String,
+                author: String,
+                authorEmail: String,
+                commiter: String,
+                commiterEmail: String,
+                remoteURL: URL?,
+                date: Date,
+                isMerge: Bool?) {
+        self.hash = hash
+        self.commitHash = commitHash
+        self.message = message
+        self.author = author
+        self.authorEmail = authorEmail
+        self.commiter = commiter
+        self.commiterEmail = commiterEmail
+        self.remoteURL = remoteURL
+        self.date = date
+        self.isMerge = isMerge
+    }
+
     public var commitBaseURL: URL? {
         if let remoteURL = remoteURL {
             if remoteURL.absoluteString.contains("github") {
