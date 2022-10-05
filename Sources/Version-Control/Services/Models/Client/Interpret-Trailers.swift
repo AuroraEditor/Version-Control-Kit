@@ -10,14 +10,14 @@
 import Foundation
 
 /// A representation of a Git commit message trailer.
-protocol ITrailer {
+public protocol ITrailer {
     var token: String { get }
     var value: String { get }
 }
 
 public class Trailer: ITrailer {
-    var token: String = ""
-    var value: String = ""
+    public var token: String = ""
+    public var value: String = ""
 
     init(token: String, value: String) {
         self.token = token

@@ -10,11 +10,11 @@ import Foundation
 import SwiftUI
 
 public struct Workflow: Codable, Hashable, Identifiable, Comparable {
-    static func < (lhs: Workflow, rhs: Workflow) -> Bool {
+    public static func < (lhs: Workflow, rhs: Workflow) -> Bool {
         return lhs.name < rhs.name
     }
 
-    let id: Int
+    public let id: Int
     let nodeId: String
     let name: String
     let path: String

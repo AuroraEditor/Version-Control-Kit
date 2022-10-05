@@ -9,7 +9,7 @@
 import Foundation
 
 /// Possible statuses of an entry in Git
-enum IndexStatus: Int {
+public enum IndexStatus: Int {
     case unknown = 0
     case added
     case copied
@@ -19,8 +19,6 @@ enum IndexStatus: Int {
     case typeChanged
     case unmerged
 }
-
-typealias NoRenameIndexStatus = IndexStatus
 
 public func getIndexStatus(status: String) throws -> IndexStatus {
     switch status.substring(0) {
@@ -45,7 +43,7 @@ public func getIndexStatus(status: String) throws -> IndexStatus {
     }
 }
 
-public func getNoRenameIndexStatus(status: String) throws -> NoRenameIndexStatus {
+public func getNoRenameIndexStatus(status: String) throws -> IndexStatus {
     let parsed = try getIndexStatus(status: status)
 
     switch parsed {
@@ -67,16 +65,16 @@ public func getNoRenameIndexStatus(status: String) throws -> NoRenameIndexStatus
 }
 
 /// The SHA for the nil tree
-private let nilTreeSHA = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+public let nilTreeSHA = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
-public func getIndexChanges(directoryURL: URL) throws -> [String: NoRenameIndexStatus] {
+public func getIndexChanges(directoryURL: URL) throws -> [String: IndexStatus] {
     let args = ["diff-index", "--cahced", "name-status", "--no-renames", "-z"]
 
     let result = try ShellClient().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)"
     )
 
-    var map: [String: NoRenameIndexStatus] = [:]
+    var map: [String: IndexStatus] = [:]
 
     let pieces = result.split(separator: "\0")
 

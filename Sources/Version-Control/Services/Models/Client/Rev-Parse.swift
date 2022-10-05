@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum RepositoryType {
+public enum RepositoryType {
     case bare
     case regular
     case missing

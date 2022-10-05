@@ -11,7 +11,7 @@ import Foundation
 
 /// Base protocol containing all the properties that progress events
 /// need to support.
-protocol IProgress {
+public protocol IProgress {
     /// The overall progress of the operation, represented as a fraction between
     /// 0 and 1.
     var value: Int { get }
@@ -27,18 +27,18 @@ protocol IProgress {
 }
 
 /// An object describing the progression of a branch checkout operation
-protocol ICheckoutProgress: IProgress {
+public protocol ICheckoutProgress: IProgress {
     var kind: String { get }
     /// The branch that's currently being checked out
     var targetBranch: String { get }
 }
 
-class CheckoutProgress: ICheckoutProgress {
-    var kind: String = "checkout"
-    var targetBranch: String
-    var value: Int
-    var title: String?
-    var description: String?
+public class CheckoutProgress: ICheckoutProgress {
+    public var kind: String = "checkout"
+    public var targetBranch: String
+    public var value: Int
+    public var title: String?
+    public var description: String?
 
     init(targetBranch: String, value: Int, title: String? = nil, description: String? = nil) {
         self.targetBranch = targetBranch
@@ -49,18 +49,18 @@ class CheckoutProgress: ICheckoutProgress {
 }
 
 /// An object describing the progression of a fetch operation
-protocol IFetchProgress: IProgress {
+public protocol IFetchProgress: IProgress {
     var kind: String { get }
     /// The remote that's being fetched
     var remote: String { get }
 }
 
-class FetchProgress: IFetchProgress {
-    var kind: String = "fetch"
-    var remote: String
-    var value: Int
-    var title: String?
-    var description: String?
+public class FetchProgress: IFetchProgress {
+    public var kind: String = "fetch"
+    public var remote: String
+    public var value: Int
+    public var title: String?
+    public var description: String?
 
     init(remote: String, value: Int, title: String? = nil, description: String? = nil) {
         self.remote = remote
@@ -71,18 +71,18 @@ class FetchProgress: IFetchProgress {
 }
 
 /// An object describing the progression of a pull operation
-protocol IPullProgress: IProgress {
+public protocol IPullProgress: IProgress {
     var kind: String { get }
     /// The remote that's being pulled from
     var remote: String { get }
 }
 
-class PullProgress: IPullProgress {
-    var kind: String = "pull"
-    var remote: String
-    var value: Int
-    var title: String?
-    var description: String?
+public class PullProgress: IPullProgress {
+    public var kind: String = "pull"
+    public var remote: String
+    public var value: Int
+    public var title: String?
+    public var description: String?
 
     init(remote: String, value: Int, title: String? = nil, description: String? = nil) {
         self.remote = remote
@@ -93,7 +93,7 @@ class PullProgress: IPullProgress {
 }
 
 /// An object describing the progression of a pull operation
-protocol IPushProgress: IProgress {
+public protocol IPushProgress: IProgress {
     var kind: String { get }
     /// The remote that's being pushed to
     var remote: String { get }
@@ -101,13 +101,13 @@ protocol IPushProgress: IProgress {
     var branch: String { get }
 }
 
-class PushProgress: IPushProgress {
-    var kind: String = "push"
-    var remote: String
-    var branch: String
-    var value: Int
-    var title: String?
-    var description: String?
+public class PushProgress: IPushProgress {
+    public var kind: String = "push"
+    public var remote: String
+    public var branch: String
+    public var value: Int
+    public var title: String?
+    public var description: String?
 
     init(remote: String, branch: String, value: Int, title: String? = nil, description: String? = nil) {
         self.remote = remote
@@ -119,15 +119,15 @@ class PushProgress: IPushProgress {
 }
 
 /// An object describing the progression of a fetch operation
-protocol ICloneProgress: IProgress {
+public protocol ICloneProgress: IProgress {
     var kind: String { get }
 }
 
-class CloneProgress: ICloneProgress {
-    var kind: String = "clone"
-    var value: Int
-    var title: String?
-    var description: String?
+public class CloneProgress: ICloneProgress {
+    public var kind: String = "clone"
+    public var value: Int
+    public var title: String?
+    public var description: String?
 
     init(value: Int, title: String? = nil, description: String? = nil) {
         self.value = value
@@ -137,15 +137,15 @@ class CloneProgress: ICloneProgress {
 }
 
 /// An object describing the progression of a revert operation.
-protocol IRevertProgress: IProgress {
+public protocol IRevertProgress: IProgress {
     var kind: String { get }
 }
 
-class RevertProgress: IRevertProgress {
-    var kind: String = "revert"
-    var value: Int
-    var title: String?
-    var description: String?
+public class RevertProgress: IRevertProgress {
+    public var kind: String = "revert"
+    public var value: Int
+    public var title: String?
+    public var description: String?
 
     init(value: Int, title: String? = nil, description: String? = nil) {
         self.value = value
@@ -154,7 +154,7 @@ class RevertProgress: IRevertProgress {
     }
 }
 
-protocol IMultiCommitOperationProgress: IProgress {
+public protocol IMultiCommitOperationProgress: IProgress {
     var kind: String { get }
     /// The summary of the commit applied
     var currentCommitSummary: String { get }
@@ -164,14 +164,14 @@ protocol IMultiCommitOperationProgress: IProgress {
     var totalCommitCount: Int { get }
 }
 
-class MultiCommitOperationProgress: IMultiCommitOperationProgress {
-    var kind: String = "multiCommitOperation"
-    var currentCommitSummary: String
-    var position: Int
-    var totalCommitCount: Int
-    var value: Int
-    var title: String?
-    var description: String?
+public class MultiCommitOperationProgress: IMultiCommitOperationProgress {
+    public var kind: String = "multiCommitOperation"
+    public var currentCommitSummary: String
+    public var position: Int
+    public var totalCommitCount: Int
+    public var value: Int
+    public var title: String?
+    public var description: String?
 
     init(currentCommitSummary: String, position: Int, totalCommitCount: Int,
          value: Int, title: String? = nil, description: String? = nil) {

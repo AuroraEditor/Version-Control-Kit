@@ -41,7 +41,7 @@ public func isDiffToLarge(diff: IRawDiff) -> Bool {
 public func getCommitDiff(directoryURL: URL,
                           file: GitFileItem,
                           commitish: String,
-                          hideWhitespaceInDiff: Bool = false) throws -> IDiff {
+                          hideWhitespaceInDiff: Bool = false) throws -> IDiffTypes {
     var args = [
         "log",
         commitish,
@@ -75,7 +75,7 @@ public func getCommitRangeDiff(directoryURL: URL,
                                file: GitFileItem,
                                commits: [String],
                                hideWhitespacesInDiff: Bool = false,
-                               useNillTreeSHA: Bool = false) throws -> IDiff {
+                               useNillTreeSHA: Bool = false) throws -> IDiffTypes {
     if commits.isEmpty {
         throw DiffErrors.noCommits("No commits to diff...")
     }
@@ -161,14 +161,14 @@ public func convertDiff(directoryURL: URL,
                         file: GitFileItem,
                         diff: IRawDiff,
                         oldestCommitish: String,
-                        lineEndignsChange: LineEndingsChange?) -> IDiff {
+                        lineEndignsChange: LineEndingsChange?) -> IDiffTypes {
     let fileExtension = file.url.lastPathComponent.lowercased()
     
-    return IDiff.text(ITextDiff(text: diff.contents,
-                                hunks: diff.hunks,
-                                lineEndingsChange: lineEndignsChange,
-                                maxLineNumber: diff.maxLineNumber,
-                                hasHiddenBidiChars: diff.hasHiddenBidiChars))
+    return IDiffTypes.text(ITextDiff(text: diff.contents,
+                                     hunks: diff.hunks,
+                                     lineEndingsChange: lineEndignsChange,
+                                     maxLineNumber: diff.maxLineNumber,
+                                     hasHiddenBidiChars: diff.hasHiddenBidiChars))
 }
 
 public func diffFromRawDiffOutput(output: String) -> IRawDiff {
@@ -181,7 +181,7 @@ public func diffFromRawDiffOutput(output: String) -> IRawDiff {
 public func buildDiff(directoryURL: URL,
                       file: GitFileItem,
                       oldestCommitish: String,
-                      lineEndingsChange: LineEndingsChange?) throws -> IDiff {
+                      lineEndingsChange: LineEndingsChange?) throws -> IDiffTypes {
     
     let diff: IRawDiff = IRawDiff(header: "",
                                   contents: "",

@@ -9,7 +9,7 @@
 
 import Foundation
 
-private enum MergeResult {
+public enum MergeResult {
     /// The merge completed successfully
     case success
     /// The merge was a noop since the current branch
@@ -21,8 +21,8 @@ private enum MergeResult {
 
 /// Merge the named branch into the current branch.
 public func merge(directoryURL: URL,
-           branch: String,
-           isSquash: Bool = false) throws -> MergeResult {
+                  branch: String,
+                  isSquash: Bool = false) throws -> MergeResult {
     var args = ["merge"]
 
     if isSquash {
@@ -48,8 +48,8 @@ private let noopMergeMessage = "Already up to date.\n"
 
 /// Find the base commit between two commit-ish identifiers
 public func getMergeBase(directoryURL: URL,
-                  firstCommitish: String,
-                  secondCommitish: String) throws -> String? {
+                         firstCommitish: String,
+                         secondCommitish: String) throws -> String? {
     let process = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git merge-base \(firstCommitish) \(secondCommitish)"
     )

@@ -8,9 +8,9 @@
 
 import Foundation
 
-let maximumDiffStringSize = 268435441
+private let maximumDiffStringSize = 268435441
 
-enum DiffType {
+public enum DiffType {
     /// Changes to a text file, which may be partially selected for commit
     case text
     /// Changes to a file with a known extension, which can be viewed in the editor
@@ -25,7 +25,7 @@ enum DiffType {
     case unrenderable
 }
 
-enum LineEndingType: String {
+public enum LineEndingType: String {
     // swiftlint:disable:next identifier_name
     case cr = "CR"
     // swiftlint:disable:next identifier_name
@@ -33,23 +33,21 @@ enum LineEndingType: String {
     case crlf = "CRLF"
 }
 
-typealias LineEnding = LineEndingType
-
-class LineEndingsChange {
-    var from: LineEnding
+public class LineEndingsChange {
+    var from: LineEndingType
     // swiftlint:disable:next identifier_name
-    var to: LineEnding
+    var to: LineEndingType
 
-    init(from: LineEnding,
+    init(from: LineEndingType,
          // swiftlint:disable:next identifier_name
-         to: LineEnding) {
+         to: LineEndingType) {
         self.from = from
         self.to = to
     }
 }
 
 /// Parse the line ending string into an enum value (or `null` if unknown)
-func parseLineEndingText(text: String) -> LineEnding? {
+public func parseLineEndingText(text: String) -> LineEndingType? {
     let input = text.trimmingCharacters(in: .whitespacesAndNewlines)
     switch input {
     case "CR":
@@ -64,7 +62,7 @@ func parseLineEndingText(text: String) -> LineEnding? {
 }
 
 /// Data returned as part of a textual diff from Aurora Editor
-class ITextDiffData {
+public class ITextDiffData {
     /// The unified text diff - including headers and context
     var text: String
     /// The diff contents organized by hunk - how the git CLI outputs to the caller
@@ -88,33 +86,30 @@ class ITextDiffData {
     }
 }
 
-class ITextDiff: ITextDiffData {
+public class ITextDiff: ITextDiffData {
     var kind: DiffType = .text
 }
 
-class IImageDiff {
+public class IImageDiff {
     var kind: DiffType = .image
 }
 
-class IBinaryDiff {
+public class IBinaryDiff {
     var kind: DiffType = .binary
 }
 
-class ILargeTextDiff: ITextDiffData {
+public class ILargeTextDiff: ITextDiffData {
     var kind: DiffType = .largeText
 }
 
-class IUnrenderableDiff {
+public class IUnrenderableDiff {
     var kind: DiffType = .unrenderable
 }
 
-enum IDiffTypes {
+public enum IDiffTypes {
     case text(ITextDiff)
     case image(IImageDiff)
     case binary(IBinaryDiff)
     case large(ILargeTextDiff)
     case unrenderable(IUnrenderableDiff)
 }
-
-/// The union of diff types that can be rendered in Aurora Editor
-typealias IDiff = IDiffTypes

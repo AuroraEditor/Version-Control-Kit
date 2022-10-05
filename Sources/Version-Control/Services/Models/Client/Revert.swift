@@ -13,8 +13,8 @@ import Foundation
 ///
 /// @param sha - The SHA of the commit to be reverted
 public func revertCommit(directoryURL: URL,
-                  commit: GitCommit,
-                  progressCallback: RevertProgress?) throws {
+                         commit: GitCommit,
+                         progressCallback: RevertProgress?) throws {
     var args: [Any] = [gitNetworkArguments, "revert"]
 
     if (commit.coAuthors?.count)! > 1 {

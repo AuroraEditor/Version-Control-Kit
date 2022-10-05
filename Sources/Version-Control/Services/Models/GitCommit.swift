@@ -10,7 +10,7 @@
 import Foundation
 
 /// Grouping of information required to create a commit
-protocol ICommitContext {
+public protocol ICommitContext {
     /// The summary of the commit message (required)
     var summary: String? { get }
     /// Additional details for the commit message (optional)
@@ -22,16 +22,16 @@ protocol ICommitContext {
     var trailers: [Trailer]? { get }
 }
 
-class CommitContext: ICommitContext {
-    var summary: String?
-    var description: String?
-    var amend: Bool?
-    var trailers: [Trailer]?
+public class CommitContext: ICommitContext {
+    public var summary: String?
+    public var description: String?
+    public var amend: Bool?
+    public var trailers: [Trailer]?
 
-    init(summary: String?,
-         description: String?,
-         amend: Bool?,
-         trailers: [Trailer]?) {
+    public init(summary: String?,
+                description: String?,
+                amend: Bool?,
+                trailers: [Trailer]?) {
         self.summary = summary
         self.description = description
         self.amend = amend
@@ -41,7 +41,7 @@ class CommitContext: ICommitContext {
 
 /// Extract any Co-Authored-By trailers from an array of arbitrary
 /// trailers.
-func extractCoAuthors(trailers: [Trailer]) -> [GitAuthor] {
+public func extractCoAuthors(trailers: [Trailer]) -> [GitAuthor] {
     var coAuthors: [GitAuthor] = []
 
     for trailer in trailers where isCoAuthoredByTrailer(trailer: trailer) {
@@ -59,18 +59,18 @@ func extractCoAuthors(trailers: [Trailer]) -> [GitAuthor] {
 ///
 /// Equivalent to the output where Git command support the
 /// `--oneline --no-abbrev-commit` arguments to format a commit.
-class CommitOneLine {
+public class CommitOneLine {
     var sha: String
     var summary: String
 
-    init(sha: String, summary: String) {
+    public init(sha: String, summary: String) {
         self.sha = sha
         self.summary = summary
     }
 }
 
 /// A git commit.
-class GitCommit {
+public class GitCommit {
     /// A list of co-authors parsed from the commit message
     /// trailers.
     var coAuthors: [GitAuthor]?
@@ -82,15 +82,15 @@ class GitCommit {
     /// Whether or not the commit is a merge commit (i.e. has at least 2 parents)
     var isMergeCommit: Bool
 
-    init(sha: String,
-         shortSha: String,
-         summary: String,
-         body: String,
-         author: String,
-         commiter: String,
-         parentShas: [String],
-         trailers: [Trailer],
-         tags: [String]) {
+    public init(sha: String,
+                shortSha: String,
+                summary: String,
+                body: String,
+                author: String,
+                commiter: String,
+                parentShas: [String],
+                trailers: [Trailer],
+                tags: [String]) {
         self.coAuthors = extractCoAuthors(trailers: trailers)
         self.authoredByCommitter = false
         self.bodyNoCoAuthors = ""

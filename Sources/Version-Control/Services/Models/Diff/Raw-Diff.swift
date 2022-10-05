@@ -8,7 +8,7 @@
 
 import Foundation
 
-enum DiffHunkExpansionType: String {
+public enum DiffHunkExpansionType: String {
     /// The hunk header cannot be expanded at all.
     case none = "None"
 
@@ -30,7 +30,7 @@ enum DiffHunkExpansionType: String {
 }
 
 /// Each diff is made up of a number of hunks
-class DiffHunk {
+public class DiffHunk {
     var header: DiffHunkHeader
     var lines: [DiffLine]
     var unifiedDiffStart: Int
@@ -68,7 +68,7 @@ class DiffHunkHeader {
     }
 }
 
-class IRawDiff {
+public class IRawDiff {
     /// The plain text contents of the diff header. This contains
     /// everything from the start of the diff up until the first
     /// hunk header starts. Note that this does not include a trailing

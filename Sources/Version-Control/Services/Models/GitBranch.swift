@@ -14,7 +14,7 @@ protocol IAheadBehind {
     var behind: Int { get }
 }
 
-class AheadBehind: IAheadBehind {
+public class AheadBehind: IAheadBehind {
     var ahead: Int
     var behind: Int
 
