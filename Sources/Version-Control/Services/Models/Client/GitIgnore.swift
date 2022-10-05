@@ -16,7 +16,7 @@ public struct GitIgnore {
     /// Returns a promise which will either be rejected or resolved
     /// with the contents of the file. If there's no .gitignore file
     /// in the repository root the promise will resolve with null.
-    func readGitIgnoreAtRoot(directoryURL: URL) throws -> String? {
+    public func readGitIgnoreAtRoot(directoryURL: URL) throws -> String? {
         let ignorePath = try String(contentsOf: directoryURL) + ".gitignore"
         let content = try String(contentsOf: URL(string: ignorePath)!)
         return content
@@ -26,7 +26,7 @@ public struct GitIgnore {
     ///
     /// If the repository root doesn't contain a .gitignore file one
     /// will be created, otherwise the current file will be overwritten.
-    func saveGitIgnore(directoryURL: URL,
+    public func saveGitIgnore(directoryURL: URL,
                        text: String) throws {
         let ignorePath = try String(contentsOf: directoryURL) + ".gitignore"
 
@@ -40,7 +40,7 @@ public struct GitIgnore {
     }
 
     /// Add the given pattern or patterns to the root gitignore file
-    func appendIgnoreRule(directoryURL: URL, patterns: [String]) throws {
+    public func appendIgnoreRule(directoryURL: URL, patterns: [String]) throws {
         let text = try readGitIgnoreAtRoot(directoryURL: directoryURL)
 
         let currentContents = try formatGitIgnoreContents(text: text!,
@@ -56,7 +56,7 @@ public struct GitIgnore {
     /// Convenience method to add the given file path(s) to the repository's gitignore.
     ///
     /// The file path will be escaped before adding.
-    func appendIgnoreFile(directoryURL: URL,
+    public func appendIgnoreFile(directoryURL: URL,
                           filePath: [String]) throws {
         let escapedFilePaths = filePath.map {
             escapeGitSpecialCharacters(pattern: $0)
@@ -67,7 +67,7 @@ public struct GitIgnore {
 
     // WARNING: I have a feeling this may not work, @#CK Apple
     /// Escapes a string from special characters used in a gitignore file
-    func escapeGitSpecialCharacters(pattern: String) -> String {
+    public func escapeGitSpecialCharacters(pattern: String) -> String {
         let specialCharacters = "/[\\[\\]!\\*\\#\\?]/g"
 
         return pattern.replacingOccurrences(of: specialCharacters, with: "\\")
@@ -81,7 +81,7 @@ public struct GitIgnore {
     /// @param text - The text to format.
     /// @param directoryURL - The project url
     @discardableResult
-    func formatGitIgnoreContents(text: String,
+    public func formatGitIgnoreContents(text: String,
                                  directoryURL: URL) throws -> String {
 
         return ""

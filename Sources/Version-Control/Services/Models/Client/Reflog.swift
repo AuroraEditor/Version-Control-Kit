@@ -10,7 +10,7 @@
 import Foundation
 
 /// Get the `limit` most recently checked out branches.
-func getRecentBranches(directoryURL: URL,
+public func getRecentBranches(directoryURL: URL,
                        limit: Int) throws -> [String] {
     // swiftlint:disable:next line_length
     let regex = "//.*? (renamed|checkout)(?:: moving from|\\s*) (?:refs\\//heads\\//|\\s*)(.*?) to (?:refs\\//heads\\//|\\s*)(.*?)$//i"
@@ -34,11 +34,11 @@ func getRecentBranches(directoryURL: URL,
     return []
 }
 
-let noCommitsOnBranchRe = "fatal: your current branch '.*' does not have any commits yet"
+private let noCommitsOnBranchRe = "fatal: your current branch '.*' does not have any commits yet"
 
 /// Gets the distinct list of branches that have been checked out after a specific date
 /// Returns a map keyed on branch names
-func getBranchesCheckouts(directoryURL: URL,
+public func getBranchesCheckouts(directoryURL: URL,
                           afterDate: Date) throws -> [String: Date] {
     let regex = "/^[a-z0-9]{40}\\sHEAD@{(.*)}\\scheckout: moving from\\s.*\\sto\\s(.*)$/"
 

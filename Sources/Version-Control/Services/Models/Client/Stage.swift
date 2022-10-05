@@ -11,7 +11,7 @@ import Foundation
 
 /// Stages a file with the given manual resolution method.
 /// Useful for resolving binary conflicts at commit-time.
-func stageManualConflictResolution(directoryURL: URL,
+public func stageManualConflictResolution(directoryURL: URL,
                                    file: GitFileItem,
                                    manualResoultion: ManualConflictResolution) throws {
     let status = file

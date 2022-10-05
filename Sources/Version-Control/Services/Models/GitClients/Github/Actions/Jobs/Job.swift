@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Job: Codable {
+public struct Job: Codable {
     let totalCount: Int
     let jobs: [Jobs]
 

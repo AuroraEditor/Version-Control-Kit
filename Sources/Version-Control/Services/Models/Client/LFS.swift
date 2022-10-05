@@ -10,7 +10,7 @@
 import Foundation
 
 /// Install the global LFS filters.
-func installGlobalLFSFilters(force: Bool) throws {
+public func installGlobalLFSFilters(force: Bool) throws {
     var args = ["lfs", "install", "--skip-repo"]
 
     if force {
@@ -21,7 +21,7 @@ func installGlobalLFSFilters(force: Bool) throws {
 }
 
 /// Install LFS hooks in the project
-func installLFSHooks(directoryURL: URL,
+public func installLFSHooks(directoryURL: URL,
                      force: Bool) throws {
     var args = ["lfs", "install"]
 
@@ -34,7 +34,7 @@ func installLFSHooks(directoryURL: URL,
 }
 
 /// Is the repository configured to track any paths with LFS?
-func isUsingLFS(directoryURL: URL) throws -> Bool {
+public func isUsingLFS(directoryURL: URL) throws -> Bool {
     let result = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git lfs track")
 
@@ -42,7 +42,7 @@ func isUsingLFS(directoryURL: URL) throws -> Bool {
 }
 
 /// Is the repository configured to track any paths with LFS?
-func isTrackedByLFS(directoryURL: URL,
+public func isTrackedByLFS(directoryURL: URL,
                     path: String) throws -> Bool {
     let result = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git check-attr filter \(path)")
@@ -71,7 +71,7 @@ func isTrackedByLFS(directoryURL: URL,
 /// which are not covered by the current Git LFS configuration.
 ///
 /// @param filePaths List of relative paths in the repository
-func filesNotTrackedByLFS(directoryURL: URL,
+public func filesNotTrackedByLFS(directoryURL: URL,
                           filePaths: [String]) throws -> [String] {
     var filesNotTrackedByGitLFS: [String] = []
 

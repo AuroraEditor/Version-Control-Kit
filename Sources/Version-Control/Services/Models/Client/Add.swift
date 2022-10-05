@@ -15,5 +15,5 @@ public struct Add {
     ///
     /// Typically done after having resolved conflicts either manually
     /// or through checkout --theirs/--ours.
-    func addConflictedFile() {}
+    public func addConflictedFile() {}
 }

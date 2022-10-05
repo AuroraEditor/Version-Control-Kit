@@ -16,7 +16,7 @@ import Foundation
 /// Each parameter can be the commit SHA or a ref name, or specify an empty
 /// string to represent HEAD.
 // swiftlint:disable:next identifier_name
-func revRange(from: String, to: String) -> String {
+private func revRange(from: String, to: String) -> String {
     return "\(from)..\(to)"
 }
 
@@ -27,7 +27,7 @@ func revRange(from: String, to: String) -> String {
 /// Each parameter can be the commit SHA or a ref name, or specify an empty
 /// string to represent HEAD.
 // swiftlint:disable:next identifier_name
-func revRangeInclusive(from: String, to: String) -> String {
+private func revRangeInclusive(from: String, to: String) -> String {
     return "\(from)^...\(to)"
 }
 
@@ -38,12 +38,12 @@ func revRangeInclusive(from: String, to: String) -> String {
 /// Each parameter can be the commit SHA or a ref name, or you can use an empty
 /// string to represent HEAD.
 // swiftlint:disable:next identifier_name
-func revSymmetricDifference(from: String, to: String) -> String {
+private func revSymmetricDifference(from: String, to: String) -> String {
     return "\(from)...\(to)"
 }
 
 /// Calculate the number of commits the range is ahead and behind.
-func getAheadBehind(directoryURL: URL,
+public func getAheadBehind(directoryURL: URL,
                     range: String) throws -> AheadBehind? {
     // `--left-right` annotates the list of commits in the range with which side
     // they're coming from. When used with `--count`, it tells us how many
@@ -79,7 +79,7 @@ func getAheadBehind(directoryURL: URL,
     return AheadBehind(ahead: ahead!, behind: behind!)
 }
 
-func getBranchAheadBehind(directoryURL: URL,
+public func getBranchAheadBehind(directoryURL: URL,
                           branch: String) {
 }
 
@@ -92,7 +92,7 @@ func getBranchAheadBehind(directoryURL: URL,
 ///
 /// Returns `nil` when the rebase is not possible to perform, because of a
 /// missing commit ID
-func getCommitsBetweenCommits(directoryURL: URL,
+public func getCommitsBetweenCommits(directoryURL: URL,
                               baseBranchSha: String,
                               targetBranchSha: String) throws -> [CommitOneLine]? {
     let range = revRange(from: baseBranchSha, to: targetBranchSha)
@@ -102,7 +102,7 @@ func getCommitsBetweenCommits(directoryURL: URL,
 /// Get a list of commits inside the provided range.
 ///
 /// Returns `nil` when it is not possible to perform because of a bad range.
-func getCommitsInRange(directoryURL: URL,
+public func getCommitsInRange(directoryURL: URL,
                        range: String) throws -> [CommitOneLine]? {
 
     let args = [

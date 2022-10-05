@@ -23,4 +23,4 @@ import Foundation
 /// Also means if the last 2 commits in history are A, B, whether user squashes A
 /// onto B or B onto A. It will always perform based on log history, thus, B onto
 /// A.
-func squash() {}
+public func squash() {}

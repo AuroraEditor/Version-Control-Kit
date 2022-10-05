@@ -15,7 +15,7 @@ protocol ITrailer {
     var value: String { get }
 }
 
-class Trailer: ITrailer {
+public class Trailer: ITrailer {
     var token: String = ""
     var value: String = ""
 
@@ -27,14 +27,14 @@ class Trailer: ITrailer {
 
 /// Gets a value indicating whether the trailer token is
 /// Co-Authored-By. Does not validate the token value.
-func isCoAuthoredByTrailer(trailer: Trailer) -> Bool {
+public func isCoAuthoredByTrailer(trailer: Trailer) -> Bool {
     return trailer.token.lowercased() == "co-authored-by"
 }
 
 /// Parse a string containing only unfolded trailers produced by
 /// git-interpret-trailers --only-input --only-trailers --unfold or
 /// a derivative such as git log --format="%(trailers:only,unfold)"
-func parseRawUnfoldedTrailers(trailers: String, seperators: String) -> [ITrailer] {
+public func parseRawUnfoldedTrailers(trailers: String, seperators: String) -> [ITrailer] {
     let lines = trailers.split(separator: "\n")
     var parsedTrailers: [ITrailer] = []
 
@@ -51,7 +51,7 @@ func parseRawUnfoldedTrailers(trailers: String, seperators: String) -> [ITrailer
     return parsedTrailers
 }
 
-func parseSingleUnfoldedTrailer(line: String, seperators: String) -> ITrailer? {
+public func parseSingleUnfoldedTrailer(line: String, seperators: String) -> ITrailer? {
     for seperator in seperators {
         let idx = line.firstIndex(of: seperator)?.utf16Offset(in: "")
 
@@ -66,7 +66,7 @@ func parseSingleUnfoldedTrailer(line: String, seperators: String) -> ITrailer? {
 /// Get a string containing the characters that may be used in this repository
 /// separate tokens from values in commit message trailers. If no specific
 /// trailer separator is configured the default separator (:) will be returned.
-func getTrailerSeparatorCharacters(directoryURL: URL) -> String {
+public func getTrailerSeparatorCharacters(directoryURL: URL) -> String {
     return ""
 }
 
@@ -74,7 +74,7 @@ func getTrailerSeparatorCharacters(directoryURL: URL) -> String {
 ///
 /// The trailers returned here are unfolded, i.e. they've had their
 /// whitespace continuation removed and are all on one line.
-func parseTrailers(directoryURL: URL,
+public func parseTrailers(directoryURL: URL,
                    commitMessage: String) throws -> [ITrailer] {
     let result = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git interpret-trailers --parse")
@@ -116,7 +116,7 @@ func parseTrailers(directoryURL: URL,
 /// any have been merged into the commit message using the
 /// configuration settings for trailers in the provided
 /// repository.
-func mergeTrailers(directoryURL: URL,
+public func mergeTrailers(directoryURL: URL,
                    commitMessage: String,
                    trailers: [ITrailer],
                    unfold: Bool = false) throws -> String {

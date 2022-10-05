@@ -12,7 +12,7 @@ import Foundation
 /// Creates a new commit that reverts the changes of a previous commit
 ///
 /// @param sha - The SHA of the commit to be reverted
-func revertCommit(directoryURL: URL,
+public func revertCommit(directoryURL: URL,
                   commit: GitCommit,
                   progressCallback: RevertProgress?) throws {
     var args: [Any] = [gitNetworkArguments, "revert"]
@@ -21,5 +21,4 @@ func revertCommit(directoryURL: URL,
         args.append("-m")
         args.append("1")
     }
-
 }

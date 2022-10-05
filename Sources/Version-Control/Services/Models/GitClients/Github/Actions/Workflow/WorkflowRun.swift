@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct WorkflowRun: Codable {
+public struct WorkflowRun: Codable {
     let id: Int
     let name: String
     let nodeId: String
@@ -40,7 +40,7 @@ struct WorkflowRun: Codable {
     }
 }
 
-struct WorkflowRunCommit: Codable {
+public struct WorkflowRunCommit: Codable {
     let id: String
     let treeId: String
     let message: String
@@ -56,7 +56,7 @@ struct WorkflowRunCommit: Codable {
     }
 }
 
-struct CommitAuthor: Codable {
+public struct CommitAuthor: Codable {
     let name: String
     let email: String
 }

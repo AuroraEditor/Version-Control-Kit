@@ -9,7 +9,7 @@
 
 import Foundation
 
-public var forkedRemotePrefix = "aurora-editor-"
+private var forkedRemotePrefix = "aurora-editor-"
 
 public func forkPullRequestRemoteName(remoteName: String) -> String {
     return "\(forkedRemotePrefix)\(remoteName)"

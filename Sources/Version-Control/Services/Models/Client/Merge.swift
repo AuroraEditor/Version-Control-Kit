@@ -9,7 +9,7 @@
 
 import Foundation
 
-enum MergeResult {
+private enum MergeResult {
     /// The merge completed successfully
     case success
     /// The merge was a noop since the current branch
@@ -20,7 +20,7 @@ enum MergeResult {
 }
 
 /// Merge the named branch into the current branch.
-func merge(directoryURL: URL,
+public func merge(directoryURL: URL,
            branch: String,
            isSquash: Bool = false) throws -> MergeResult {
     var args = ["merge"]
@@ -44,10 +44,10 @@ func merge(directoryURL: URL,
     return result == noopMergeMessage ? MergeResult.alreadyUpToDate : MergeResult.success
 }
 
-let noopMergeMessage = "Already up to date.\n"
+private let noopMergeMessage = "Already up to date.\n"
 
 /// Find the base commit between two commit-ish identifiers
-func getMergeBase(directoryURL: URL,
+public func getMergeBase(directoryURL: URL,
                   firstCommitish: String,
                   secondCommitish: String) throws -> String? {
     let process = try ShellClient.live().run(
@@ -58,7 +58,7 @@ func getMergeBase(directoryURL: URL,
 }
 
 /// Abort a mid-flight (conflicted) merge
-func abortMerge(directoryURL: URL) throws {
+public func abortMerge(directoryURL: URL) throws {
     _ = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git merge --abort"
     )
@@ -66,7 +66,7 @@ func abortMerge(directoryURL: URL) throws {
 
 /// Check the `.git/MERGE_HEAD` file exists in a repository to confirm
 /// that it is in a conflicted state.
-func isMergeHeadSet(directoryURL: URL) throws -> Bool {
+public func isMergeHeadSet(directoryURL: URL) throws -> Bool {
     let path = try String(contentsOf: directoryURL) + ".git/MERGE_HEAD"
     return FileManager.default.fileExists(atPath: path)
 }
@@ -77,7 +77,7 @@ func isMergeHeadSet(directoryURL: URL) throws -> Bool {
 ///
 /// Note: If we abort the merge, this doesn't get cleared automatically which
 /// could lead to this being erroneously available in a non merge --squashing scenario.
-func isSquashMsgSet(directoryURL: URL) throws -> Bool {
+public func isSquashMsgSet(directoryURL: URL) throws -> Bool {
     let path = try String(contentsOf: directoryURL) + ".git/SQUASH_MSG"
     return FileManager.default.fileExists(atPath: path)
 }

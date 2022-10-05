@@ -9,12 +9,12 @@
 
 import Foundation
 
-let gitDescriptionPath = ".git/description"
+private let gitDescriptionPath = ".git/description"
 
-let defaultGitDescription = "Unnamed repository; edit this file 'description' to name the repository.\n"
+private let defaultGitDescription = "Unnamed repository; edit this file 'description' to name the repository.\n"
 
 /// Get the project's description from the .git/description file.
-func getGitDescription(directoryURL: URL) throws -> String {
+public func getGitDescription(directoryURL: URL) throws -> String {
     let path = try String(contentsOf: directoryURL) + gitDescriptionPath
 
     do {
@@ -29,7 +29,7 @@ func getGitDescription(directoryURL: URL) throws -> String {
 }
 
 /// Write a .git/description file to the project git folder.
-func writeGitDescription(directoryURL: URL,
+public func writeGitDescription(directoryURL: URL,
                          description: String) throws {
     let fullPath = try String(contentsOf: directoryURL) + gitDescriptionPath
     try description.write(toFile: fullPath, atomically: false, encoding: .utf8)

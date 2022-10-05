@@ -38,7 +38,7 @@ public struct CherryPick {
     /// For a cherry-pick operation, it does not matter what order the commits
     /// appear. But, it is best practice to send them in ascending order to prevent
     /// conflicts. First one on the array is first to be cherry-picked.
-    func cherryPick() {}
+    public func cherryPick() {}
 
     /// Inspect the `.git/sequencer` folder and convert the current cherry pick
     /// state into am `ICherryPickProgress` instance as well as return an array of
@@ -54,7 +54,7 @@ public struct CherryPick {
     /// - Runs into errors parsing cherry pick files. This is expected if cherry
     ///   pick is aborted or finished during parsing. It could also occur if cherry
     ///   pick sequencer files are corrupted.
-    func getCherryPickSnapshot() {
+    public func getCherryPickSnapshot() {
 
         // Abort safety sha is stored in.git/sequencer/abort-safety. It is the sha of
         // the last cherry-picked commit in the operation or the head of target branch
@@ -75,17 +75,17 @@ public struct CherryPick {
     ///
     /// @param files - The working directory of files. These are the files that are
     /// detected to have changes that we want to stage for the cherry pick.
-    func continueCherryPick() {}
+    public func continueCherryPick() {}
 
     /// Abandon the current cherry pick operation
-    func abortCherryPick(directoryURL: URL) throws {
+    public func abortCherryPick(directoryURL: URL) throws {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git cherry-pick --abort"
         )
     }
 
     /// Check if the `.git/CHERRY_PICK_HEAD` file exists
-    func isCherryPickHeadFound(directoryURL: URL) -> Bool {
+    public func isCherryPickHeadFound(directoryURL: URL) -> Bool {
         do {
             let cherryPickHeadPath = try String(contentsOf: directoryURL) + ".git/CHERRY_PICK_HEAD"
             return FileManager.default.fileExists(atPath: cherryPickHeadPath)

@@ -22,7 +22,7 @@ let maxReasonableDiffSize = maxDiffBufferSize / 16 // ~4.375MB in decimal
 let maxCharactersPerLine = 5000
 
 /// Is the diff too large for us to reasonably represent?
-func isDiffToLarge(diff: IRawDiff) -> Bool {
+public func isDiffToLarge(diff: IRawDiff) -> Bool {
     for hunk in diff.hunks {
         for line in hunk.lines {
             // swiftlint:disable:next for_where
@@ -38,10 +38,10 @@ func isDiffToLarge(diff: IRawDiff) -> Bool {
 ///
 /// @param commitish - A commit SHA or some other identifier that ultimately dereferences
 /// to a commit.
-func getCommitDiff(directoryURL: URL,
-                   file: GitFileItem,
-                   commitish: String,
-                   hideWhitespaceInDiff: Bool = false) throws -> IDiff {
+public func getCommitDiff(directoryURL: URL,
+                          file: GitFileItem,
+                          commitish: String,
+                          hideWhitespaceInDiff: Bool = false) throws -> IDiff {
     var args = [
         "log",
         commitish,
@@ -55,34 +55,34 @@ func getCommitDiff(directoryURL: URL,
         "--",
         file.url.absoluteString
     ] as [Any]
-
+    
     if file.gitStatus == .renamed || file.gitStatus == .copied {
         // TODO: Change this to old path instead
         args.append(file.url.absoluteString)
     }
-
+    
     let output = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)"
     )
-
+    
     return try buildDiff(directoryURL: directoryURL,
                          file: file,
                          oldestCommitish: commitish,
                          lineEndingsChange: nil)
 }
 
-func getCommitRangeDiff(directoryURL: URL,
-                        file: GitFileItem,
-                        commits: [String],
-                        hideWhitespacesInDiff: Bool = false,
-                        useNillTreeSHA: Bool = false) throws -> IDiff {
+public func getCommitRangeDiff(directoryURL: URL,
+                               file: GitFileItem,
+                               commits: [String],
+                               hideWhitespacesInDiff: Bool = false,
+                               useNillTreeSHA: Bool = false) throws -> IDiff {
     if commits.isEmpty {
         throw DiffErrors.noCommits("No commits to diff...")
     }
-
+    
     let oldestCommitRef = useNillTreeSHA ? nilTreeSHA : "\(commits[0])^"
     let latestCommit = commits[-1]
-
+    
     var args = [
         "diff",
         oldestCommitRef,
@@ -94,34 +94,34 @@ func getCommitRangeDiff(directoryURL: URL,
         "--",
         file.url.absoluteString
     ] as [Any]
-
+    
     if file.gitStatus == .renamed || file.gitStatus == .copied {
         // TODO: Change this to old path instead
         args.append(file.url.absoluteString)
     }
-
+    
     let result = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)"
     )
-
+    
     return try buildDiff(directoryURL: directoryURL,
                          file: file,
                          oldestCommitish: latestCommit,
                          lineEndingsChange: nil)
 }
 
-func getCommitRangeChangeFiles(directoryURL: URL,
-                               shas: [String],
-                               useNillTreeSHA: Bool = false) {
-
+public func getCommitRangeChangeFiles(directoryURL: URL,
+                                      shas: [String],
+                                      useNillTreeSHA: Bool = false) {
+    
 }
 
 /// Render the diff for a file within the repository working directory. The file will be
 /// compared against HEAD if it's tracked, if not it'll be compared to an empty file meaning
 /// that all content in the file will be treated as additions.
-func getWorkingDirectoryDiff(workspaceURL: URL,
-                             file: GitFileItem,
-                             hideWhitespaceInDiff: Bool = false) throws {
+public func getWorkingDirectoryDiff(workspaceURL: URL,
+                                    file: GitFileItem,
+                                    hideWhitespaceInDiff: Bool = false) throws {
     var args: [Any] = [
         "diff",
         (hideWhitespaceInDiff ? ["-w"] : []),
@@ -130,7 +130,7 @@ func getWorkingDirectoryDiff(workspaceURL: URL,
         "-z",
         "--no-color"
     ]
-
+    
     if file.gitStatus == .added || file.gitStatus == .unknown {
         args.append("--no-index")
         args.append("--")
@@ -148,22 +148,22 @@ func getWorkingDirectoryDiff(workspaceURL: URL,
 /// `git diff` will write out messages about the line ending changes it knows
 /// about to `stderr` - this rule here will catch this and also the to/from
 /// changes based on what the user has configured.
-let lineEndingsChangeRegex = "warning: (CRLF|CR|LF) will be replaced by (CRLF|CR|LF) in .*"
+private let lineEndingsChangeRegex = "warning: (CRLF|CR|LF) will be replaced by (CRLF|CR|LF) in .*"
 
-func getBinaryPaths(directoryURL: URL, ref: String) throws -> [String] {
+public func getBinaryPaths(directoryURL: URL, ref: String) throws -> [String] {
     let output = try ShellClient.live().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git diff --numstat -z \(ref)")
-
+    
     return [""]
 }
 
-func convertDiff(directoryURL: URL,
-                 file: GitFileItem,
-                 diff: IRawDiff,
-                 oldestCommitish: String,
-                 lineEndignsChange: LineEndingsChange?) -> IDiff {
+public func convertDiff(directoryURL: URL,
+                        file: GitFileItem,
+                        diff: IRawDiff,
+                        oldestCommitish: String,
+                        lineEndignsChange: LineEndingsChange?) -> IDiff {
     let fileExtension = file.url.lastPathComponent.lowercased()
-
+    
     return IDiff.text(ITextDiff(text: diff.contents,
                                 hunks: diff.hunks,
                                 lineEndingsChange: lineEndignsChange,
@@ -171,25 +171,25 @@ func convertDiff(directoryURL: URL,
                                 hasHiddenBidiChars: diff.hasHiddenBidiChars))
 }
 
-func diffFromRawDiffOutput(output: String) -> IRawDiff {
+public func diffFromRawDiffOutput(output: String) -> IRawDiff {
     let result = output
     let pieces = result.split(separator: "\0").map { String($0) }
     let parser = DiffParser()
     return parser.parse(text: pieces[-1])
 }
 
-func buildDiff(directoryURL: URL,
-               file: GitFileItem,
-               oldestCommitish: String,
-               lineEndingsChange: LineEndingsChange?) throws -> IDiff {
-
+public func buildDiff(directoryURL: URL,
+                      file: GitFileItem,
+                      oldestCommitish: String,
+                      lineEndingsChange: LineEndingsChange?) throws -> IDiff {
+    
     let diff: IRawDiff = IRawDiff(header: "",
                                   contents: "",
                                   hunks: [],
                                   isBinary: false,
                                   maxLineNumber: 0,
                                   hasHiddenBidiChars: false)
-
+    
     if isDiffToLarge(diff: diff) {
         let largeTextDiff: ILargeTextDiff = ILargeTextDiff(text: diff.contents,
                                                            hunks: diff.hunks,
@@ -197,7 +197,7 @@ func buildDiff(directoryURL: URL,
                                                            maxLineNumber: diff.maxLineNumber,
                                                            hasHiddenBidiChars: diff.hasHiddenBidiChars)
     }
-
+    
     return convertDiff(directoryURL: directoryURL,
                        file: file,
                        diff: diff,
@@ -205,7 +205,7 @@ func buildDiff(directoryURL: URL,
                        lineEndignsChange: lineEndingsChange)
 }
 
-let binaryListRegex = "/-\t-\t(?:\0.+\0)?([^\0]*)/gi"
+private let binaryListRegex = "/-\t-\t(?:\0.+\0)?([^\0]*)/gi"
 
 enum DiffErrors: Error {
     case noCommits(String)

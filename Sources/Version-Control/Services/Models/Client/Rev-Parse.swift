@@ -20,7 +20,7 @@ enum RepositoryType {
 ///
 /// Returns 'bare', 'regular', or 'missing' if the repository couldn't be
 /// found.
-func getRepositoryType(path: String) throws -> RepositoryType {
+public func getRepositoryType(path: String) throws -> RepositoryType {
     if FileManager().directoryExistsAtPath(path) {
         return .missing
     }

@@ -9,7 +9,7 @@
 import Foundation
 
 /// Returns a list of files with conflict markers present
-func getFilesWithConflictMarkers(directoryURL: URL) throws -> [String: Int] {
+public func getFilesWithConflictMarkers(directoryURL: URL) throws -> [String: Int] {
     let args = ["diff", "--check"]
     let output = try ShellClient().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)"
@@ -23,4 +23,4 @@ func getFilesWithConflictMarkers(directoryURL: URL) throws -> [String: Int] {
 
 /// Matches a line reporting a leftover conflict marker
 /// and captures the name of the file
-let fileNameCapetureRe = "/(.+):\\d+: leftover conflict marker/gi"
+private let fileNameCapetureRe = "/(.+):\\d+: leftover conflict marker/gi"

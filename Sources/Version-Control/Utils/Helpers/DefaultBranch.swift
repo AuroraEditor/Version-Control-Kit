@@ -13,24 +13,24 @@ public struct DefaultBranch {
 
     /// The default branch name that GitHub Desktop will use when
     /// initializing a new repository.
-    let defaultBranchInAE = "main"
+    private let defaultBranchInAE = "main"
 
     /// The name of the Git configuration variable which holds what
     /// branch name Git will use when initializing a new repository.
-    let defaultBranchSettingName = "init.defaultBranch"
+    private let defaultBranchSettingName = "init.defaultBranch"
 
     /// The branch names that Aurora Editor shows by default as radio buttons on the
     /// form that allows users to change default branch name.
-    let suggestedBranchNames: [String] = ["main, master"]
+    public let suggestedBranchNames: [String] = ["main, master"]
 
     /// Returns the configured default branch when creating new repositories
     // TODO: Bug where global config value is not being processed correctly
-    func getConfiguredDefaultBranch() throws -> String? {
+    public func getConfiguredDefaultBranch() throws -> String? {
         return try getGlobalConfigVlaue(name: defaultBranchSettingName)
     }
 
     /// Returns the configured default branch when creating new repositories
-    func getDefaultBranch() throws -> String {
+    public func getDefaultBranch() throws -> String {
         // return try getConfiguredDefaultBranch() ?? defaultBranchInAE
         return defaultBranchInAE
     }
@@ -38,9 +38,8 @@ public struct DefaultBranch {
     /// Sets the configured default branch when creating new repositories.
     ///
     /// @param branchName - The default branch name to use.
-    func setDefaultBranch(branchName: String) throws -> String {
+    public func setDefaultBranch(branchName: String) throws -> String {
         return try setGlobalConfigValue(name: defaultBranchSettingName,
                                     value: branchName)
     }
-
 }

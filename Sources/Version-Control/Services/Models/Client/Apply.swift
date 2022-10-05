@@ -9,7 +9,7 @@
 
 import Foundation
 
-func applyPatchToIndex(directoryURL: URL,
+public func applyPatchToIndex(directoryURL: URL,
                        file: GitFileItem) throws {
     // If the file was a rename we have to recreate that rename since we've
     // just blown away the index. Think of this block of weird looking commands

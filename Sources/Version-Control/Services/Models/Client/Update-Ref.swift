@@ -19,7 +19,7 @@ import Foundation
 ///
 /// @param newValue - The new value for the ref.
 /// @param reason - The reflog entry.
-func updateRef(directoryURL: URL,
+public func updateRef(directoryURL: URL,
                ref: String,
                oldValue: String,
                newValue: String,
@@ -34,7 +34,7 @@ func updateRef(directoryURL: URL,
 /// @param reason - The reflog entry (optional). Note that this is only useful when
 /// deleting the HEAD reference as deleting any other reference will
 /// implicitly delete the reflog file for that reference as well.
-func deleteRef(directoryURL: URL,
+public func deleteRef(directoryURL: URL,
                ref: String,
                reason: String?) throws {
     var args = ["update-ref", "-d", ref]

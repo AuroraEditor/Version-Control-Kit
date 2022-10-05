@@ -9,7 +9,7 @@
 import Foundation
 
 /// Utility function for getting the digit count of the largest line number in an array of diff hunks
-func getLargestLineNumber(hunks: [DiffHunk]) -> Int {
+private func getLargestLineNumber(hunks: [DiffHunk]) -> Int {
     if hunks.isEmpty {
         return 0
     }

@@ -20,7 +20,7 @@ public enum GitType: String, Codable {
     case ignored = "!"
     case unchanged = "."
 
-    var description: String {
+    public var description: String {
         switch self {
         case .modified: return "M"
         case .unknown: return "?"

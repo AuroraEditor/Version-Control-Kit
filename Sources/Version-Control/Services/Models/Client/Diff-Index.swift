@@ -22,7 +22,7 @@ enum IndexStatus: Int {
 
 typealias NoRenameIndexStatus = IndexStatus
 
-func getIndexStatus(status: String) throws -> IndexStatus {
+public func getIndexStatus(status: String) throws -> IndexStatus {
     switch status.substring(0) {
     case "A":
         return IndexStatus.added
@@ -45,7 +45,7 @@ func getIndexStatus(status: String) throws -> IndexStatus {
     }
 }
 
-func getNoRenameIndexStatus(status: String) throws -> NoRenameIndexStatus {
+public func getNoRenameIndexStatus(status: String) throws -> NoRenameIndexStatus {
     let parsed = try getIndexStatus(status: status)
 
     switch parsed {
@@ -67,9 +67,9 @@ func getNoRenameIndexStatus(status: String) throws -> NoRenameIndexStatus {
 }
 
 /// The SHA for the nil tree
-let nilTreeSHA = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
+private let nilTreeSHA = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
-func getIndexChanges(directoryURL: URL) throws -> [String: NoRenameIndexStatus] {
+public func getIndexChanges(directoryURL: URL) throws -> [String: NoRenameIndexStatus] {
     let args = ["diff-index", "--cahced", "name-status", "--no-renames", "-z"]
 
     let result = try ShellClient().run(

@@ -15,7 +15,7 @@ import Foundation
 ///
 /// These arguments should be inserted before the subcommand, i.e in the case of
 /// git pull` these arguments needs to go before the `pull` argument.
-var gitNetworkArguments: [String] {
+private var gitNetworkArguments: [String] {
     // Explicitly unset any defined credential helper, we rely on our
     // own askpass for authentication.
     ["-c", "credential.helper="]
@@ -23,7 +23,7 @@ var gitNetworkArguments: [String] {
 
 /// Returns the arguments to use on any git operation that can end up
 /// triggering a rebase.
-func gitRebaseArguments() -> [String] {
+private func gitRebaseArguments() -> [String] {
     // Explicitly set the rebase backend to merge.
     // We need to force this option to be sure that AE
     // uses the merge backend even if the user has the apply backend
@@ -33,6 +33,6 @@ func gitRebaseArguments() -> [String] {
 }
 
 /// Returns the SHA of the passed in IGitResult
-func parseCommitSHA(result: String) -> String {
+private func parseCommitSHA(result: String) -> String {
     return String(result.split(separator: "]")[0].split(separator: " ")[1])
 }

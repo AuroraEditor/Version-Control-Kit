@@ -10,7 +10,7 @@
 import Foundation
 
 /// Generate a patch representing the changes associated with a range of commits
-func formatPatch(directoryURL: URL,
+public func formatPatch(directoryURL: URL,
                  base: String,
                  head: String) throws -> String {
     let result = try ShellClient.live().run(

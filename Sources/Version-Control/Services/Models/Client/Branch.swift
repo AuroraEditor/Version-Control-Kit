@@ -10,13 +10,13 @@
 import Foundation
 
 public struct Branches {
-    func getCurrentBranch(directoryURL: URL) throws -> String {
+    public func getCurrentBranch(directoryURL: URL) throws -> String {
         return try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git rev-parse --abbrev-ref HEAD"
         ).removingNewLines()
     }
 
-    func getBranches(_ allBranches: Bool = false, directoryURL: URL) throws -> [String] {
+    public func getBranches(_ allBranches: Bool = false, directoryURL: URL) throws -> [String] {
         if allBranches == true {
             return try ShellClient.live().run(
                 "cd \(directoryURL.relativePath.escapedWhiteSpaces());git branch -a --format \"%(refname:short)\""
@@ -38,7 +38,7 @@ public struct Branches {
     /// @param startPoint - A committish string that the new branch should be based
     /// on, or undefined if the branch should be created based
     /// off of the current state of HEAD
-    func createBranch(directoryURL: URL,
+    public func createBranch(directoryURL: URL,
                       name: String,
                       startPoint: String?,
                       noTrack: Bool?) throws {
@@ -53,7 +53,7 @@ public struct Branches {
     }
 
     /// Rename the given branch to a new name.
-    func renameBranch(directoryURL: URL,
+    public func renameBranch(directoryURL: URL,
                       branch: String,
                       newName: String) throws {
         try ShellClient().run(
@@ -61,7 +61,7 @@ public struct Branches {
     }
 
     /// Delete the branch locally.
-    func deleteLocalBranch(directoryURL: URL,
+    public func deleteLocalBranch(directoryURL: URL,
                            branchName: String) throws -> Bool {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git branch -D \(branchName)")
@@ -71,7 +71,7 @@ public struct Branches {
     ///
     /// @param remoteName - the name of the remote to delete the branch from
     /// @param remoteBranchName - the name of the branch on the remote
-    func deleteRemoteBranch(directoryURL: URL,
+    public func deleteRemoteBranch(directoryURL: URL,
                             remoteName: String,
                             remoteBranchName: String) throws {
         let args: [Any] = [
@@ -97,7 +97,7 @@ public struct Branches {
     ///
     /// @param commitish - a sha, HEAD, etc that the branch(es) tip should be
     /// @returns - list branch names. null if an error is encountered
-    func getBranchesPointedAt(directoryURL: URL,
+    public func getBranchesPointedAt(directoryURL: URL,
                               commitsh: String) throws -> [String]? {
         let args = [
             "branch",
@@ -113,5 +113,5 @@ public struct Branches {
         return resultRange
     }
 
-    func getMergedBranches() {}
+    public func getMergedBranches() {}
 }

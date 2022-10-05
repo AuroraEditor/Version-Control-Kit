@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct WorkflowRuns: Codable {
+public struct WorkflowRuns: Codable {
     let totalCount: Int
     let workflowRuns: [WorkflowRun]?
 

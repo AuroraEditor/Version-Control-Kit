@@ -12,7 +12,7 @@ import Foundation
 public struct Remote {
 
     /// List the remotes, sorted alphabetically by `name`, for a repository.
-    func getRemotes(directoryURL: URL) throws -> [IRemote] {
+    public func getRemotes(directoryURL: URL) throws -> [IRemote] {
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git remote -v"
         )
@@ -35,7 +35,7 @@ public struct Remote {
     }
 
     /// Add a new remote with the given URL.
-    func addRemote(directoryURL: URL,
+    public func addRemote(directoryURL: URL,
                    name: String,
                    url: String) throws -> GitRemote? {
         try ShellClient.live().run(
@@ -46,7 +46,7 @@ public struct Remote {
     }
 
     /// Removes an existing remote, or silently errors if it doesn't exist
-    func removeRemote(directoryURL: URL,
+    public func removeRemote(directoryURL: URL,
                       name: String) throws {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git remote remove"
@@ -55,7 +55,7 @@ public struct Remote {
     }
 
     /// Changes the URL for the remote that matches the given name
-    func setRemoteURL(directoryURL: URL,
+    public func setRemoteURL(directoryURL: URL,
                       name: String,
                       url: String) throws -> Bool {
         try ShellClient().run(
@@ -68,7 +68,7 @@ public struct Remote {
     /// Get the URL for the remote that matches the given name.
     ///
     /// Returns null if the remote could not be found
-    func getRemoteURL(directoryURL: URL,
+    public func getRemoteURL(directoryURL: URL,
                       name: String) throws -> String? {
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git remote get-url \(name)"
@@ -78,14 +78,14 @@ public struct Remote {
     }
 
     /// Update the HEAD ref of the remote, which is the default branch.
-    func updateRemoteHEAD(directoryURL: URL,
+    public func updateRemoteHEAD(directoryURL: URL,
                           remote: IRemote) throws {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git remote set-head -a \(remote.name)"
         )
     }
 
-    func getRemoteHEAD(directoryURL: URL,
+    public func getRemoteHEAD(directoryURL: URL,
                        remote: String) throws -> String? {
         let remoteNamespace = "refs/remotes/\(remote)/"
         let match = try Refs().getSymbolicRef(directoryURL: directoryURL,
@@ -99,13 +99,13 @@ public struct Remote {
         return nil
     }
 
-    func getRemoteHEAD(url: String) throws -> [String] {
+    public func getRemoteHEAD(url: String) throws -> [String] {
         return try ShellClient.live().run(
             "git ls-remote -q --symref \(url) | head -1 | cut -f1 | sed 's!^ref: refs/heads/!!'"
         ).components(separatedBy: "\n").filter { !$0.isEmpty }
     }
 
-    func getRemoteBranch(url: String) throws -> [String] {
+    public func getRemoteBranch(url: String) throws -> [String] {
         return try ShellClient.live().run(
             "git ls-remote \(url) --h --sort origin \"refs/heads/*\" | cut -f2 | sed 's!^refs/heads/!!'"
         ).components(separatedBy: "\n").filter { !$0.isEmpty }

@@ -9,7 +9,7 @@
 import Foundation
 import SwiftUI
 
-struct Workflow: Codable, Hashable, Identifiable, Comparable {
+public struct Workflow: Codable, Hashable, Identifiable, Comparable {
     static func < (lhs: Workflow, rhs: Workflow) -> Bool {
         return lhs.name < rhs.name
     }

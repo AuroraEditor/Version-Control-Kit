@@ -15,7 +15,7 @@ public struct Commit {
     /// @param message commit message
     /// @param files files to commit
     /// @returns the commit SHA
-    func createCommit(directoryURL: URL,
+    public func createCommit(directoryURL: URL,
                       message: String,
                       files: [GitFileItem],
                       amend: Bool = false) throws -> String {
@@ -43,5 +43,5 @@ public struct Commit {
     ///
     /// @param repository repository to execute merge in
     /// @param files files to commit
-    func createMergeCommit() {}
+    public func createMergeCommit() {}
 }

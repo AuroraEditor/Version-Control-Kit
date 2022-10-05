@@ -8,7 +8,7 @@
 
 import Foundation
 
-func checkIfProjectIsRepo(workspaceURL: URL) -> Bool {
+public func checkIfProjectIsRepo(workspaceURL: URL) -> Bool {
     do {
         let type = try getRepositoryType(path: workspaceURL.path)
 

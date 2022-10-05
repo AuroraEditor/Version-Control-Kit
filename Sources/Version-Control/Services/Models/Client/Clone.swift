@@ -28,6 +28,5 @@ public struct Clone {
     ///                     of the clone operation. When provided this enables
     ///                     the '--progress' command line flag for
     ///                     'git clone'.
-    func clone() {}
-
+    public func clone() {}
 }

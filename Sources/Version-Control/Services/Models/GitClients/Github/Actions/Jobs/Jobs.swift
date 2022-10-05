@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct Jobs: Codable {
+public struct Jobs: Codable {
     let id: Int
     let runId: Int
     let runURL: String

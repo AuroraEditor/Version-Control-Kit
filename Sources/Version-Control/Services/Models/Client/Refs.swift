@@ -19,7 +19,7 @@ public struct Refs {
     /// - heads/AuroraEditor/main -> refs/heads/AuroraEditor/main
     ///
     /// @param name - The local branch name
-    func formatAsLocalRef(name: String) -> String {
+    public func formatAsLocalRef(name: String) -> String {
         if name.starts(with: "heads/") {
             // In some cases, Git will report this name explicitly to distinguish from
             // a remote ref with the same name - this ensures we format it correctly.
@@ -45,7 +45,7 @@ public struct Refs {
     ///
     /// @returns - the canonical ref, if found, or `nil` if `ref` cannot be found or
     /// is not a symbolic ref
-    func getSymbolicRef(directoryURL: URL,
+    public func getSymbolicRef(directoryURL: URL,
                         ref: String) throws -> String? {
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git symbolic-ref -q \(ref)"

@@ -9,7 +9,7 @@
 
 import Foundation
 
-func listSubmodules(directoryURL: URL,
+public func listSubmodules(directoryURL: URL,
                     paths: [String]) throws -> [SubmoduleEntry] {
     let submodulesFile = FileManager.default.fileExists(atPath: "\(directoryURL).gitmodules")
     var isDirectory: ObjCBool = true
@@ -65,7 +65,7 @@ func listSubmodules(directoryURL: URL,
     return submodules
 }
 
-func resetSubmodulePaths(directoryURL: URL,
+public func resetSubmodulePaths(directoryURL: URL,
                          paths: [String]) throws {
     if paths.isEmpty {
         return
@@ -75,7 +75,7 @@ func resetSubmodulePaths(directoryURL: URL,
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git submodule update --recursive --force --\(paths)")
 }
 
-class SubmoduleEntry {
+public class SubmoduleEntry {
     let sha: String
     let path: String
     let describe: String

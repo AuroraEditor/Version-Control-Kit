@@ -8,14 +8,14 @@
 
 import Foundation
 
-enum CommitDate: String {
+public enum CommitDate: String {
     case lastDay = "Last 24 Hours"
     case lastSevenDays = "Last 7 Days"
     case lastThirtyDays = "Last 30 Days"
 }
 
 /// Get the repository's commits using `revisionRange` and limited to `limit`
-func getCommits(directoryURL: URL,
+public func getCommits(directoryURL: URL,
                 revisionRange: String = "",
                 limit: Int,
                 skip: Int = 0,

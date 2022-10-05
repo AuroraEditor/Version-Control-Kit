@@ -9,12 +9,12 @@
 
 import Foundation
 
-class GitAuthor {
+public class GitAuthor {
 
     var name: String
     var email: String
 
-    init(name: String?, email: String?) {
+    public init(name: String?, email: String?) {
         self.name = name ?? "Unknown"
         self.email = email ?? "Unknown"
     }

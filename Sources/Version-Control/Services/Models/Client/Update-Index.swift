@@ -49,7 +49,7 @@ protocol IUpdateIndexOptions {
     var replace: Bool? { get set }
 }
 
-class UpdateIndexOptions: IUpdateIndexOptions {
+public class UpdateIndexOptions: IUpdateIndexOptions {
     var add: Bool?
     var remove: Bool?
     var forceRemove: Bool?
@@ -63,7 +63,7 @@ class UpdateIndexOptions: IUpdateIndexOptions {
     }
 }
 
-func updateIndex(directoryURL: URL,
+public func updateIndex(directoryURL: URL,
                  paths: [String],
                  options: UpdateIndexOptions?) throws {
 
@@ -95,7 +95,7 @@ func updateIndex(directoryURL: URL,
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)")
 }
 
-func stageFiles(directoryURL: URL,
+public func stageFiles(directoryURL: URL,
                 files: [GitFileItem]) throws {
     var normal: [String] = []
     var oldRenamed: [String] = []

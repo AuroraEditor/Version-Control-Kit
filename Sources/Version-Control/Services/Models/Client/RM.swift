@@ -10,7 +10,7 @@
 import Foundation
 
 /// Remove all files from the index
-func unstageAllFiles(directoryURL: URL) {
+public func unstageAllFiles(directoryURL: URL) {
     do {
         try ShellClient().run(
             // these flags are important:
@@ -25,7 +25,7 @@ func unstageAllFiles(directoryURL: URL) {
 }
 
 /// Remove conflicted file from  working tree and index
-func removeConflictedFile(directoryURL: URL,
+public func removeConflictedFile(directoryURL: URL,
                           file: GitFileItem) throws {
     try ShellClient().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git rm --\(file.url)")

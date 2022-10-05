@@ -26,7 +26,7 @@ public enum GitResetMode: Int {
 
 public struct Reset {
 
-    func resetModeToArgs(mode: GitResetMode, ref: String) -> [String] {
+    public func resetModeToArgs(mode: GitResetMode, ref: String) -> [String] {
         switch mode {
         case .hard:
             return ["reset", "--hard", ref]
@@ -38,7 +38,7 @@ public struct Reset {
     }
 
     /// Reset with the mode to the ref.
-    func reset(directoryURL: URL,
+    public func reset(directoryURL: URL,
                mode: GitResetMode,
                ref: String) throws -> Bool {
         let args = resetModeToArgs(mode: mode,
@@ -62,7 +62,7 @@ public struct Reset {
     ///
     /// @param paths - The paths that should be updated in the index with information
     /// from the given tree
-    func resetPaths(directoryURL: URL,
+    public func resetPaths(directoryURL: URL,
                     mode: GitResetMode,
                     ref: String,
                     paths: [String]) throws {
@@ -79,7 +79,7 @@ public struct Reset {
 
     /// Unstage all paths.
     @discardableResult
-    func unstageAll(directoryURL: URL) throws -> Bool {
+    public func unstageAll(directoryURL: URL) throws -> Bool {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git reset -- ."
         )

@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct JobSteps: Codable {
+public struct JobSteps: Codable {
     let name: String
     let status: String
     let conclusion: String
