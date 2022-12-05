@@ -16,8 +16,17 @@ import Foundation
 public func createTag(directoryURL: URL,
                       name: String,
                       targetCommitSha: String) throws {
+    let args = [
+        "tag",
+         "-a",
+         "-m",
+         "",
+         name,
+         targetCommitSha
+    ]
+
     try ShellClient().run(
-        "cd \(directoryURL.relativePath.escapedWhiteSpaces());git tag -a -m \(name) \(targetCommitSha)"
+        "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args.joined(separator: " "))"
     )
 }
 
