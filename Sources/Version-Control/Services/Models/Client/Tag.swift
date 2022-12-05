@@ -25,6 +25,8 @@ public func createTag(directoryURL: URL,
          targetCommitSha
     ]
 
+    print("cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args.joined(separator: " "))")
+
     try ShellClient().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args.joined(separator: " "))"
     )
