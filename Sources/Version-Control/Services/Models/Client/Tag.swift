@@ -21,8 +21,8 @@ public func createTag(directoryURL: URL,
          "-a",
          "-m",
          "",
-         name,
-         targetCommitSha
+         targetCommitSha,
+         name
     ]
 
     print("cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args.joined(separator: " "))")
