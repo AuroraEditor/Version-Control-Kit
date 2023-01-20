@@ -20,7 +20,7 @@
 
 <br/>
 
-AuroraEditor Version Control Kit allows us to perform actions like commiting, pulling, pushing and fetching history of whole files or just a certian line of code.
+AuroraEditor Version Control Kit allows us to perform actions like commiting, pulling, pushing and fetching history of whole files or just a certain line of code.
 
 It is currently still in **development** and has been extracted from the main [AuroraEditor Repository](https://github.com/AuroraEditor/AuroraEditor).
 
@@ -32,4 +32,4 @@ The AuroraEditor Version Control Logo is copyright of AuroraEditor and Aurora Co
 
 ### GNU Affero General Public License v3.0
 
-AuroraEditor Version Control Kit uses the [GNU AGL V3 License](https://github.com/AuroraEditor/Version-Control-Kit/blob/main/LICENSE)
+AuroraEditor Version Control Kit uses the [GNU AGPL V3 License](https://github.com/AuroraEditor/Version-Control-Kit/blob/main/LICENSE)
