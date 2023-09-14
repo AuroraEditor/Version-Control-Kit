@@ -33,6 +33,7 @@ public func getRemotes(directoryURL: URL) throws -> [IRemote] {
 }
 
 /// Add a new remote with the given URL.
+@discardableResult
 public func addRemote(directoryURL: URL,
                       name: String,
                       url: String) throws -> GitRemote? {
