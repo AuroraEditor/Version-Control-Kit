@@ -15,8 +15,7 @@ import Foundation
 ///
 /// Each parameter can be the commit SHA or a ref name, or specify an empty
 /// string to represent HEAD.
-// swiftlint:disable:next identifier_name
-private func revRange(from: String, to: String) -> String {
+private func revRange(from: String, to: String) -> String { // swiftlint:disable:this identifier_name
     return "\(from)..\(to)"
 }
 
@@ -26,8 +25,7 @@ private func revRange(from: String, to: String) -> String {
 ///
 /// Each parameter can be the commit SHA or a ref name, or specify an empty
 /// string to represent HEAD.
-// swiftlint:disable:next identifier_name
-private func revRangeInclusive(from: String, to: String) -> String {
+private func revRangeInclusive(from: String, to: String) -> String { // swiftlint:disable:this identifier_name
     return "\(from)^...\(to)"
 }
 
@@ -37,8 +35,7 @@ private func revRangeInclusive(from: String, to: String) -> String {
 ///
 /// Each parameter can be the commit SHA or a ref name, or you can use an empty
 /// string to represent HEAD.
-// swiftlint:disable:next identifier_name
-private func revSymmetricDifference(from: String, to: String) -> String {
+private func revSymmetricDifference(from: String, to: String) -> String { // swiftlint:disable:this identifier_name
     return "\(from)...\(to)"
 }
 

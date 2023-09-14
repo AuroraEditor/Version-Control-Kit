@@ -24,8 +24,8 @@ public struct DefaultBranch {
     public let suggestedBranchNames: [String] = ["main, master"]
 
     /// Returns the configured default branch when creating new repositories
-    // TODO: Bug where global config value is not being processed correctly
     public func getConfiguredDefaultBranch() throws -> String? {
+        // TODO: Bug where global config value is not being processed correctly
         return try getGlobalConfigVlaue(name: defaultBranchSettingName)
     }
 
