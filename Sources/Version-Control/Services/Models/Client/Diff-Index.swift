@@ -67,8 +67,26 @@ public func getNoRenameIndexStatus(status: String) throws -> IndexStatus {
 /// The SHA for the nil tree
 public let nilTreeSHA = "4b825dc642cb6eb9a060e54bf8d69288fbee4904"
 
+/// Get the status of changes in the Git index (staging area).
+///
+/// This function retrieves the status of changes in the Git index (staging area) for all tracked files.
+///
+/// - Parameters:
+///   - directoryURL: The URL of the Git repository directory where the `git diff-index` command will be executed.
+///
+/// - Returns: A dictionary where the keys are file paths and the values are `IndexStatus` representing the status of each file in the index.
+///
+/// - Throws: An error if there is a problem executing the `git diff-index` command or if the Git repository is not in a valid state.
+///
+/// - SeeAlso: `git diff-index` documentation for additional options and details.
 public func getIndexChanges(directoryURL: URL) throws -> [String: IndexStatus] {
-    let args = ["diff-index", "--cahced", "name-status", "--no-renames", "-z"]
+    let args = [
+        "diff-index",
+        "--cached",
+        "name-status",
+        "--no-renames",
+        "-z"
+    ]
 
     let result = try ShellClient().run(
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)"
@@ -78,12 +96,11 @@ public func getIndexChanges(directoryURL: URL) throws -> [String: IndexStatus] {
 
     let pieces = result.split(separator: "\0")
 
-    // swiftlint:disable:next identifier_name
     for i in stride(from: 0, to: pieces.count, by: 2) {
         let status = try getNoRenameIndexStatus(status: String(pieces[i]))
-        let path = pieces[i + 1]
+        let path = String(pieces[i + 1])
 
-        map = [String(path): status]
+        map[path] = status
     }
 
     return map

@@ -48,6 +48,37 @@ extension String {
             return []
         }
     }
+    
+    func urlEncode(_ parameters: [String: Any]) -> String? {
+        var components = URLComponents()
+        components.queryItems = parameters.map { key, value in
+            URLQueryItem(name: key, value: "\(value)")
+        }
+        return components.percentEncodedQuery
+    }
+    
+    func urlEncode() -> String? {
+        return self.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed)
+    }
+    
+    func stdout() throws -> String {
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/bash")
+        process.arguments = ["-c", self]
+        
+        let stdoutPipe = Pipe()
+        process.standardOutput = stdoutPipe
+        
+        try process.run()
+        process.waitUntilExit()
+        
+        let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
+        if let stdoutString = String(data: stdoutData, encoding: .utf8) {
+            return stdoutString
+        } else {
+            throw NSError(domain: "Error converting stdout data to string", code: 0, userInfo: nil)
+        }
+    }
 }
 
 extension StringProtocol where Index == String.Index {

@@ -9,6 +9,33 @@
 
 import Foundation
 
+/// Applies a Git patch to the Git index for a specified file in a specified directory.
+///
+/// - Parameters:
+///   - directoryURL: The URL of the directory containing the Git repository.
+///   - file: The GitFileItem representing the file to which the patch should be applied.
+///
+/// - Throws:
+///   - An error of type `Error` if any issues occur during the patch application process.
+///
+/// - Note:
+///   If the file was renamed (`file.gitStatus == .renamed`), this function recreates the rename operation by staging the removal of the old file and adding the old file's blob to the index under the new name.
+///
+/// - Example:
+///   ```swift
+///   let directoryURL = URL(fileURLWithPath: "/path/to/repo")
+///   let fileToPatch = GitFileItem(url: URL(fileURLWithPath: "path/to/file"), status: .modified)
+///
+///   do {
+///       try applyPatchToIndex(directoryURL: directoryURL, file: fileToPatch)
+///       print("Patch applied to the index for '\(fileToPatch.url.relativePath)'.")
+///   } catch {
+///       print("Error applying patch to the index: \(error.localizedDescription)")
+///   }
+///   ```
+///
+/// - Warning:
+///   Ensure that the specified `directoryURL` exists and is a valid Git repository directory.
 public func applyPatchToIndex(directoryURL: URL,
                               file: GitFileItem) throws {
     // If the file was a rename we have to recreate that rename since we've

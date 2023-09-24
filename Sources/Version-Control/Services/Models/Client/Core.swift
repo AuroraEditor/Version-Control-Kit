@@ -32,7 +32,27 @@ public func gitRebaseArguments() -> [String] {
     return ["-c", "rebase.backend=merge"]
 }
 
-/// Returns the SHA of the passed in IGitResult
+/// Parse the commit SHA from a Git command result string.
+///
+/// This function extracts the commit SHA from a Git command result string. It assumes that the result string follows a specific format, typically used in Git commands that return commit information.
+///
+/// - Parameter result: The Git command result string containing commit information.
+///
+/// - Returns: The commit SHA extracted from the result string.
+///
+/// - Example:
+///   ```swift
+///   let gitResult = "[commit abcdef12345678901234567890] Some commit message"
+///   let commitSHA = parseCommitSHA(result: gitResult)
+///   print("Parsed Commit SHA: \(commitSHA)")
+///   ```
+///
+/// - Note:
+///   This function is designed to work with Git command result strings that have a specific format, where the commit SHA is enclosed in square brackets (e.g., "[commit abcdef12345678901234567890]").
+///
+/// - Warning:
+///   Ensure that the provided result string conforms to the expected format; otherwise, this function may not extract the commit SHA correctly.
+
 public func parseCommitSHA(result: String) -> String {
     return String(result.split(separator: "]")[0].split(separator: " ")[1])
 }

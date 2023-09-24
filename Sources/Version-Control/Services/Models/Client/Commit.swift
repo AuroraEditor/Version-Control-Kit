@@ -11,18 +11,40 @@ import Foundation
 
 public struct Commit {
 
-    /// @param repository repository to execute merge in
-    /// @param message commit message
-    /// @param files files to commit
-    /// @returns the commit SHA
+    /// Creates a Git commit in a specified Git repository directory.
+    ///
+    /// - Parameters:
+    ///   - directoryURL: The URL of the directory containing the Git repository.
+    ///   - message: The commit message for the new commit.
+    ///   - files: An array of `GitFileItem` representing the files to be included in the commit.
+    ///   - amend: A Boolean flag indicating whether to amend the last commit (default is `false`).
+    ///
+    /// - Throws:
+    ///   - An error of type `Error` if any issues occur during the commit creation process.
+    ///
+    /// - Returns:
+    ///   The SHA-1 hash of the newly created commit.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repo")
+    ///   let commitMessage = "Added feature X" // Replace with your commit message
+    ///   let filesToCommit = [GitFileItem(url: URL(fileURLWithPath: "file1.txt"), status: .modified)]
+    ///
+    ///   do {
+    ///       let commitSHA = try createCommit(directoryURL: directoryURL, message: commitMessage, files: filesToCommit)
+    ///       print("Commit \(commitSHA) created successfully.")
+    ///   } catch {
+    ///       print("Error creating commit: \(error.localizedDescription)")
+    ///   }
+    ///   ```
+    ///
+    /// - Warning:
+    ///   Ensure that the specified `directoryURL` exists and is a valid Git repository directory.
     public func createCommit(directoryURL: URL,
                              message: String,
                              files: [GitFileItem],
                              amend: Bool = false) throws -> String {
-
-        // Clear the staging area, our diffs reflect the difference between the
-        // working directory and the last commit (if any) so our commits should
-        // do the same thing.
         try Reset().unstageAll(directoryURL: directoryURL)
 
         var args = ["-F", "-"]

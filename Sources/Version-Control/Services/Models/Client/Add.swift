@@ -10,10 +10,15 @@
 import Foundation
 
 public struct Add {
+    /**
+     Adds a conflicted file to the index.
 
-    /// Add a conflicted file to the index.
-    ///
-    /// Typically done after having resolved conflicts either manually
-    /// or through checkout --theirs/--ours.
-    public func addConflictedFile() {}
+     Typically done after having resolved conflicts either manually
+     or through checkout --theirs/--ours.
+     */
+    func addConflictedFile(directoryURL: URL,
+                           file: GitFileItem) async throws {
+        
+        try ShellClient().run("cd \(directoryURL.relativePath.escapedWhiteSpaces()); git add -- \(file.url)")
+    }
 }

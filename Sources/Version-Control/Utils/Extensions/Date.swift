@@ -9,16 +9,23 @@ import Foundation
 
 public extension Date {
 
-    public func yearMonthDayFormat() -> String {
+    func yearMonthDayFormat() -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
         return dateFormatter.string(from: self)
     }
 
-    public func gitDateFormat(commitDate: String) -> Date? {
+    func gitDateFormat(commitDate: String) -> Date? {
         let dateFormatter = DateFormatter()
         dateFormatter.locale = Locale.current
         dateFormatter.dateFormat = "E MMM dd HH:mm:ss yyyy Z"
         return dateFormatter.date(from: commitDate)
+    }
+    
+    func toGitHubIsoDateString(_ date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+        return dateFormatter.string(from: date)
     }
 }

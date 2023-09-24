@@ -78,20 +78,62 @@ public struct CherryPick {
     public func continueCherryPick() {}
 
     /// Abandon the current cherry pick operation
+    /// Aborts the ongoing cherry-pick operation in a specified Git repository directory.
+    ///
+    /// - Parameter directoryURL: The URL of the directory containing the Git repository.
+    ///
+    /// - Throws:
+    ///   - An error of type `Error` if any issues occur during the cherry-pick abort process.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repo")
+    ///
+    ///   do {
+    ///       try abortCherryPick(directoryURL: directoryURL)
+    ///       print("Cherry-pick operation aborted successfully.")
+    ///   } catch {
+    ///       print("Error aborting cherry-pick operation: \(error.localizedDescription)")
+    ///   }
+    ///   ```
+    ///
+    /// - Warning:
+    ///   Ensure that the specified `directoryURL` exists and is a valid Git repository directory.
     public func abortCherryPick(directoryURL: URL) throws {
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git cherry-pick --abort"
         )
     }
 
-    /// Check if the `.git/CHERRY_PICK_HEAD` file exists
+    /// Checks if the `.git/CHERRY_PICK_HEAD` file exists in a specified Git repository directory.
+    ///
+    /// - Parameter directoryURL: The URL of the directory containing the Git repository.
+    ///
+    /// - Returns: `true` if the `.git/CHERRY_PICK_HEAD` file exists, `false` otherwise.
+    ///
+    /// - Note:
+    ///   This function is typically used to check if a cherry-pick operation is in progress in the Git repository.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repo")
+    ///
+    ///   if isCherryPickHeadFound(directoryURL: directoryURL) {
+    ///       print("Cherry-pick operation is in progress.")
+    ///   } else {
+    ///       print("No cherry-pick operation in progress.")
+    ///   }
+    ///   ```
+    ///
+    /// - Warning:
+    ///   Ensure that the specified `directoryURL` exists and is a valid Git repository directory.
     public func isCherryPickHeadFound(directoryURL: URL) -> Bool {
         do {
             let cherryPickHeadPath = try String(contentsOf: directoryURL) + ".git/CHERRY_PICK_HEAD"
+            
             return FileManager.default.fileExists(atPath: cherryPickHeadPath)
         } catch {
-            // swiftlint:disable:next line_length
-            print("[cherryPick] a problem was encountered reading .git/CHERRY_PICK_HEAD, so it is unsafe to continue cherry-picking")
+            print("[cherryPick] A problem was encountered reading .git/CHERRY_PICK_HEAD, so it is unsafe to continue cherry-picking.")
             return false
         }
     }

@@ -14,7 +14,41 @@ public enum CommitDate: String {
     case lastThirtyDays = "Last 30 Days"
 }
 
-/// Get the repository's commits using `revisionRange` and limited to `limit`
+/// Retrieve a list of Git commits from the repository's history.
+///
+/// This function retrieves a list of Git commits from the repository's history based on the specified parameters. You can filter commits by revision range, limit the number of commits returned, skip a certain number of commits, and include additional Git log arguments. You can also filter commits by date and exclude merge commits if needed.
+///
+/// - Parameters:
+///   - directoryURL: The URL of the Git repository directory.
+///   - revisionRange: A string specifying the revision range for filtering commits (optional).
+///   - limit: The maximum number of commits to retrieve (optional).
+///   - skip: The number of commits to skip (optional).
+///   - additionalArgs: Additional Git log arguments (optional).
+///   - commitsSince: Filter commits based on date (optional).
+///   - getMerged: Specify whether to include merge commits (optional).
+///
+/// - Throws: An error if there was an issue executing the Git log command or parsing the commit history.
+///
+/// - Returns: An array of `CommitHistory` objects representing the Git commits.
+///
+/// - Example:
+///   ```swift
+///   do {
+///       let commits = try getCommits(directoryURL: myProjectDirectoryURL, limit: 10)
+///       for commit in commits {
+///           print("Commit Hash: \(commit.hash)")
+///           print("Author: \(commit.author)")
+///           print("Message: \(commit.message)")
+///           // ...
+///       }
+///   } catch {
+///       print("Error: \(error)")
+///   }
+///   ```
+///
+/// - Note: The `CommitHistory` structure represents a Git commit and includes fields such as the commit hash, author, commit message, date, and more.
+///
+/// - Important: Ensure that you have a valid Git repository in the specified directory before calling this function.
 public func getCommits(directoryURL: URL,
                        revisionRange: String = "",
                        limit: Int,
