@@ -63,6 +63,27 @@ public class UpdateIndexOptions: IUpdateIndexOptions {
     }
 }
 
+/// Update the Git index with changes to specified paths in a local Git repository.
+///
+/// This function updates the Git index with changes to the specified file paths in the local Git repository.
+///
+/// - Parameters:
+///   - directoryURL: The local directory URL of the Git repository.
+///   - paths: An array of file paths to update in the Git index.
+///   - options: An optional `UpdateIndexOptions` object that allows you to specify additional options for the `update-index` Git command.
+///
+/// - Throws: An error if there's an issue with executing the Git command or if the specified paths are invalid.
+///
+/// - Example:
+///   ```swift
+///   do {
+///       let directoryURL = URL(fileURLWithPath: "/path/to/local/repository")
+///       let pathsToUpdate = ["file1.txt", "file2.txt"]
+///       let updateOptions = UpdateIndexOptions(add: true, remove: false, forceRemove: false, replace: false)
+///       try updateIndex(directoryURL: directoryURL, paths: pathsToUpdate, options: updateOptions)
+///   } catch {
+///       print("Error: Unable to update the Git index.")
+///   }
 public func updateIndex(directoryURL: URL,
                         paths: [String],
                         options: UpdateIndexOptions?) throws {
