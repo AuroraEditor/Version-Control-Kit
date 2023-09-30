@@ -11,6 +11,8 @@ import Foundation
 
 public struct Config {
     
+    public init() {}
+    
     /// Look up a Git configuration value by name within a specific repository context.
     ///
     /// This function retrieves a Git configuration value within the context of a specific Git repository by reading the repository's path and then using the `getConfigValueInPath` function to perform the configuration value lookup.

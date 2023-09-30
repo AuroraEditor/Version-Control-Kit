@@ -10,6 +10,8 @@
 import Foundation
 
 public struct GitIgnore {
+    
+    public init() {}
 
     /// Read the contents of the repository's root `.gitignore` file.
     ///

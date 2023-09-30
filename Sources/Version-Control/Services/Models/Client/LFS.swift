@@ -11,6 +11,8 @@ import Foundation
 
 public struct LFS {
     
+    public init() {}
+    
     /// Install Git LFS (Large File Storage) global filters.
     ///
     /// Git LFS is an extension for handling large files in a Git repository. This function installs Git LFS global filters, which apply to all Git repositories on the system and are configured globally.

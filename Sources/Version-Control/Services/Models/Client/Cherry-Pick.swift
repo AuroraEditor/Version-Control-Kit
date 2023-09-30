@@ -10,6 +10,9 @@
 import Foundation
 
 public struct CherryPick {
+    
+    public init() {}
+    
     /// The app-specific results from attempting to cherry pick commits
     enum CherryPickResult: String {
         /// Git completed the cherry pick without reporting any errors, and the caller can

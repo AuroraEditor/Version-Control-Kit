@@ -25,6 +25,8 @@ public enum GitResetMode: Int {
 }
 
 public struct Reset {
+    
+    public init() {}
 
     /// Convert a Git reset mode and a reference to an array of Git command arguments.
     ///

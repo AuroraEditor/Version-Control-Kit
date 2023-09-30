@@ -11,6 +11,8 @@ import Foundation
 
 public struct Tag {
     
+    public init() {}
+    
     /// Create a Git tag in a repository.
     ///
     /// This function creates a Git tag with the specified `name` in a Git repository located at the specified `directoryURL`. The tag is associated with a target commit identified by its SHA (`targetCommitSha`).

@@ -11,6 +11,8 @@ import Foundation
 
 public struct Checkout {
     
+    public init() {}
+    
     /// Checks out a Git branch in a specified directory.
     ///
     /// - Parameters:

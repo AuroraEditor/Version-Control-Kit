@@ -10,6 +10,8 @@
 import Foundation
 
 public struct Commit {
+    
+    public init() {}
 
     /// Creates a Git commit in a specified Git repository directory.
     ///
