@@ -192,8 +192,8 @@ public struct GitIgnore {
     ///
     /// - Important: Ensure that you have a valid Git repository and a `.gitignore` file in the specified directory before calling this function.
     func formatGitIgnoreContents(text: String, directoryURL: URL) throws -> String {
-        let autocrlf = try getConfigValue(directoryURL: directoryURL, name: "core.autocrlf")
-        let safecrlf = try getConfigValue(directoryURL: directoryURL, name: "core.safecrlf")
+        let autocrlf = try Config().getConfigValue(directoryURL: directoryURL, name: "core.autocrlf")
+        let safecrlf = try Config().getConfigValue(directoryURL: directoryURL, name: "core.safecrlf")
 
         if autocrlf == "true" && safecrlf == "true" {
             // Normalize line endings to CRLF (\r\n)

@@ -173,6 +173,6 @@ public func stageFiles(directoryURL: URL,
                     options: UpdateIndexOptions(forceRemove: true))
 
     for file in files {
-        try applyPatchToIndex(directoryURL: directoryURL, file: file)
+        try Apply().applyPatchToIndex(directoryURL: directoryURL, file: file)
     }
 }

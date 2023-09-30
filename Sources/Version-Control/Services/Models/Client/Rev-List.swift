@@ -211,7 +211,7 @@ public func getAheadBehind(directoryURL: URL,
 ///
 /// - Returns: An `IAheadBehind` object representing the number of commits ahead and behind the upstream branch, or `nil` if the branch type is remote or no upstream branch is set.
 func getBranchAheadBehind(directoryURL: URL,
-                          branch: Branch) async throws -> IAheadBehind? {
+                          branch: GitBranch) async throws -> IAheadBehind? {
     if branch.type == .remote {
         return nil
     }

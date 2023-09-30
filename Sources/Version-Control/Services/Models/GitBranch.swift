@@ -78,7 +78,7 @@ enum BranchType: Int {
     case remote = 1
 }
 
-struct Branch {
+struct GitBranch {
     let name: String
     let upstream: String?
     let tip: IBranchTip
