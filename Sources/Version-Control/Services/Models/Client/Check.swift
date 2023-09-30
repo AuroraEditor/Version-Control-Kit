@@ -9,6 +9,8 @@
 import Foundation
 
 public struct Check {
+    
+    public init() {}
  
     /// Checks if a given workspace directory is a Git repository or a Git worktree.
     ///

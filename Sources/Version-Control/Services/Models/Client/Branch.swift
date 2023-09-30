@@ -11,6 +11,8 @@ import Foundation
 
 public struct Branch {
     
+    public init() {}
+    
     /// Retrieves the name of the current Git branch in a specified directory.
     ///
     /// - Parameters:
