@@ -10,7 +10,9 @@ import Foundation
 
 /// Convert two references into Git's range syntax.
 ///
-/// Git's range syntax represents the set of commits that are reachable from the `to` reference but excludes those that are reachable from the `from` reference. This syntax is not inclusive of the `from` reference itself; it only includes commits up to the `to` reference.
+/// Git's range syntax represents the set of commits that are reachable from the `to` reference 
+/// but excludes those that are reachable from the `from` reference. \
+/// This syntax is not inclusive of the `from` reference itself; it only includes commits up to the `to` reference.
 ///
 /// - Parameters:
 ///   - from: The source reference or commit SHA.
@@ -45,7 +47,9 @@ private func revRange(from: String, to: String) -> String {
 
 /// Convert two references into Git's inclusive range syntax.
 ///
-/// Git's inclusive range syntax represents the set of commits that are reachable from the `to` reference but excludes those that are reachable from the `from` reference. Unlike `revRange`, this syntax includes the `from` reference itself.
+/// Git's inclusive range syntax represents the set of commits that are reachable from the `to`
+/// reference but excludes those that are reachable from the `from` reference. \
+/// Unlike `revRange`, this syntax includes the `from` reference itself.
 ///
 /// - Parameters:
 ///   - from: The source reference or commit SHA.
@@ -64,7 +68,9 @@ private func revRange(from: String, to: String) -> String {
 ///   ```
 ///
 /// - Note:
-///   The Git inclusive range syntax is used to represent the set of commits that are reachable from the `to` reference but excludes those that are reachable from the `from` reference. It includes the commit specified by the `from` reference.
+///   The Git inclusive range syntax is used to represent the set of commits that are reachable
+///   from the `to` reference but excludes those that are reachable from the `from` reference. \
+///   It includes the commit specified by the `from` reference.
 ///
 /// - Warning:
 ///   Ensure that the `from` and `to` parameters represent valid references or commit SHA values 

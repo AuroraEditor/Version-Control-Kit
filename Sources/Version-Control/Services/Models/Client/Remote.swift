@@ -225,16 +225,22 @@ public func getRemoteURL(directoryURL: URL, name: String) throws -> String? {
 
 /// Update the HEAD reference for a remote Git repository.
 ///
-/// Use this function to update the HEAD reference of a remote Git repository associated with a specific remote name. The function executes a Git command to set the HEAD reference of the remote repository to its default branch (usually the main branch).
+/// Use this function to update the HEAD reference of a remote Git repository associated 
+/// with a specific remote name. \
+/// The function executes a Git command to set the HEAD reference of the remote repository
+/// to its default branch (usually the main branch).
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the local Git repository.
 ///   - remote: An instance of `IRemote` representing the remote repository to update.
 ///
-/// - Throws: An error if there is a problem accessing the Git repository or executing the Git command to update the remote's HEAD reference.
+/// - Throws: An error if there is a problem accessing the Git repository or executing \
+///           the Git command to update the remote's HEAD reference.
 ///
 /// - Note:
-///   - The function executes the Git command `git remote set-head -a <remote-name>` to update the remote's HEAD reference to its default branch. This operation is typically used to synchronize the remote's HEAD reference with its default branch.
+///   - The function executes the Git command `git remote set-head -a <remote-name>` \
+///     to update the remote's HEAD reference to its default branch. \
+///     This operation is typically used to synchronize the remote's HEAD reference with its default branch.
 ///
 /// - Example:
 ///   ```swift
@@ -283,7 +289,8 @@ public func updateRemoteHEAD(directoryURL: URL, remote: IRemote) throws {
 ///   ```
 ///
 /// - Note:
-///   - This function constructs the reference path for the remote's HEAD using the provided `remote` name and then fetches the reference using the `Refs` utility.
+///   - This function constructs the reference path for the remote's HEAD using the provided \
+///     `remote` name and then fetches the reference using the `Refs` utility.
 ///   - The function returns `nil` if the remote's HEAD reference is not found or if there is an error in the process.
 public func getRemoteHEAD(directoryURL: URL, remote: String) throws -> String? {
     let remoteNamespace = "refs/remotes/\(remote)/"
@@ -322,7 +329,8 @@ public func getRemoteHEAD(directoryURL: URL, remote: String) throws -> String? {
 ///
 /// - Note:
 ///   - This function fetches the HEAD reference information from a remote Git repository at the specified URL.
-///   - It extracts the name of the HEAD branch from the Git command output, removing any empty or unnecessary characters.
+///   - It extracts the name of the HEAD branch from the Git command output, \
+///     removing any empty or unnecessary characters.
 public func getRemoteHEAD(url: String) throws -> String {
     return try ShellClient.live().run(
         "git ls-remote -q --symref \(url) | head -1 | cut -f1 | sed 's!^ref: refs/heads/!!'"

@@ -35,9 +35,12 @@ public struct LFS {
     ///   }
     ///   ```
     ///
-    /// - Note: If `force` is set to `true`, the function will forcibly install global LFS filters even if they already exist.
+    /// - Note: If `force` is set to `true`, the function will forcibly install global LFS filters \
+    ///         even if they already exist.
     ///
-    /// - Important: Installing global Git LFS filters is typically required to properly manage large files in all Git repositories on the system. Make sure to call this function if you want to apply Git LFS globally.
+    /// - Important: Installing global Git LFS filters is typically required to \
+    ///              properly manage large files in all Git repositories on the system. \
+    ///              Make sure to call this function if you want to apply Git LFS globally.
     public func installGlobalLFSFilters(force: Bool) throws {
         var args = ["lfs", "install", "--skip-repo"]
 
@@ -177,9 +180,12 @@ public struct LFS {
         return match
     }
 
-    /// Query a Git repository to filter a set of provided relative paths and identify which files are not covered by the current Git LFS (Large File Storage) configuration.
+    /// Query a Git repository to filter a set of provided relative paths \
+    /// and identify which files are not covered by the current Git LFS (Large File Storage) configuration.
     ///
-    /// Git LFS is an extension for handling large files in a Git repository, and this function helps you determine which files are not tracked by Git LFS within the specified relative paths.
+    /// Git LFS is an extension for handling large files in a Git repository, 
+    /// and this function helps you determine which files are not tracked by
+    /// Git LFS within the specified relative paths.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the Git repository.
