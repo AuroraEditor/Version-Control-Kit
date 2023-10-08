@@ -16,7 +16,11 @@ public enum CommitDate: String {
 
 /// Retrieve a list of Git commits from the repository's history.
 ///
-/// This function retrieves a list of Git commits from the repository's history based on the specified parameters. You can filter commits by revision range, limit the number of commits returned, skip a certain number of commits, and include additional Git log arguments. You can also filter commits by date and exclude merge commits if needed.
+/// This function retrieves a list of Git commits from the repository's history based on 
+/// the specified parameters. \
+/// You can filter commits by revision range, limit the number of commits returned,
+/// skip a certain number of commits, and include additional Git log arguments. \
+/// You can also filter commits by date and exclude merge commits if needed.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository directory.
@@ -46,7 +50,8 @@ public enum CommitDate: String {
 ///   }
 ///   ```
 ///
-/// - Note: The `CommitHistory` structure represents a Git commit and includes fields such as the commit hash, author, commit message, date, and more.
+/// - Note: The `CommitHistory` structure represents a Git commit and includes fields such as
+///         the commit hash, author, commit message, date, and more.
 ///
 /// - Important: Ensure that you have a valid Git repository in the specified directory before calling this function.
 public func getCommits(directoryURL: URL,

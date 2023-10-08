@@ -96,9 +96,9 @@ public func getIndexChanges(directoryURL: URL) throws -> [String: IndexStatus] {
 
     let pieces = result.split(separator: "\0")
 
-    for i in stride(from: 0, to: pieces.count, by: 2) {
-        let status = try getNoRenameIndexStatus(status: String(pieces[i]))
-        let path = String(pieces[i + 1])
+    for index in stride(from: 0, to: pieces.count, by: 2) {
+        let status = try getNoRenameIndexStatus(status: String(pieces[index]))
+        let path = String(pieces[index + 1])
 
         map[path] = status
     }

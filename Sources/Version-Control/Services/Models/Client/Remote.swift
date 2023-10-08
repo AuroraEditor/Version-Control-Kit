@@ -36,9 +36,11 @@ import Foundation
 ///   ```
 ///
 /// - Note:
-///   - The function executes the Git command `git remote -v` to retrieve the list of Git remotes configured for the local repository.
+///   - The function executes the Git command `git remote -v`\
+///     to retrieve the list of Git remotes configured for the local repository.
 ///
-/// - Warning: Ensure that the provided `directoryURL` points to a valid local Git repository directory. Failure to do so may result in errors or incorrect results.
+/// - Warning: Ensure that the provided `directoryURL` points to a valid local Git repository directory.\
+///   Failure to do so may result in errors or incorrect results.
 ///
 /// - Returns: An array of `GitRemote` objects representing the configured Git remotes for the local repository.
 public func getRemotes(directoryURL: URL) throws -> [GitRemote] {
@@ -105,7 +107,8 @@ public func addRemote(directoryURL: URL, name: String, url: String) throws -> Gi
 
 /// Remove an existing Git remote repository by its name or silently ignore if it doesn't exist.
 ///
-/// Use this function to remove an existing Git remote repository specified by its remote name. If the remote with the given name does not exist, the function silently ignores the operation.
+/// Use this function to remove an existing Git remote repository specified by its remote name.\
+/// If the remote with the given name does not exist, the function silently ignores the operation.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the local Git repository.
@@ -250,7 +253,6 @@ public func updateRemoteHEAD(directoryURL: URL, remote: IRemote) throws {
         "cd \(directoryURL.relativePath.escapedWhiteSpaces());git remote set-head -a \(remote.name)"
     )
 }
-
 
 /// Get the name of the HEAD branch in a remote Git repository.
 ///

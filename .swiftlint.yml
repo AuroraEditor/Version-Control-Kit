@@ -17,6 +17,7 @@ identifier_name:
   excluded:
     - id
     - vc
+    - to
     # (short) File extensions:
     - c
     - m

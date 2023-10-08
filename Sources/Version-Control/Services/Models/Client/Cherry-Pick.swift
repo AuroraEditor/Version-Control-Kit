@@ -10,9 +10,9 @@
 import Foundation
 
 public struct CherryPick {
-    
+
     public init() {}
-    
+
     /// The app-specific results from attempting to cherry pick commits
     enum CherryPickResult: String {
         /// Git completed the cherry pick without reporting any errors, and the caller can
@@ -133,10 +133,13 @@ public struct CherryPick {
     public func isCherryPickHeadFound(directoryURL: URL) -> Bool {
         do {
             let cherryPickHeadPath = try String(contentsOf: directoryURL) + ".git/CHERRY_PICK_HEAD"
-            
+
             return FileManager.default.fileExists(atPath: cherryPickHeadPath)
         } catch {
-            print("[cherryPick] A problem was encountered reading .git/CHERRY_PICK_HEAD, so it is unsafe to continue cherry-picking.")
+            print(
+                "[cherryPick] A problem was encountered reading .git/CHERRY_PICK_HEAD," +
+                " so it is unsafe to continue cherry-picking."
+            )
             return false
         }
     }

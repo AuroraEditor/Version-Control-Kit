@@ -10,9 +10,9 @@
 import Foundation
 
 public struct Branch {
-    
+
     public init() {}
-    
+
     /// Retrieves the name of the current Git branch in a specified directory.
     ///
     /// - Parameters:
@@ -47,7 +47,8 @@ public struct Branch {
     /// Retrieves a list of Git branches in a specified directory.
     ///
     /// - Parameters:
-    ///   - allBranches: A Boolean flag indicating whether to list all branches, including remote branches (default is `false`).
+    ///   - allBranches: A Boolean flag indicating whether to list all branches, \
+    ///                  including remote branches (default is `false`).
     ///   - directoryURL: The URL of the directory containing the Git repository.
     ///
     /// - Throws:
@@ -168,7 +169,8 @@ public struct Branch {
     ///   - An error of type `Error` if any issues occur during the branch renaming process.
     ///
     /// - Note:
-    ///   If the branch renaming is successful, the old branch name will no longer exist, and a new branch with the specified `newName` will be created.
+    ///   If the branch renaming is successful, the old branch name will no longer exist, \
+    ///   and a new branch with the specified `newName` will be created.
     ///
     /// - Example:
     ///   ```swift
@@ -203,7 +205,8 @@ public struct Branch {
     ///   - An error of type `Error` if any issues occur during the branch deletion process.
     ///
     /// - Returns:
-    ///   A `Bool` value indicating whether the branch was successfully deleted. Returns `true` if the branch was deleted successfully; otherwise, returns `false`.
+    ///   A `Bool` value indicating whether the branch was successfully deleted. \
+    ///   Returns `true` if the branch was deleted successfully; otherwise, returns `false`.
     ///
     /// - Example:
     ///   ```swift
@@ -229,11 +232,10 @@ public struct Branch {
         /// Prepare and execute the Git command to delete the local branch using a ShellClient.
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git branch -D \(branchName)")
-        
+
         // Return true to indicate that the branch deletion was attempted.
         return true
     }
-
 
     /// Deletes a remote Git branch in a specified directory.
     ///
@@ -246,7 +248,9 @@ public struct Branch {
     ///   - An error of type `Error` if any issues occur during the remote branch deletion process.
     ///
     /// - Note:
-    ///   This function attempts to delete the remote branch on the specified remote repository. If the deletion fails due to the remote branch already being deleted or for any other reason, it may try to remove the corresponding local reference.
+    ///   This function attempts to delete the remote branch on the specified remote repository. \
+    ///   If the deletion fails due to the remote branch already being deleted or for any other reason, \
+    ///   it may try to remove the corresponding local reference.
     ///
     /// - Example:
     ///   ```swift
@@ -255,7 +259,11 @@ public struct Branch {
     ///   let remoteBranchName = "feature/old-feature"
     ///
     ///   do {
-    ///       try deleteRemoteBranch(directoryURL: directoryURL, remoteName: remoteName, remoteBranchName: remoteBranchName)
+    ///       try deleteRemoteBranch(
+    ///           directoryURL: directoryURL,
+    ///           remoteName: remoteName,
+    ///           remoteBranchName: remoteBranchName
+    ///       )
     ///       print("Remote branch '\(remoteBranchName)' was successfully deleted on '\(remoteName)'.")
     ///   } catch {
     ///       print("Error deleting remote branch: \(error.localizedDescription)")
@@ -330,17 +338,17 @@ public struct Branch {
             "--points-at=\(commitsh)",
             "--format=%(refname:short)"
         ]
-        
+
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)")
-        
+
         let resultSplit = result.split(separator: "\n").map { String($0) }
         let resultRange = Array(resultSplit.reversed())
         return resultRange.isEmpty ? nil : resultRange
     }
 
-
-    /// Retrieves a dictionary of branch names and their corresponding commit SHAs that are merged into the specified branch.
+    /// Retrieves a dictionary of branch names and their corresponding commit SHAs \
+    /// that are merged into the specified branch.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -350,7 +358,8 @@ public struct Branch {
     ///   - An error of type `Error` if any issues occur during the branch retrieval process.
     ///
     /// - Returns:
-    ///   A dictionary containing branch names as keys and their corresponding commit SHAs as values, representing branches that are merged into the specified branch.
+    ///   A dictionary containing branch names as keys and their corresponding commit SHAs as values, \
+    ///   representing branches that are merged into the specified branch.
     ///
     /// - Example:
     ///   ```swift
@@ -377,19 +386,19 @@ public struct Branch {
     func getMergedBranches(directoryURL: URL,
                            branchName: String) throws -> [String: String] {
         let canonicalBranchRef = Refs().formatAsLocalRef(name: branchName)
-        
+
         let args = ["branch", "--format=%(refname):%(objectname)", "--merged", branchName]
-        
+
         do {
             let result = try ShellClient().run("cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)")
-            
+
             var mergedBranches = [String: String]()
             for line in result.split(separator: "\n") {
                 let components = line.split(separator: ":", maxSplits: 1)
                 if components.count == 2 {
                     let ref = String(components[0])
                     let sha = String(components[1])
-                    
+
                     // Don't include the branch we're using to compare against
                     // in the list of branches merged into that branch.
                     if ref != canonicalBranchRef {

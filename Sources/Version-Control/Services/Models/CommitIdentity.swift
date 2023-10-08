@@ -42,9 +42,13 @@ struct CommitIdentity {
         // Note also that this expects a date formatted with the RAW option in git see:
         //  https://github.com/git/git/blob/35f6318d4/date.c#L191
         let pattern = #"^(.*?) <(.*?)> (\d+) (\+|-)?(\d{2})(\d{2})"#
-        
+
         if let regex = try? NSRegularExpression(pattern: pattern, options: []) {
-            if let match = regex.firstMatch(in: identity, options: [], range: NSRange(location: 0, length: identity.utf16.count)) {
+            if let match = regex.firstMatch(
+                in: identity,
+                options: [],
+                range: NSRange(location: 0, length: identity.utf16.count)
+                ) {
                 let name = (identity as NSString).substring(with: match.range(at: 1))
                 let email = (identity as NSString).substring(with: match.range(at: 2))
                 let timestamp = TimeInterval((identity as NSString).substring(with: match.range(at: 3))) ?? 0
@@ -59,7 +63,7 @@ struct CommitIdentity {
 
                 if let tzHours = Int(tzHH), let tzMinutes = Int(tzmm) {
                     let tzOffset = tzSign * (tzHours * 60 + tzMinutes)
-                    
+
                     return CommitIdentity(name: name, email: email, date: date, tzOffset: tzOffset)
                 }
             }

@@ -11,7 +11,9 @@ import Foundation
 
 /// Remove all files from the Git index.
 ///
-/// This function removes all files from the Git index (staging area) in a Git repository located at the specified `directoryURL`. The files are removed from the staging area while keeping them in the working directory.
+/// This function removes all files from the Git index (staging area) in a Git repository \
+/// located at the specified `directoryURL`. \
+/// The files are removed from the staging area while keeping them in the working directory.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -32,10 +34,13 @@ import Foundation
 ///   ```
 ///
 /// - Note:
-///   This function uses the `git rm --cached -r -f .` command to remove all files from the Git index while preserving them in the working directory.
+///   This function uses the `git rm --cached -r -f .` command to remove all files from the Git \
+///   index while preserving them in the working directory.
 ///
 /// - Warning:
-///   Exercise caution when using this function, as it can lead to the removal of all staged changes without committing them. Make sure you understand the implications of unstaging files from the index.
+///   Exercise caution when using this function, \
+///   as it can lead to the removal of all staged changes without committing them. \
+///   Make sure you understand the implications of unstaging files from the index.
 public func unstageAllFiles(directoryURL: URL) throws {
     try ShellClient().run(
         // these flags are important:
@@ -48,7 +53,9 @@ public func unstageAllFiles(directoryURL: URL) throws {
 
 /// Remove a conflicted file from both the working tree and the Git index (staging area).
 ///
-/// This function removes a conflicted file specified by `file` from both the working tree and the Git index (staging area) in a Git repository located at the specified `directoryURL`. The file will be deleted from the working directory, and the removal will be staged for the next commit.
+/// This function removes a conflicted file specified by `file` from both the working tree and the \
+/// Git index (staging area) in a Git repository located at the specified `directoryURL`. \
+/// The file will be deleted from the working directory, and the removal will be staged for the next commit.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -71,10 +78,12 @@ public func unstageAllFiles(directoryURL: URL) throws {
 ///   ```
 ///
 /// - Note:
-///   This function uses the `git rm` command with the `--` flag to remove the specified conflicted file from both the working directory and the Git index.
+///   This function uses the `git rm` command with the `--` flag to remove the specified conflicted file \
+///        from both the working directory and the Git index.
 ///
 /// - Warning:
-///   Be cautious when using this function, as it permanently deletes the conflicted file from both the working directory and the Git index.
+///   Be cautious when using this function, as it permanently deletes the conflicted file \
+///   from both the working directory and the Git index.
 public func removeConflictedFile(directoryURL: URL,
                                  file: GitFileItem) throws {
     try ShellClient().run(

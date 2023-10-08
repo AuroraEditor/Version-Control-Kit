@@ -12,15 +12,15 @@ public class ShellClient {
     func generateProcessAndPipe(_ args: [String]) -> (Process, Pipe) {
         let task = Process()
         let pipe = Pipe()
-        
+
         task.standardOutput = pipe
         task.standardError = pipe
         task.arguments = ["-c"] + args
         task.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        
+
         return (task, pipe)
     }
-    
+
     /// Generate a process and pipe to run commands
     /// - Parameters:
     ///   - commandPath: The path to the command to run (e.g., "/usr/bin/git")
@@ -31,16 +31,16 @@ public class ShellClient {
                                 workingDirectory: String?) -> (Process, Pipe) {
         let task = Process()
         let pipe = Pipe()
-        
+
         task.standardOutput = pipe
         task.standardError = pipe
         task.arguments = ["-c"] + arguments
         task.executableURL = URL(fileURLWithPath: "/bin/zsh")
-        
+
         if let workingDirectory = workingDirectory {
             task.currentDirectoryPath = workingDirectory
         }
-        
+
         return (task, pipe)
     }
 
@@ -105,7 +105,6 @@ public class ShellClient {
         }
     }
 
-
     /// Run a command with Publisher
     /// - Parameter args: command to run
     /// - Returns: command output
@@ -114,9 +113,9 @@ public class ShellClient {
         let subject = PassthroughSubject<String, Never>()
         let (task, pipe) = generateProcessAndPipe(args)
         let outputHandler = pipe.fileHandleForReading
-        
+
         outputHandler.waitForDataInBackgroundAndNotify()
-        
+
         let id = UUID()
         self.cancellables[id] = NotificationCenter
             .default
@@ -137,12 +136,12 @@ public class ShellClient {
                 }
                 outputHandler.waitForDataInBackgroundAndNotify() // Wait for more data
             }
-        
+
         task.launch() // Start the task
-        
+
         return subject.eraseToAnyPublisher()
     }
-    
+
     func run(arguments: [String],
              workingDirectory: String) throws -> (stdout: String, stderr: String) {
         let process = Process()

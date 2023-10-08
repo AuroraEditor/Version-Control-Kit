@@ -10,23 +10,27 @@
 import Foundation
 
 public struct Config {
-    
+
     public init() {}
-    
+
     /// Look up a Git configuration value by name within a specific repository context.
     ///
-    /// This function retrieves a Git configuration value within the context of a specific Git repository by reading the repository's path and then using the `getConfigValueInPath` function to perform the configuration value lookup.
+    /// This function retrieves a Git configuration value within the context of a specific Git repository \
+    /// by reading the repository's path and then using the `getConfigValueInPath` function to \
+    /// perform the configuration value lookup.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the Git repository.
     ///   - name: The name of the Git configuration key to look up.
-    ///   - onlyLocal: Whether or not the value should be retrieved from local repository settings only. Default is `false`, which means both local and global settings are considered.
+    ///   - onlyLocal: Whether or not the value should be retrieved from local repository settings only. \
+    ///                Default is `false`, which means both local and global settings are considered.
     ///
     /// - Throws:
     ///   - An error of type `Error` if any issues occur during the configuration value lookup process.
     ///
     /// - Returns:
-    ///   The string value associated with the specified Git configuration key in the context of the repository, or `nil` if the configuration key is not found.
+    ///   The string value associated with the specified Git configuration key in the context of the repository, \
+    ///   or `nil` if the configuration key is not found.
     ///
     /// - Example:
     ///   ```swift
@@ -57,7 +61,8 @@ public struct Config {
 
     /// Look up a global Git configuration value by name.
     ///
-    /// This function retrieves a Git configuration value from the global Git configuration file based on the provided `name`.
+    /// This function retrieves a Git configuration value from the global Git configuration file based
+    /// on the provided `name`.
     ///
     /// - Parameters:
     ///   - name: The name of the Git configuration key to look up.
@@ -84,7 +89,8 @@ public struct Config {
     ///   ```
     ///
     /// - Note:
-    ///   This function retrieves a global Git configuration value using the `getConfigValueInPath` function with appropriate parameters.
+    ///   This function retrieves a global Git configuration value using the `getConfigValueInPath` 
+    ///   function with appropriate parameters.
     public func getGlobalConfigValue(name: String) throws -> String? {
         return try getConfigValueInPath(name: name,
                                         path: nil,
@@ -247,7 +253,9 @@ public struct Config {
 
     /// Sets a Git configuration value within a specific repository context.
     ///
-    /// This function sets a Git configuration value within the context of a specific Git repository by reading the repository's path and then using the `setConfigValueInPath` function to perform the configuration value setting.
+    /// This function sets a Git configuration value within the context of a specific 
+    /// Git repository by reading the repository's path and then using the `setConfigValueInPath` 
+    /// function to perform the configuration value setting.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -412,7 +420,9 @@ public struct Config {
     ///   ```
     ///
     /// - Note:
-    ///   This function checks if the specified Git configuration value already exists in the global Git configuration file. If it does not exist, it adds the value using the `git config` command with the `--global -z --get-all` flags.
+    ///   This function checks if the specified Git configuration value \
+    ///   already exists in the global Git configuration file. If it does not exist, \
+    ///   it adds the value using the `git config` command with the `--global -z --get-all` flags.
 
     public func addGlobalConfigValueIfMissing(name: String,
                                               value: String) throws {
@@ -504,7 +514,8 @@ public struct Config {
     ///   ```
     ///
     /// - Note:
-    ///   This function removes a Git configuration value within the context of a specific Git repository by reading the repository's path and then using the `removeConfigValueInPath` function to perform the removal.
+    ///   This function removes a Git configuration value within the context of a specific Git repository 
+    ///   by reading the repository's path and then using the `removeConfigValueInPath` function to perform the removal.
     public func removeConfigValue(directoryURL: URL,
                                   name: String) throws {
         try removeConfigValueInPath(name: name,

@@ -21,7 +21,7 @@ public extension Date {
         dateFormatter.dateFormat = "E MMM dd HH:mm:ss yyyy Z"
         return dateFormatter.date(from: commitDate)
     }
-    
+
     func toGitHubIsoDateString(_ date: Date) -> String {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss'Z'"

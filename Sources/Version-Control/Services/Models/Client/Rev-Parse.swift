@@ -17,7 +17,8 @@ public enum RepositoryType {
 
 /// Determine the type of a Git repository at the specified `path`.
 ///
-/// This function attempts to identify the type of a Git repository located at the specified `path`. It can determine whether the repository is a bare repository, a regular repository, or if it couldn't be found.
+/// This function attempts to identify the type of a Git repository located at the specified `path`. \
+/// It can determine whether the repository is a bare repository, a regular repository, or if it couldn't be found.
 ///
 /// - Parameters:
 ///   - path: The path to the directory where the Git repository is located.
@@ -44,7 +45,9 @@ public enum RepositoryType {
 ///   ```
 ///
 /// - Note:
-///   This function uses the `git rev-parse --is-bare-repository` command to determine if the repository is bare or regular. It also checks for certain error messages to identify unsafe or missing repositories.
+///   This function uses the `git rev-parse --is-bare-repository` command to determine \
+///   if the repository is bare or regular. \
+///   It also checks for certain error messages to identify unsafe or missing repositories.
 ///
 /// - Warning:
 ///   This function assumes that the Git executable is available and accessible in the system's PATH.

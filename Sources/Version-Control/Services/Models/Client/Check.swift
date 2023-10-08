@@ -9,16 +9,18 @@
 import Foundation
 
 public struct Check {
-    
+
     public init() {}
- 
+
     /// Checks if a given workspace directory is a Git repository or a Git worktree.
     ///
     /// - Parameter workspaceURL: The URL of the workspace directory to be checked.
     ///
     /// - Returns: `true` if the workspace is a Git repository or worktree, `false` otherwise.
     ///
-    /// - Note: This function checks the type of the workspace using `getRepositoryType`, and if it's marked as unsafe by Git, it falls back to a naive approximation by looking for the `.git` directory.
+    /// - Note: This function checks the type of the workspace using `getRepositoryType`, \
+    ///   and if it's marked as unsafe by Git, \
+    ///   it falls back to a naive approximation by looking for the `.git` directory.
     ///
     /// - Example:
     ///   ```swift

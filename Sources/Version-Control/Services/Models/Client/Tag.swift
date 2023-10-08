@@ -10,12 +10,14 @@
 import Foundation
 
 public struct Tag {
-    
+
     public init() {}
-    
+
     /// Create a Git tag in a repository.
     ///
-    /// This function creates a Git tag with the specified `name` in a Git repository located at the specified `directoryURL`. The tag is associated with a target commit identified by its SHA (`targetCommitSha`).
+    /// This function creates a Git tag with the specified `name` in a Git repository located \
+    /// at the specified `directoryURL`. \
+    /// The tag is associated with a target commit identified by its SHA (`targetCommitSha`).
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -40,10 +42,13 @@ public struct Tag {
     ///   ```
     ///
     /// - Note:
-    ///   This function uses the `git tag -a` command to create an annotated Git tag with the specified `name` and associates it with the target commit identified by `targetCommitSha`. The tag message is intentionally left empty.
+    ///   This function uses the `git tag -a` command to create an annotated Git tag with \
+    ///   the specified `name` and associates it with the target commit identified by \
+    ///   `targetCommitSha`. The tag message is intentionally left empty.
     ///
     /// - Warning:
-    ///   Be cautious when creating tags, especially annotated tags, as they can affect the history and versioning of a Git repository.
+    ///   Be cautious when creating tags, especially annotated tags, \
+    ///   as they can affect the history and versioning of a Git repository.
     public func createTag(directoryURL: URL,
                           name: String,
                           targetCommitSha: String) throws {
@@ -55,16 +60,16 @@ public struct Tag {
              name,
              targetCommitSha
         ]
-        
+
         try ShellClient().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args.joined(separator: " "))"
         )
     }
 
-
     /// Delete a Git tag from a repository.
     ///
-    /// This function deletes a Git tag with the specified `name` from a Git repository located at the specified `directoryURL`.
+    /// This function deletes a Git tag with the specified `name` from a Git repository located at \
+    /// the specified `directoryURL`.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -96,7 +101,9 @@ public struct Tag {
 
     /// Retrieve a dictionary of all Git tags in a repository.
     ///
-    /// This asynchronous function retrieves a dictionary containing all Git tags in a Git repository located at the specified `directoryURL`. The dictionary maps tag names (strings) to their corresponding commit SHAs (strings).
+    /// This asynchronous function retrieves a dictionary containing all Git tags in a Git repository \
+    /// located at the specified `directoryURL`. \
+    /// The dictionary maps tag names (strings) to their corresponding commit SHAs (strings).
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -127,13 +134,16 @@ public struct Tag {
     ///   ```
     ///
     /// - Note:
-    ///   This function uses the `git show-ref` command to retrieve a list of all Git tags and their associated commit SHAs. It normalizes tag names by removing the leading "refs/tags/" and trailing "^{}" from annotated tags.
+    ///   This function uses the `git show-ref` command to retrieve a list of all Git tags and \
+    ///   their associated commit SHAs. \
+    ///   It normalizes tag names by removing the leading "refs/tags/" and trailing "^{}" from annotated tags.
     ///
     /// - Important:
-    ///   This function is asynchronous and must be called from within an asynchronous context (e.g., an `async` function).
+    ///   This function is asynchronous and must be called from within an asynchronous context \
+    ///   (e.g., an `async` function).
     func getAllTags(directoryURL: URL) async throws -> [String: String]? {
         var tags = [String: String]()
-        
+
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git show-ref --tags -d"
         )
@@ -170,7 +180,9 @@ public struct Tag {
 
     /// Fetch tags to be pushed to a remote Git repository.
     ///
-    /// This function fetches the tags that are pending to be pushed to a remote Git repository specified by `remote`. It performs a dry run of the push operation to identify unpushed tags. The tags are then extracted from the Git command result.
+    /// This function fetches the tags that are pending to be pushed to a remote Git repository specified by `remote`. \
+    /// It performs a dry run of the push operation to identify unpushed tags. \
+    /// The tags are then extracted from the Git command result.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -186,7 +198,10 @@ public struct Tag {
     /// - Example:
     ///   ```swift
     ///   let directoryURL = URL(fileURLWithPath: "/path/to/repo") // Replace with the path to the Git repository
-    ///   let remote = GitRemote(name: "origin", url: "https://github.com/user/repo.git") // Replace with your Git remote details
+    ///   let remote = GitRemote(
+    ///       name: "origin",
+    ///       url: "https://github.com/user/repo.git"
+    ///   ) // Replace with your Git remote details
     ///   let branchName = "main" // Replace with the name of the branch associated with the push operation
     ///
     ///   do {
@@ -202,7 +217,8 @@ public struct Tag {
     ///   ```
     ///
     /// - Note:
-    ///   This function performs a dry run of the push operation and parses the Git command result to identify unpushed tags. It removes the "refs/tags/" prefix from the tag names.
+    ///   This function performs a dry run of the push operation and parses the Git command \
+    ///   result to identify unpushed tags. It removes the "refs/tags/" prefix from the tag names.
     public func fetchTagsToPush(directoryURL: URL,
                                 remote: GitRemote,
                                 branchName: String) throws -> [String] {

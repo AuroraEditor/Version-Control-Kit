@@ -10,7 +10,7 @@
 import Foundation
 
 public struct Refs {
-    
+
     public init() {}
 
     /// Format a local branch name as a Git ref syntax.

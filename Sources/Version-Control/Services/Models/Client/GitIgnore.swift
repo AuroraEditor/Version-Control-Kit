@@ -10,7 +10,7 @@
 import Foundation
 
 public struct GitIgnore {
-    
+
     public init() {}
 
     /// Read the contents of the repository's root `.gitignore` file.
@@ -117,7 +117,9 @@ public struct GitIgnore {
     ///
     /// - Throws: An error if there is a problem reading or updating the `.gitignore` file.
     ///
-    /// - Note: This function is intended for appending file paths to an existing `.gitignore` file. If the `.gitignore` file does not exist, you should create it first and then use this function to add file paths.
+    /// - Note: This function is intended for appending file paths to an existing `.gitignore` file. \
+    ///         If the `.gitignore` file does not exist, you should create it first and then use this 
+    ///         function to add file paths.
     ///
     /// - Example:
     ///   ```swift
@@ -126,7 +128,8 @@ public struct GitIgnore {
     ///   try appendIgnoreFile(directoryURL: directoryURL, filePath: filePaths)
     ///   ```
     ///
-    /// - Important: Ensure that you have write permissions for the `.gitignore` file and that the provided directory is part of a Git repository.
+    /// - Important: Ensure that you have write permissions for the `.gitignore` 
+    ///              file and that the provided directory is part of a Git repository.
     public func appendIgnoreFile(directoryURL: URL,
                                  filePath: [String]) throws {
         let escapedFilePaths = filePath.map {
