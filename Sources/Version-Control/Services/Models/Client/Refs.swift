@@ -15,7 +15,9 @@ public struct Refs {
 
     /// Format a local branch name as a Git ref syntax.
     ///
-    /// In Git, branch names are often represented as refs, and this function converts a local branch name into the corresponding ref syntax. It ensures that situations where the branch name is ambiguous are handled correctly.
+    /// In Git, branch names are often represented as refs, 
+    /// and this function converts a local branch name into the corresponding ref syntax. \
+    /// It ensures that situations where the branch name is ambiguous are handled correctly.
     ///
     /// - Parameter name: The local branch name to format.
     ///
@@ -40,7 +42,8 @@ public struct Refs {
             // This ensures we format it correctly.
             return "refs/\(name)"
         } else if !name.starts(with: "refs/heads/") {
-            // By default, Git drops the `heads` prefix unless necessary. Include it to ensure the ref is fully qualified.
+            // By default, Git drops the `heads` prefix unless necessary. 
+            // Include it to ensure the ref is fully qualified.
             return "refs/heads/\(name)"
         } else {
             return name
@@ -49,15 +52,20 @@ public struct Refs {
 
     /// Read the canonical ref pointed to by a symbolic ref in the Git repository.
     ///
-    /// Symbolic refs in Git are references that point to other references, similar to symbolic links in a filesystem. They provide an additional layer of indirection. This function allows you to resolve a symbolic ref to its canonical ref, providing you with the actual reference it points to.
+    /// Symbolic refs in Git are references that point to other references, similar to symbolic links in a filesystem. \
+    /// They provide an additional layer of indirection. \
+    /// This function allows you to resolve a symbolic ref to its canonical ref, 
+    /// providing you with the actual reference it points to.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the Git repository where the symbolic ref should be resolved.
     ///   - ref: The symbolic ref to resolve.
     ///
-    /// - Throws: An error if there is a problem accessing the Git repository or executing the Git command to read the symbolic ref.
+    /// - Throws: An error if there is a problem accessing the Git repository or \
+    ///           executing the Git command to read the symbolic ref.
     ///
-    /// - Returns: The canonical ref pointed to by the symbolic ref, or `nil` if the symbolic ref cannot be found or is not a symbolic ref.
+    /// - Returns: The canonical ref pointed to by the symbolic ref, or \
+    ///            `nil` if the symbolic ref cannot be found or is not a symbolic ref.
     ///
     /// - Example:
     ///   ```swift
@@ -76,11 +84,14 @@ public struct Refs {
     ///   ```
     ///
     /// - Note:
-    ///   - The function executes the Git command `git symbolic-ref -q <ref>` to read the canonical ref pointed to by the symbolic ref.
+    ///   - The function executes the Git command `git symbolic-ref -q <ref>` to \
+    ///     read the canonical ref pointed to by the symbolic ref.
     ///
-    /// - Warning: Ensure that the provided `directoryURL` points to a valid Git repository directory. Failure to do so may result in errors or incorrect results.
+    /// - Warning: Ensure that the provided `directoryURL` points to a valid Git repository directory. \
+    ///            Failure to do so may result in errors or incorrect results.
     ///
-    /// - Returns: The canonical ref pointed to by the symbolic ref, or `nil` if the symbolic ref cannot be found or is not a symbolic ref.
+    /// - Returns: The canonical ref pointed to by the symbolic ref, or \
+    ///            `nil` if the symbolic ref cannot be found or is not a symbolic ref.
     public func getSymbolicRef(directoryURL: URL, ref: String) throws -> String? {
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git symbolic-ref -q \(ref)"

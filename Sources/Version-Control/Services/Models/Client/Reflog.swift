@@ -40,7 +40,7 @@ import Foundation
 /// - Returns: An array of branch names that were recently checked out or renamed, with a maximum count of `limit`.
 public func getRecentBranches(directoryURL: URL, limit: Int) throws -> [String] {
     // Regular expression to match branch checkout and rename events in Git log.
-    let regexPattern = ".*? (renamed|checkout)(?:: moving from|\\s*) (?:refs/heads/|\\s*)(.*?) to (?:refs/heads/|\\s*)(.*?)$"
+    let regexPattern = ".*? (renamed|checkout)(?:: moving from|\\s*) (?:refs/heads/|\\s*)(.*?) to (?:refs/heads/|\\s*)(.*?)$" // swiftlint:disable:this line_length
 
     let regex = try NSRegularExpression(pattern: regexPattern, options: [])
 

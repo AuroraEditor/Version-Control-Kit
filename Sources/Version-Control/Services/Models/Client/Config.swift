@@ -620,4 +620,4 @@ public struct Config {
 
         try ShellClient().run(gitCommand)
     }
-}
+} // swiftlint:disable:this file_length

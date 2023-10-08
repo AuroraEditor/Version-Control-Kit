@@ -411,4 +411,4 @@ public struct Branch {
             throw error
         }
     }
-}
+} // swiftlint:disable:this file_length
