@@ -39,7 +39,7 @@ import Foundation
 ///
 /// - SeeAlso:
 ///   [Git Range](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefrangea)
-private func revRange(from: String, to: String) -> String { // swiftlint:disable:this identifier_name
+private func revRange(from: String, to: String) -> String {
     return "\(from)..\(to)"
 }
 
@@ -72,13 +72,16 @@ private func revRange(from: String, to: String) -> String { // swiftlint:disable
 ///
 /// - SeeAlso:
 ///   [Git Inclusive Range](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefinclusiverangea)
-private func revRangeInclusive(from: String, to: String) -> String { // swiftlint:disable:this identifier_name
+private func revRangeInclusive(from: String, to: String) -> String {
     return "\(from)^...\(to)"
 }
 
 /// Convert two references into Git's symmetric difference syntax.
 ///
-/// Git's symmetric difference syntax represents the set of commits that are reachable from either the `from` reference or the `to` reference but not from both. This function takes two parameters, `from` and `to`, which can be specified as commit SHA values, reference names, or an empty string to represent the HEAD reference.
+/// Git's symmetric difference syntax represents the set of commits that are reachable from either
+/// the `from` reference or the `to` reference but not from both. This function takes two parameters,
+/// `from` and `to`, which can be specified as commit SHA values, reference names, 
+/// or an empty string to represent the HEAD reference.
 ///
 /// - Parameters:
 ///   - from: The source reference or commit SHA.
@@ -97,21 +100,27 @@ private func revRangeInclusive(from: String, to: String) -> String { // swiftlin
 ///   ```
 ///
 /// - Note:
-///   The Git symmetric difference syntax is used to represent the set of commits that are reachable from either the `from` reference or the `to` reference but not from both. It is commonly used in Git operations such as comparing branches or finding the differences between two references.
+///   The Git symmetric difference syntax is used to represent the set of commits that are 
+///   reachable from either the `from` reference or the `to` reference but not from both. \
+///   It is commonly used in Git operations such as comparing branches or 
+///   finding the differences between two references.
 ///
 /// - Warning:
 ///   Ensure that the `from` and `to` parameters represent valid references or commit SHA values to
 ///   avoid syntax errors when using the resulting string in Git commands.
 ///
 /// - SeeAlso:
-///   [Git Symmetric Difference](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefsymmetricdiffa)
-private func revSymmetricDifference(from: String, to: String) -> String { // swiftlint:disable:this identifier_name
+///   https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefsymmetricdiffa
+private func revSymmetricDifference(from: String, to: String) -> String {
     return "\(from)...\(to)"
 }
 
 /// Calculate the number of commits that a given commit range is ahead of and behind.
 ///
-/// This function calculates the number of commits that a specified commit range is ahead of and behind in a Git repository located at the specified `directoryURL`. The commit range is represented by the `range` parameter, and the result is returned as an `AheadBehind` object containing the counts of commits ahead and behind.
+/// This function calculates the number of commits that a specified commit range is ahead of and behind in
+/// a Git repository located at the specified `directoryURL`. \
+/// The commit range is represented by the `range` parameter, and the result is returned as 
+/// an `AheadBehind` object containing the counts of commits ahead and behind.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -188,7 +197,10 @@ public func getAheadBehind(directoryURL: URL,
 
 /// Retrieve the number of commits ahead and behind between a local branch and its upstream branch.
 ///
-/// This function calculates the number of commits that a local branch is ahead and behind its corresponding upstream branch. It provides information about how the local branch differs from its upstream branch, taking into account merge bases and merge commits.
+/// This function calculates the number of commits that a local branch is ahead and behind its
+/// corresponding upstream branch. \
+/// It provides information about how the local branch differs from its upstream branch, 
+/// taking into account merge bases and merge commits.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository directory.
@@ -287,10 +299,13 @@ func getBranchAheadBehind(directoryURL: URL,
 ///   ```
 ///
 /// - Note:
-///   This function uses the `git rev-range` command to retrieve a list of commits between two commit references. The commits are represented as `CommitOneLine` objects, where each object contains a commit SHA and a commit summary.
+///   This function uses the `git rev-range` command to retrieve a list of commits between two commit references. \
+///   The commits are represented as `CommitOneLine` objects, 
+///   where each object contains a commit SHA and a commit summary.
 ///
 /// - Warning:
-///   Be cautious when using this function, as missing commit IDs or invalid commit references may result in errors, and it assumes that the Git executable is available and accessible in the system's PATH.
+///   Be cautious when using this function, as missing commit IDs or invalid commit references may result in errors,
+///   and it assumes that the Git executable is available and accessible in the system's PATH.
 public func getCommitsBetweenCommits(directoryURL: URL,
                                      baseBranchSha: String,
                                      targetBranchSha: String) throws -> [CommitOneLine]? {
