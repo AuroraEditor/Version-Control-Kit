@@ -21,7 +21,9 @@ public enum MergeResult {
 
 /// Merge the named branch into the current branch in the Git repository.
 ///
-/// This function performs a merge operation, incorporating changes from a named branch into the current branch of the Git repository. You can specify whether to perform a regular merge or a squash merge.
+/// This function performs a merge operation, 
+/// incorporating changes from a named branch into the current branch of the Git repository. \
+/// You can specify whether to perform a regular merge or a squash merge.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository.
@@ -50,7 +52,9 @@ public enum MergeResult {
 ///   }
 ///   ```
 ///
-/// - Important: This function performs a merge operation in the Git repository. Ensure that the provided branch name is valid and that the repository is in a clean state before calling this function.
+/// - Important: This function performs a merge operation in the Git repository. \
+///              Ensure that the provided branch name is valid and that the repository is in a \
+///              clean state before calling this function.
 public func merge(directoryURL: URL,
                   branch: String,
                   isSquash: Bool = false) throws -> MergeResult {
@@ -80,7 +84,8 @@ private let noopMergeMessage = "Already up to date.\n"
 
 /// Find the base commit between two commit-ish identifiers in the Git repository.
 ///
-/// This function calculates the merge base commit between two commit-ish identifiers (e.g., branch names, commit hashes) in the Git repository.
+/// This function calculates the merge base commit between two commit-ish identifiers
+/// (e.g., branch names, commit hashes) in the Git repository.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository.
@@ -96,14 +101,19 @@ private let noopMergeMessage = "Already up to date.\n"
 ///   let repositoryURL = URL(fileURLWithPath: "/path/to/git/repo")
 ///   let firstBranch = "feature/branch-a"
 ///   let secondBranch = "feature/branch-b"
-///   if let mergeBase = try getMergeBase(directoryURL: repositoryURL, firstCommitish: firstBranch, secondCommitish: secondBranch) {
+///   if let mergeBase = try getMergeBase(
+///       directoryURL: repositoryURL,
+///       firstCommitish: firstBranch,
+///       secondCommitish: secondBranch
+///   ) {
 ///       print("Merge base commit: \(mergeBase)")
 ///   } else {
 ///       print("No common merge base found.")
 ///   }
 ///   ```
 ///
-/// - Important: This function requires valid commit-ish identifiers as input, and it may return `nil` if there is no common merge base between the provided commit-ish identifiers.
+/// - Important: This function requires valid commit-ish identifiers as input, \
+///              and it may return `nil` if there is no common merge base between the provided commit-ish identifiers.
 public func getMergeBase(directoryURL: URL,
                          firstCommitish: String,
                          secondCommitish: String) throws -> String? {
@@ -116,12 +126,14 @@ public func getMergeBase(directoryURL: URL,
 
 /// Abort a conflicted merge in the Git repository.
 ///
-/// This function aborts a mid-flight merge operation that is in a conflicted state. It is equivalent to running the `git merge --abort` command in the repository.
+/// This function aborts a mid-flight merge operation that is in a conflicted state. \
+/// It is equivalent to running the `git merge --abort` command in the repository.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository.
 ///
-/// - Throws: An error if there was an issue aborting the merge operation or if the repository is not in a merge-conflicted state.
+/// - Throws: An error if there was an issue aborting the merge operation or \
+///           if the repository is not in a merge-conflicted state.
 ///
 /// - Example:
 ///   ```swift
@@ -130,7 +142,8 @@ public func getMergeBase(directoryURL: URL,
 ///   print("Merge aborted successfully.")
 ///   ```
 ///
-/// - Important: This function should only be called when the repository is in a conflicted state due to a mid-flight merge operation.
+/// - Important: This function should only be called when the repository is in a conflicted state \
+///              due to a mid-flight merge operation.
 public func abortMerge(directoryURL: URL) throws {
     // Execute the `git merge --abort` command to abort the conflicted merge.
     _ = try ShellClient.live().run(
@@ -140,7 +153,9 @@ public func abortMerge(directoryURL: URL) throws {
 
 /// Check if the `.git/MERGE_HEAD` file exists in the Git repository.
 ///
-/// This function checks for the presence of the `.git/MERGE_HEAD` file in the repository's Git directory. The existence of this file typically indicates that the repository is in a conflicted state due to an ongoing merge operation.
+/// This function checks for the presence of the `.git/MERGE_HEAD` file in the repository's Git directory. \
+/// The existence of this file typically indicates that the repository is in a conflicted state due to 
+/// an ongoing merge operation.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository.
@@ -168,16 +183,20 @@ public func isMergeHeadSet(directoryURL: URL) throws -> Bool {
 
 /// Check if the `.git/SQUASH_MSG` file exists in the Git repository.
 ///
-/// This function checks for the presence of the `.git/SQUASH_MSG` file in the repository's Git directory. The existence of this file typically indicates that a merge with the `--squash` option has been initiated, and the merge has not yet been committed. It can be an indicator of a detected conflict.
+/// This function checks for the presence of the `.git/SQUASH_MSG` file in the repository's Git directory. \
+/// The existence of this file typically indicates that a merge with the `--squash` option has been initiated,
+/// and the merge has not yet been committed. It can be an indicator of a detected conflict.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository.
 ///
-/// - Returns: `true` if the `.git/SQUASH_MSG` file exists, indicating a potential merge --squash scenario; otherwise, `false`.
+/// - Returns: `true` if the `.git/SQUASH_MSG` file exists, \
+///            indicating a potential merge --squash scenario; otherwise, `false`.
 ///
 /// - Throws: An error if there was an issue accessing or reading the repository's Git directory.
 ///
-/// - Note: If a merge --squash is aborted, the `.git/SQUASH_MSG` file may not be cleared automatically, leading to its presence in non-merge --squashing scenarios.
+/// - Note: If a merge --squash is aborted, the `.git/SQUASH_MSG` file may not be cleared automatically, \
+///         leading to its presence in non-merge --squashing scenarios.
 ///
 /// - Example:
 ///   ```swift

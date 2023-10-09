@@ -35,11 +35,9 @@ public enum LineEndingType: String {
 
 public class LineEndingsChange {
     var from: LineEndingType
-    // swiftlint:disable:next identifier_name
     var to: LineEndingType
 
     init(from: LineEndingType,
-         // swiftlint:disable:next identifier_name
          to: LineEndingType) {
         self.from = from
         self.to = to

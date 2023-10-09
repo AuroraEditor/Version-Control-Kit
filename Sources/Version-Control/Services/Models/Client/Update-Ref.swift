@@ -10,12 +10,14 @@
 import Foundation
 
 public struct UpdateRef {
-    
+
     public init() {}
-    
+
     /// Update a Git reference (branch or tag) in a local Git repository.
     ///
-    /// This function updates the specified Git reference (branch or tag) in the local Git repository with a new value. You must provide the old and new values of the reference and a reason or commit message for the update.
+    /// This function updates the specified Git reference (branch or tag) \ 
+    /// in the local Git repository with a new value. \
+    /// You must provide the old and new values of the reference and a reason or commit message for the update.
     ///
     /// - Parameters:
     ///   - directoryURL: The local directory URL of the Git repository.
@@ -24,7 +26,8 @@ public struct UpdateRef {
     ///   - newValue: The new value to set for the reference.
     ///   - reason: A reason or commit message for the update.
     ///
-    /// - Throws: An error if there's an issue with executing the Git command or if the specified reference doesn't exist.
+    /// - Throws: An error if there's an issue with executing the Git command or \
+    ///           if the specified reference doesn't exist.
     ///
     /// - Example:
     ///   ```swift
@@ -34,7 +37,13 @@ public struct UpdateRef {
     ///       let oldValue = "abc123"
     ///       let newValue = "def456"
     ///       let updateReason = "Updated feature branch"
-    ///       try updateRef(directoryURL: directoryURL, ref: referenceToUpdate, oldValue: oldValue, newValue: newValue, reason: updateReason)
+    ///       try updateRef(
+    ///           directoryURL: directoryURL,
+    ///           ref: referenceToUpdate,
+    ///           oldValue: oldValue,
+    ///           newValue: newValue,
+    ///           reason: updateReason
+    ///       )
     ///   } catch {
     ///       print("Error: Unable to update the Git reference.")
     ///   }
@@ -50,14 +59,16 @@ public struct UpdateRef {
 
     /// Delete a Git reference (branch or tag) in a local Git repository.
     ///
-    /// This function deletes the specified Git reference (branch or tag) in the local Git repository. You can optionally provide a reason or commit message for the deletion.
+    /// This function deletes the specified Git reference (branch or tag) in the local Git repository. \
+    /// You can optionally provide a reason or commit message for the deletion.
     ///
     /// - Parameters:
     ///   - directoryURL: The local directory URL of the Git repository.
     ///   - ref: The name of the reference (branch or tag) to be deleted.
     ///   - reason: An optional reason or commit message for the deletion.
     ///
-    /// - Throws: An error if there's an issue with executing the Git command or if the specified reference doesn't exist.
+    /// - Throws: An error if there's an issue with executing the Git command or \
+    ///           if the specified reference doesn't exist.
     ///
     /// - Example:
     ///   ```swift

@@ -10,7 +10,7 @@
 import Foundation
 
 public struct Clone {
-    
+
     public init() {}
 
     /// Clones a repository from a given url into to the specified path.

@@ -10,17 +10,20 @@
 import Foundation
 
 public struct LFS {
-    
+
     public init() {}
-    
+
     /// Install Git LFS (Large File Storage) global filters.
     ///
-    /// Git LFS is an extension for handling large files in a Git repository. This function installs Git LFS global filters, which apply to all Git repositories on the system and are configured globally.
+    /// Git LFS is an extension for handling large files in a Git repository. 
+    /// This function installs Git LFS global filters, 
+    /// which apply to all Git repositories on the system and are configured globally.
     ///
     /// - Parameters:
     ///   - force: A flag indicating whether to force the installation of global filters if they already exist.
     ///
-    /// - Throws: An error if there was an issue installing global LFS filters or if the installation is forced and fails.
+    /// - Throws: An error if there was an issue installing global LFS filters
+    ///           or if the installation is forced and fails.
     ///
     /// - Example:
     ///   ```swift
@@ -32,9 +35,12 @@ public struct LFS {
     ///   }
     ///   ```
     ///
-    /// - Note: If `force` is set to `true`, the function will forcibly install global LFS filters even if they already exist.
+    /// - Note: If `force` is set to `true`, the function will forcibly install global LFS filters \
+    ///         even if they already exist.
     ///
-    /// - Important: Installing global Git LFS filters is typically required to properly manage large files in all Git repositories on the system. Make sure to call this function if you want to apply Git LFS globally.
+    /// - Important: Installing global Git LFS filters is typically required to \
+    ///              properly manage large files in all Git repositories on the system. \
+    ///              Make sure to call this function if you want to apply Git LFS globally.
     public func installGlobalLFSFilters(force: Bool) throws {
         var args = ["lfs", "install", "--skip-repo"]
 
@@ -47,13 +53,16 @@ public struct LFS {
 
     /// Install Git LFS (Large File Storage) hooks in a Git repository.
     ///
-    /// Git LFS is an extension for handling large files in a Git repository. This function installs Git LFS hooks in the repository, which are scripts that run at various points in the Git workflow to manage large files.
+    /// Git LFS is an extension for handling large files in a Git repository. \
+    /// This function installs Git LFS hooks in the repository, 
+    /// which are scripts that run at various points in the Git workflow to manage large files.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the Git repository where LFS hooks should be installed.
     ///   - force: A flag indicating whether to force the installation of hooks if they already exist.
     ///
-    /// - Throws: An error if there was an issue installing LFS hooks, if the provided repository URL is invalid, or if the hooks installation is forced and fails.
+    /// - Throws: An error if there was an issue installing LFS hooks, \
+    ///           if the provided repository URL is invalid, or if the hooks installation is forced and fails.
     ///
     /// - Example:
     ///   ```swift
@@ -67,9 +76,12 @@ public struct LFS {
     ///   }
     ///   ```
     ///
-    /// - Note: If `force` is set to `true`, the function will forcibly install LFS hooks even if they already exist in the repository.
+    /// - Note: If `force` is set to `true`, \
+    ///         the function will forcibly install LFS hooks even if they already exist in the repository.
     ///
-    /// - Important: Installing Git LFS hooks is typically required to properly manage large files in a Git repository. Make sure to call this function if your repository uses Git LFS for large file storage.
+    /// - Important: Installing Git LFS hooks is typically required to properly manage \
+    ///              large files in a Git repository. \
+    ///              Make sure to call this function if your repository uses Git LFS for large file storage.
     public func installLFSHooks(directoryURL: URL, force: Bool) throws {
         var args = ["lfs", "install"]
 
@@ -84,13 +96,16 @@ public struct LFS {
 
     /// Check whether the Git repository is configured to track any paths with Git LFS (Large File Storage).
     ///
-    /// Git LFS is an extension for handling large files in a Git repository, and this function helps you determine if the repository is configured to track any paths using Git LFS within its configuration.
+    /// Git LFS is an extension for handling large files in a Git repository, 
+    /// and this function helps you determine if the repository is configured to track
+    /// any paths using Git LFS within its configuration.
     ///
     /// - Parameter directoryURL: The URL of the Git repository.
     ///
     /// - Returns: `true` if the repository is configured to track paths with Git LFS; otherwise, `false`.
     ///
-    /// - Throws: An error if there was an issue querying the Git repository or if the provided repository URL is invalid.
+    /// - Throws: An error if there was an issue querying the Git repository or \
+    ///           if the provided repository URL is invalid.
     ///
     /// - Example:
     ///   ```swift
@@ -108,7 +123,10 @@ public struct LFS {
     ///   }
     ///   ```
     ///
-    /// - Important: This function checks whether the Git repository is configured to track any paths with Git LFS in its configuration. It does not specify which paths are tracked; use `isTrackedByLFS` to check if specific files are tracked.
+    /// - Important: This function checks whether the Git repository is configured to track \
+    ///              any paths with Git LFS in its configuration. \
+    ///              It does not specify which paths are tracked; use `isTrackedByLFS` \
+    ///              to check if specific files are tracked.
     public func isUsingLFS(directoryURL: URL) throws -> Bool {
         let result = try ShellClient.live().run(
             "cd \(directoryURL.relativePath.escapedWhiteSpaces());git lfs track"
@@ -121,7 +139,9 @@ public struct LFS {
 
     /// Check whether the Git repository is configured to track a specific file with Git LFS (Large File Storage).
     ///
-    /// Git LFS is an extension for handling large files in a Git repository, and this function helps you determine if a particular file is tracked by Git LFS within the repository's configuration.
+    /// Git LFS is an extension for handling large files in a Git repository, 
+    /// and this function helps you determine if a particular file is tracked by 
+    /// Git LFS within the repository's configuration.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the Git repository.
@@ -148,7 +168,9 @@ public struct LFS {
     ///   }
     ///   ```
     ///
-    /// - Important: This function checks whether a specific file within the Git repository is tracked by Git LFS in the repository's configuration. Ensure that the provided path is valid and that the repository is configured to use Git LFS.
+    /// - Important: This function checks whether a specific file within the Git repository \
+    ///              is tracked by Git LFS in the repository's configuration. \
+    ///              Ensure that the provided path is valid and that the repository is configured to use Git LFS.
     public func isTrackedByLFS(directoryURL: URL,
                                path: String) throws -> Bool {
         let result = try ShellClient.live().run(
@@ -174,9 +196,12 @@ public struct LFS {
         return match
     }
 
-    /// Query a Git repository to filter a set of provided relative paths and identify which files are not covered by the current Git LFS (Large File Storage) configuration.
+    /// Query a Git repository to filter a set of provided relative paths \
+    /// and identify which files are not covered by the current Git LFS (Large File Storage) configuration.
     ///
-    /// Git LFS is an extension for handling large files in a Git repository, and this function helps you determine which files are not tracked by Git LFS within the specified relative paths.
+    /// Git LFS is an extension for handling large files in a Git repository, 
+    /// and this function helps you determine which files are not tracked by
+    /// Git LFS within the specified relative paths.
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the Git repository.
@@ -206,7 +231,9 @@ public struct LFS {
     ///   }
     ///   ```
     ///
-    /// - Important: This function checks which files within the specified relative paths are not tracked by Git LFS in the Git repository. Ensure that the provided paths are valid and that the repository is configured to use Git LFS.
+    /// - Important: This function checks which files within the specified relative \
+    ///              paths are not tracked by Git LFS in the Git repository. \
+    ///              Ensure that the provided paths are valid and that the repository is configured to use Git LFS.
     public func filesNotTrackedByLFS(directoryURL: URL,
                                      filePaths: [String]) throws -> [String] {
         var filesNotTrackedByGitLFS: [String] = []

@@ -12,7 +12,7 @@ import Foundation
 public struct IAheadBehind {
     /// The number of commits ahead of the revision range.
     let ahead: Int
-    
+
     /// The number of commits behind the revision range.
     let behind: Int
 }
@@ -21,10 +21,10 @@ public struct IAheadBehind {
 struct ICompareResult {
     /// The number of commits ahead of the reference being compared to.
     let ahead: Int
-    
+
     /// The number of commits behind the reference being compared to.
     let behind: Int
-    
+
     /// An array of `Commit` objects representing individual commits involved in the comparison.
     let commits: [Commit]
 }
@@ -33,13 +33,13 @@ struct ICompareResult {
 struct ITrackingBranch {
     /// The reference (name) of the branch.
     let ref: String
-    
+
     /// The SHA (hash) of the branch.
     let sha: String
-    
+
     /// The reference (name) of the upstream branch it's tracking.
     let upstreamRef: String
-    
+
     /// The SHA (hash) of the upstream branch.
     let upstreamSha: String
 }
@@ -48,7 +48,7 @@ struct ITrackingBranch {
 struct IBranchTip {
     /// The SHA (hash) of the latest commit.
     let sha: String
-    
+
     /// Information about the author of the latest commit.
     let author: CommitIdentity
 }
@@ -57,23 +57,22 @@ struct IBranchTip {
 enum StartPoint: String {
     /// Create the branch from the current branch.
     case currentBranch = "CurrentBranch"
-    
+
     /// Create the branch from the default branch.
     case defaultBranch = "DefaultBranch"
-    
+
     /// Create the branch from the HEAD.
     case head = "Head"
-    
+
     /// Create the branch from the upstream default branch.
     case upstreamDefaultBranch = "UpstreamDefaultBranch"
 }
-
 
 /// Enum to represent the type of a Git branch.
 enum BranchType: Int {
     /// Represents a local branch.
     case local = 0
-    
+
     /// Represents a remote branch.
     case remote = 1
 }
@@ -84,7 +83,7 @@ public struct GitBranch {
     let tip: IBranchTip
     let type: BranchType
     let ref: String
-    
+
     /**
      * A branch as loaded from Git.
      *
@@ -105,27 +104,27 @@ public struct GitBranch {
         self.type = type
         self.ref = ref
     }
-    
+
     /** The name of the upstream's remote. */
     var upstreamRemoteName: String? {
         guard let upstream = self.upstream else {
             return nil
         }
-        
+
         let pieces = upstream.split(separator: "/")
         if pieces.count >= 2 {
             return String(pieces[0])
         }
-        
+
         return nil
     }
-    
+
     /** The name of remote for a remote branch. If local, will return null. */
     var remoteName: String? {
         if self.type == .local {
             return nil
         }
-        
+
         let pieces = self.ref.split(separator: "/")
         if pieces.count == 4 && pieces[0] == "refs" && pieces[1] == "remotes" {
             return String(pieces[2])
@@ -135,7 +134,7 @@ public struct GitBranch {
             fatalError("Remote branch ref has unexpected format: \(self.ref)")
         }
     }
-    
+
     /**
      * The name of the branch's upstream without the remote prefix.
      */
@@ -143,10 +142,10 @@ public struct GitBranch {
         if let upstream = self.upstream {
             return removeRemotePrefix(name: upstream)
         }
-        
+
         return nil
     }
-    
+
     /**
      * The name of the branch without the remote prefix. If the branch is a local
      * branch, this is the same as its `name`.
@@ -159,7 +158,7 @@ public struct GitBranch {
             return withoutRemote ?? self.name
         }
     }
-    
+
     /**
      * Gets a value indicating whether the branch is a remote branch belonging to
      * one of Desktop's automatically created (and pruned) fork remotes. I.e. a
@@ -174,4 +173,3 @@ public struct GitBranch {
         return self.type == .remote && self.name.hasPrefix("auroraeditor-")
     }
 }
-

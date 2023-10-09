@@ -15,7 +15,9 @@ private let defaultGitDescription = "Unnamed repository; edit this file 'descrip
 
 /// Get the project's description from the `.git/description` file.
 ///
-/// This function retrieves the project's description from the `.git/description` file within a Git repository located at the specified `directoryURL`. The description typically provides a brief overview of the project.
+/// This function retrieves the project's description from the `.git/description` 
+/// file within a Git repository located at the specified `directoryURL`. \
+/// The description typically provides a brief overview of the project.
 ///
 /// - Parameter directoryURL: The URL of the directory containing the Git repository.
 ///
@@ -42,7 +44,9 @@ private let defaultGitDescription = "Unnamed repository; edit this file 'descrip
 ///   ```
 ///
 /// - Note:
-///   This function reads the content of the `.git/description` file in the Git repository specified by `directoryURL` and returns it as a string. If the description is not found or cannot be retrieved, an empty string is returned.
+///   This function reads the content of the `.git/description` file in the Git repository specified by 
+///   `directoryURL` and returns it as a string. \
+///   If the description is not found or cannot be retrieved, an empty string is returned.
 public func getGitDescription(directoryURL: URL) throws -> String {
     let path = try String(contentsOf: directoryURL) + gitDescriptionPath
 
@@ -59,7 +63,9 @@ public func getGitDescription(directoryURL: URL) throws -> String {
 
 /// Write a project's description to the `.git/description` file within a Git repository.
 ///
-/// This function writes the provided `description` to the `.git/description` file within a Git repository located at the specified `directoryURL`. The description typically provides a brief overview of the project.
+/// This function writes the provided `description` to the `.git/description` file within 
+/// a Git repository located at the specified `directoryURL`. \
+/// The description typically provides a brief overview of the project.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the directory containing the Git repository.
@@ -82,7 +88,9 @@ public func getGitDescription(directoryURL: URL) throws -> String {
 ///   ```
 ///
 /// - Note:
-///   This function writes the provided `description` to the `.git/description` file in the Git repository specified by `directoryURL`. It does so by overwriting the existing content of the file, if any.
+///   This function writes the provided `description` to the `.git/description` file 
+///   in the Git repository specified by `directoryURL`. \
+///   It does so by overwriting the existing content of the file, if any.
 public func writeGitDescription(directoryURL: URL,
                                 description: String) throws {
     let fullPath = try String(contentsOf: directoryURL) + gitDescriptionPath

@@ -10,9 +10,9 @@
 import Foundation
 
 public struct Checkout {
-    
+
     public init() {}
-    
+
     /// Checks out a Git branch in a specified directory.
     ///
     /// - Parameters:
@@ -93,7 +93,11 @@ public struct Checkout {
     ///   let resolutionStrategy = ManualConflictResolution.ours // Replace with the desired resolution strategy
     ///
     ///   do {
-    ///       try checkoutConflictedFile(directoryURL: directoryURL, file: conflictedFile, resolution: resolutionStrategy)
+    ///       try checkoutConflictedFile(
+    ///           directoryURL: directoryURL,
+    ///           file: conflictedFile,
+    ///           resolution: resolutionStrategy
+    ///       )
     ///       print("File '\(conflictedFile.url.relativePath)' checked out with \(resolutionStrategy) resolution.")
     ///   } catch {
     ///       print("Error checking out conflicted file: \(error.localizedDescription)")
@@ -111,7 +115,7 @@ public struct Checkout {
             "--",
             file.url.relativePath
         ]
-        
+
         try ShellClient().run("cd \(directoryURL.relativePath.escapedWhiteSpaces());git \(args)")
     }
 }

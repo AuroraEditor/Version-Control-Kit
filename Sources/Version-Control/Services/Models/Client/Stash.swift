@@ -10,7 +10,7 @@
 import Foundation
 
 public struct Stash {
-    
+
     public init() {}
 
     private let editorStashEntryMarker = "!!AuroraEditor"

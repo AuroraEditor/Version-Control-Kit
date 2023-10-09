@@ -70,7 +70,8 @@ public class UpdateIndexOptions: IUpdateIndexOptions {
 /// - Parameters:
 ///   - directoryURL: The local directory URL of the Git repository.
 ///   - paths: An array of file paths to update in the Git index.
-///   - options: An optional `UpdateIndexOptions` object that allows you to specify additional options for the `update-index` Git command.
+///   - options: An optional `UpdateIndexOptions` object that allows you to specify additional options\
+///     for the `update-index` Git command.
 ///
 /// - Throws: An error if there's an issue with executing the Git command or if the specified paths are invalid.
 ///

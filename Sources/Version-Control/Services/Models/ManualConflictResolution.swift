@@ -13,6 +13,6 @@ import Foundation
 // as `--ours` and `--theirs` to git checkout. Please be careful
 // when modifying this type.
 public enum ManualConflictResolution: String {
-    case theirs = "theirs"
-    case ours = "ours"
+    case theirs = "theirs" // swiftlint:disable:this redundant_string_enum_value
+    case ours = "ours" // swiftlint:disable:this redundant_string_enum_value
 }

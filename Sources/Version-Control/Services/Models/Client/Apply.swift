@@ -10,7 +10,7 @@
 import Foundation
 
 public struct Apply {
-    
+
     /// Applies a Git patch to the Git index for a specified file in a specified directory.
     ///
     /// - Parameters:
@@ -21,7 +21,9 @@ public struct Apply {
     ///   - An error of type `Error` if any issues occur during the patch application process.
     ///
     /// - Note:
-    ///   If the file was renamed (`file.gitStatus == .renamed`), this function recreates the rename operation by staging the removal of the old file and adding the old file's blob to the index under the new name.
+    ///   If the file was renamed (`file.gitStatus == .renamed`), \
+    ///   this function recreates the rename operation by staging the removal of the old file \
+    ///   and adding the old file's blob to the index under the new name.
     ///
     /// - Example:
     ///   ```swift

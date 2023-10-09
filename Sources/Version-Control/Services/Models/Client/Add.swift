@@ -18,7 +18,7 @@ public struct Add {
      */
     func addConflictedFile(directoryURL: URL,
                            file: GitFileItem) async throws {
-        
+
         try ShellClient().run("cd \(directoryURL.relativePath.escapedWhiteSpaces()); git add -- \(file.url)")
     }
 }

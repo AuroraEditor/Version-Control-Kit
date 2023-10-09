@@ -11,7 +11,10 @@ import Foundation
 
 /// Get a list of the `limit` most recently checked out branches in the Git repository.
 ///
-/// This function retrieves information from the Git logs to identify branches that were recently checked out. It is useful for tracking branch history and provides the names of branches that were either checked out or renamed.
+/// This function retrieves information from the Git logs to identify branches 
+/// that were recently checked out. \
+/// It is useful for tracking branch history and provides the names of branches
+/// that were either checked out or renamed.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository.
@@ -22,8 +25,10 @@ import Foundation
 /// - Throws: An error if there was an issue executing the Git log command or if the output couldn't be parsed.
 ///
 /// - Note:
-///   - This function uses regular expressions to parse the Git log output, looking for branch checkout and rename events.
-///   - Renamed branches are considered as part of the history, and their original names are excluded from the result to avoid duplicates.
+///   - This function uses regular expressions to parse the Git log output, \
+///     looking for branch checkout and rename events.
+///   - Renamed branches are considered as part of the history, \
+///     and their original names are excluded from the result to avoid duplicates.
 ///
 /// - Example:
 ///   ```swift
@@ -35,7 +40,7 @@ import Foundation
 /// - Returns: An array of branch names that were recently checked out or renamed, with a maximum count of `limit`.
 public func getRecentBranches(directoryURL: URL, limit: Int) throws -> [String] {
     // Regular expression to match branch checkout and rename events in Git log.
-    let regexPattern = ".*? (renamed|checkout)(?:: moving from|\\s*) (?:refs/heads/|\\s*)(.*?) to (?:refs/heads/|\\s*)(.*?)$"
+    let regexPattern = ".*? (renamed|checkout)(?:: moving from|\\s*) (?:refs/heads/|\\s*)(.*?) to (?:refs/heads/|\\s*)(.*?)$" // swiftlint:disable:this line_length
 
     let regex = try NSRegularExpression(pattern: regexPattern, options: [])
 
@@ -98,7 +103,10 @@ private let noCommitsOnBranchRe = "fatal: your current branch '.*' does not have
 
 /// Get a distinct list of branches that have been checked out after a specific date in the Git repository.
 ///
-/// This function retrieves information from the Git reflog to identify branches that were checked out after a given date. It returns a dictionary where the keys are branch names, and the values are the timestamps when the branches were checked out.
+/// This function retrieves information from the Git reflog to identify branches 
+/// that were checked out after a given date. \
+/// It returns a dictionary where the keys are branch names, 
+/// and the values are the timestamps when the branches were checked out.
 ///
 /// - Parameters:
 ///   - directoryURL: The URL of the Git repository.
@@ -110,7 +118,8 @@ private let noCommitsOnBranchRe = "fatal: your current branch '.*' does not have
 ///
 /// - Note:
 ///   - This function uses regular expressions to parse the Git reflog output, looking for checkout events.
-///   - The reflog records information about various operations, and this function specifically filters for "checkout" events after the specified date.
+///   - The reflog records information about various operations, \
+///     and this function specifically filters for "checkout" events after the specified date.
 ///
 /// - Example:
 ///   ```swift
@@ -129,7 +138,15 @@ public func getBranchCheckouts(directoryURL: URL, afterDate: Date) throws -> [St
     // Create a process to execute the Git reflog command.
     let process = Process()
     process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-    process.arguments = ["git", "reflog", "--date=iso", "--after=\(afterDate.ISO8601Format())", "--pretty=%H %gd %gs", "--grep-reflog=checkout: moving from .* to .*$", "--"]
+    process.arguments = [
+        "git",
+        "reflog",
+        "--date=iso",
+        "--after=\(afterDate.ISO8601Format())",
+        "--pretty=%H %gd %gs",
+        "--grep-reflog=checkout: moving from .* to .*$",
+        "--"
+    ]
     process.currentDirectoryURL = URL(fileURLWithPath: directoryURL.relativePath.escapedWhiteSpaces())
 
     // Create pipes for capturing the stdout and stderr of the Git reflog command.
