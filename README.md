@@ -27,7 +27,7 @@ The AuroraEditor Version Control Kit is a comprehensive tool designed to facilit
    
    ```swift
    dependencies: [
-     .package(url: "https://github.com/AuroraEditor/Version-Control-Kit.git", from: "1.0.0")
+     .package(url: "https://github.com/AuroraEditor/Version-Control-Kit.git", from: "Version-0")
    ]
    ```
 
