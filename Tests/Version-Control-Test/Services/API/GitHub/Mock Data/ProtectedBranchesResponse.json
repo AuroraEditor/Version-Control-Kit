@@ -1,0 +1,18 @@
+[
+    {
+        "name": "development",
+        "commit": {
+            "sha": "c293badc0c44ad4e78ebd2a741731709d8c58d18",
+            "url": "https://api.github.com/repos/AuroraEditor/AuroraEditor/commits/c293badc0c44ad4e78ebd2a741731709d8c58d18"
+        },
+        "protected": true
+    },
+    {
+        "name": "main",
+        "commit": {
+            "sha": "7f7b465a3945af5717ef6d9faee57647ac8de79a",
+            "url": "https://api.github.com/repos/AuroraEditor/AuroraEditor/commits/7f7b465a3945af5717ef6d9faee57647ac8de79a"
+        },
+        "protected": true
+    }
+]

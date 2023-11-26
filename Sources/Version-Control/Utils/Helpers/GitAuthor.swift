@@ -9,7 +9,7 @@
 
 import Foundation
 
-public class GitAuthor {
+public class GitAuthor: Codable {
 
     var name: String
     var email: String

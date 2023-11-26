@@ -1,0 +1,17 @@
+{
+    "name": "development",
+    "commit": {
+        "sha": "c293badc0c44ad4e78ebd2a741731709d8c58d18",
+        "url": "https://api.github.com/repos/AuroraEditor/AuroraEditor/commits/c293badc0c44ad4e78ebd2a741731709d8c58d18"
+    },
+    "protected": true,
+    "pattern": "development",
+    "required_signatures": false,
+    "required_status_checks": [],
+    "required_approving_review_count": 0,
+    "required_linear_history": false,
+    "allow_actor": true,
+    "allow_deletions": false,
+    "allow_force_pushes": false,
+    "block_creations": false
+}
