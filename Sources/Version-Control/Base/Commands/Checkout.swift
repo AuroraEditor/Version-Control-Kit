@@ -13,9 +13,9 @@ public struct GitCheckout {
 
     public init() {}
 
-    typealias ProgressCallback = (CheckoutProgress) -> Void
+    public typealias ProgressCallback = (CheckoutProgress) -> Void
 
-    func getCheckoutArgs(progressCallback: ProgressCallback?) -> [String] {
+    public func getCheckoutArgs(progressCallback: ProgressCallback?) -> [String] {
         var args = gitNetworkArguments
 
         if let callback = progressCallback {
@@ -27,7 +27,7 @@ public struct GitCheckout {
         return args
     }
 
-    func getBranchCheckoutArgs(branch: GitBranch,
+    public func getBranchCheckoutArgs(branch: GitBranch,
                                enableRecurseSubmodulesFlag: Bool = false) -> [String] {
         var baseArgs: [String] = []
 
@@ -64,7 +64,7 @@ public struct GitCheckout {
         }
     }
 
-    func getCheckoutOpts(directoryURL: URL,
+    public func getCheckoutOpts(directoryURL: URL,
                          account: IGitAccount?,
                          title: String,
                          target: String,
@@ -128,7 +128,8 @@ public struct GitCheckout {
     ///
     /// - Warning:
     ///   Ensure that the specified `directoryURL` exists and is a valid Git repository directory.
-    func checkoutBranch(directoryURL: URL,
+    @discardableResult
+    public func checkoutBranch(directoryURL: URL,
                         account: IGitAccount?,
                         branch: GitBranch,
                         progressCallback: ProgressCallback?) throws -> Bool {
@@ -152,10 +153,10 @@ public struct GitCheckout {
         return true
     }
 
-    func checkoutCommit(directoryURL: URL,
-                        account: IGitAccount?,
-                        commit: Commit,
-                        progressCallback: ProgressCallback?) async throws -> Bool {
+    public func checkoutCommit(directoryURL: URL,
+                               account: IGitAccount?,
+                               commit: Commit,
+                               progressCallback: ProgressCallback?) async throws -> Bool {
         let opts = try getCheckoutOpts(
             directoryURL: directoryURL,
             account: account,
@@ -240,9 +241,9 @@ public struct GitCheckout {
     ///
     /// - Warning:
     ///   Ensure that the specified `directoryURL` exists and is a valid Git repository directory.
-    func checkoutConflictedFile(directoryURL: URL,
-                                file: WorkingDirectoryFileChange,
-                                resolution: ManualConflictResolution) throws {
+    public func checkoutConflictedFile(directoryURL: URL,
+                                       file: WorkingDirectoryFileChange,
+                                       resolution: ManualConflictResolution) throws {
         let args = [
             "checkout",
             "--\(resolution.rawValue)",

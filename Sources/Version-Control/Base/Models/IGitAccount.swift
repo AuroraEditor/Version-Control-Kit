@@ -10,7 +10,7 @@ import Foundation
 /**
  * An account which can be used to potentially authenticate with a git server.
  */
-struct IGitAccount {
+public struct IGitAccount {
 
     /** The login/username to authenticate with. */
     let login: String

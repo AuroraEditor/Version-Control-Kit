@@ -50,7 +50,7 @@ public struct Remote {
     ///
     /// - Returns: An array of `GitRemote` objects representing the configured Git remotes for the local repository.
     public func getRemotes(directoryURL: URL) throws -> [GitRemote] {
-        let result = try GitShell().git(args: ["remote", "-ve"],
+        let result = try GitShell().git(args: ["remote", "-v"],
                                         path: directoryURL,
                                         name: #function)
 

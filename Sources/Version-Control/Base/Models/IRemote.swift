@@ -20,12 +20,17 @@ public protocol IRemote {
     var url: String { get }
 }
 
-public class GitRemote: IRemote {
+public struct GitRemote: IRemote, Hashable {
+    public var id: String { self.name }
     public var name: String
     public var url: String
 
     init(name: String, url: String) {
         self.name = name
         self.url = url
+    }
+
+    public static func == (lhs: GitRemote, rhs: GitRemote) -> Bool {
+        return lhs.name == rhs.name
     }
 }
