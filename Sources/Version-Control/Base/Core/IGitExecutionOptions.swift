@@ -8,7 +8,7 @@
 import Foundation
 
 public struct IGitExecutionOptions: IExecutionOptions {
-    var env: [String : String]?
+    var env: [String: String]?
     var stdin: String?
     var stdinEncoding: String?
     var maxBuffer: Int?

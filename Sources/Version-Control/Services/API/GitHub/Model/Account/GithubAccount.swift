@@ -18,7 +18,7 @@ public class Account: Codable, Equatable {
     let name: String
     let plan: String?
 
-    public init(login: String, 
+    public init(login: String,
          endpoint: String,
          token: String,
          emails: [IAPIEmail],
@@ -50,7 +50,7 @@ public class Account: Codable, Equatable {
     var friendlyName: String {
         return self.name != "" ? self.name : self.login
     }
-    
+
     public static func == (lhs: Account, rhs: Account) -> Bool {
         return lhs.endpoint == rhs.endpoint && lhs.id == rhs.id
     }

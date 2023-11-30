@@ -195,7 +195,7 @@ public class MultiCommitOperationProgress: IMultiCommitOperationProgress {
          currentCommitSummary: String,
          position: Int,
          totalCommitCount: Int,
-         value: Int, 
+         value: Int,
          title: String? = nil,
          description: String? = nil) {
         self.kind = kind

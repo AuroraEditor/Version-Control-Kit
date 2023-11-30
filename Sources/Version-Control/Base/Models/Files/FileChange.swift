@@ -12,7 +12,7 @@ public class FileChange {
     let path: String
     let status: AppFileStatus
 
-    public init(path: String, 
+    public init(path: String,
                 status: AppFileStatus) {
         self.path = path
         self.status = status

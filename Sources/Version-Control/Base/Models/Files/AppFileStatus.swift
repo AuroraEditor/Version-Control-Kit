@@ -74,7 +74,6 @@ public func isManualConflict(_ conflictedFileStatus: ConflictedFileStatus) -> Bo
     return conflictedFileStatus is ManualConflict
 }
 
-
 public struct UntrackedFileStatus: AppFileStatus {
     public var kind: AppFileStatusKind
     public var submoduleStatus: SubmoduleStatus?
@@ -171,4 +170,3 @@ struct OrdinaryEntry: FileEntry {
     let workingTree: GitStatusEntry?
     let submoduleStatus: SubmoduleStatus?
 }
-

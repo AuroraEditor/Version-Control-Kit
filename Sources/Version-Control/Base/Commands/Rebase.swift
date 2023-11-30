@@ -9,7 +9,7 @@ import Foundation
 
 public struct Rebase {
 
-    public init(){}
+    public init() {}
 
     func getRebaseInternalState(directoryURL: URL) throws -> RebaseInternalState? {
         let rebaseMergePath = directoryURL.appendingPathComponent(".git/rebase-merge")
@@ -83,7 +83,7 @@ public struct Rebase {
             if let commits = try RevList().getCommitsBetweenCommits(directoryURL: directoryURL,
                                                                     baseBranchSha: baseBranch.tip!.sha,
                                                                     targetBranchSha: targetBranch.tip!.sha) {
-                options = configureOptionsForRebase(options: baseOptions, 
+                options = configureOptionsForRebase(options: baseOptions,
                                                     progress: RebaseProgressOptions(commits: commits,
                                                                                     progressCallback: progressCallback))
             } else {
@@ -135,7 +135,7 @@ public struct Rebase {
 
     func parseRebaseResult(result: IGitResult) -> RebaseResult {
         if result.exitCode == 0 {
-            if result.stdout.trimmingCharacters(in: .whitespacesAndNewlines).range(of: #"^Current branch [^ ]+ is up to date.$"#, 
+            if result.stdout.trimmingCharacters(in: .whitespacesAndNewlines).range(of: #"^Current branch [^ ]+ is up to date.$"#,
                                                                                    options: .regularExpression) != nil {
                 return .alreadyUpToDate
             }
@@ -153,7 +153,7 @@ public struct Rebase {
         return .error
     }
 
-    func configureOptionsForRebase(options: IGitExecutionOptions, 
+    func configureOptionsForRebase(options: IGitExecutionOptions,
                                    progress: RebaseProgressOptions?) -> IGitExecutionOptions {
         guard let progress = progress else {
             return options
@@ -165,7 +165,7 @@ public struct Rebase {
         newOptions.processCallback = { output in
             // Assuming output is a string containing the content of stderr
             var stdout = ""
-            
+
             let stdoutPipe = Pipe()
             output.standardOutput = stdoutPipe
 
@@ -227,7 +227,7 @@ public struct Rebase {
                 return .aborted
             }
 
-            options = configureOptionsForRebase(options: options, 
+            options = configureOptionsForRebase(options: options,
                                                 progress: RebaseProgressOptions(commits: snapshot.commits,
                                                                                 progressCallback: progressCallback))
         }
@@ -249,7 +249,6 @@ public struct Rebase {
         return parseRebaseResult(result: result)
     }
 
-
     func rebaseInteractive(directoryURL: URL,
                            pathOfGeneratedTodo: String,
                            lastRetainedCommitRef: String?,
@@ -262,7 +261,7 @@ public struct Rebase {
                                                expectedErrors: [.RebaseConflicts])
 
         if let progressCallback = progressCallback, let commits = commits {
-            let context = RebaseProgressOptions(commits: commits, 
+            let context = RebaseProgressOptions(commits: commits,
                                                 progressCallback: progressCallback)
             baseOptions = configureOptionsForRebase(options: baseOptions, progress: context)
         } else {
@@ -273,9 +272,9 @@ public struct Rebase {
         let ref = lastRetainedCommitRef ?? "--root"
         let sequenceEditorCommand = "cat \"\(pathOfGeneratedTodo)\" >"
 
-        let result = try GitShell().git(args: ["-c", 
+        let result = try GitShell().git(args: ["-c",
                                                "sequence.editor=\(sequenceEditorCommand)",
-                                               "rebase", 
+                                               "rebase",
                                                "-i",
                                                ref],
                                         path: directoryURL,

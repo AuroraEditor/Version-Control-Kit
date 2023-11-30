@@ -628,8 +628,8 @@ public struct GitDiff {
         let fullPath = directoryURL.appendingPathComponent(path).path
         let url = try Config().getConfigValue(directoryURL: directoryURL, name: "submodule.\(path).url")
 
-        var oldSHA: String? = nil
-        var newSHA: String? = nil
+        var oldSHA: String?
+        var newSHA: String?
 
         if status.commitChanged ||
             file.status.kind == .new ||

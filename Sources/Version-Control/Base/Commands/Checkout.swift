@@ -34,7 +34,7 @@ public struct GitCheckout {
         if enableRecurseSubmodulesFlag {
             if branch.type == BranchType.remote {
                 return baseArgs + [
-                    branch.name, 
+                    branch.name,
                     "-b",
                     branch.nameWithoutRemote,
                     "--recurse-submodules",
@@ -50,7 +50,7 @@ public struct GitCheckout {
         } else {
             if branch.type == BranchType.remote {
                 return baseArgs + [
-                    branch.name, 
+                    branch.name,
                     "-b",
                     branch.nameWithoutRemote,
                     "--"

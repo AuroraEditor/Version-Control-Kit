@@ -7,8 +7,6 @@
 
 import Foundation
 
-import Foundation
-
 /// `null` can be returned by the API for legacy reasons. A non-null value is
 /// set for the primary email address currently, but in the future visibility
 /// may be defined for each email address.
@@ -24,8 +22,8 @@ public struct IAPIEmail: Codable {
     let verified: Bool
     let primary: Bool
     let visibility: EmailVisibility
-    
-    public init(email: String, 
+
+    public init(email: String,
          verified: Bool,
          primary: Bool,
          visibility: EmailVisibility) {

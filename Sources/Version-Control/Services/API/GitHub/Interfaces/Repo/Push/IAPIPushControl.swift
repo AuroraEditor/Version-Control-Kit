@@ -15,14 +15,14 @@ struct IAPIPushControl: Codable {
      * Empty array if user is admin and branch is not admin-enforced
      */
     let required_status_checks: [String]
-    
+
     /**
      * How many reviews are required before merging?
      *
      * 0 if user is admin and branch is not admin-enforced
      */
     let required_approving_review_count: Int
-    
+
     /**
      * Is user permitted?
      *
@@ -32,7 +32,7 @@ struct IAPIPushControl: Codable {
      * `false` if `Restrict who can push` is enabled and user is not in list.
      */
     let allow_actor: Bool
-    
+
     /**
      * Currently unused properties
      */
@@ -42,4 +42,3 @@ struct IAPIPushControl: Codable {
     let allow_deletions: Bool
     let allow_force_pushes: Bool
 }
-

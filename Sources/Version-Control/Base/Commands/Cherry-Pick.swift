@@ -161,11 +161,11 @@ public struct CherryPick {
         let headPath = directoryURL.appendingPathComponent(".git/sequencer/head").path
         let todoPath = directoryURL.appendingPathComponent(".git/sequencer/todo").path
 
-        guard let abortSafetySha = try? String(contentsOfFile: abortSafetyPath, 
+        guard let abortSafetySha = try? String(contentsOfFile: abortSafetyPath,
                                                encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines),
-              let headSha = try? String(contentsOfFile: headPath, 
+              let headSha = try? String(contentsOfFile: headPath,
                                         encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines),
-              let remainingPicks = try? String(contentsOfFile: todoPath, 
+              let remainingPicks = try? String(contentsOfFile: todoPath,
                                                encoding: .utf8).trimmingCharacters(in: .whitespacesAndNewlines) else {
             print("Could not read file")
             return nil

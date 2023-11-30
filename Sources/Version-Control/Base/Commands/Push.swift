@@ -21,7 +21,6 @@ public struct Push {
 
     public init() {}
 
-
     public func push(directoryURL: URL,
                      remote: IRemote,
                      localBranch: String,

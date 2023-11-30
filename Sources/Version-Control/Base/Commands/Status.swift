@@ -31,11 +31,10 @@ public struct GitStatus {
         }
 
         let manualConflictEntry = entry as? ManualConflictEntry
-        return ManualConflict(kind: .conflicted, 
+        return ManualConflict(kind: .conflicted,
                               entry: manualConflictEntry!,
                               submoduleStatus: nil)
     }
-
 
     func convertToAppStatus(
         path: String,
@@ -63,7 +62,6 @@ public struct GitStatus {
             fatalError("Unknown file status \(type(of: entry))")
         }
     }
-
 
     func getStatus(directoryURL: URL) async throws -> StatusResult? {
         let args = [
@@ -168,7 +166,7 @@ public struct GitStatus {
         return files
     }
 
-    func parseStatusHeader(results: StatusHeadersData, 
+    func parseStatusHeader(results: StatusHeadersData,
                            header: IStatusHeader) -> StatusHeadersData {
         var currentBranch = results.currentBranch
         var currentUpstreamBranch = results.currentUpstreamBranch
@@ -238,7 +236,6 @@ public struct GitStatus {
 
         return ConflictFilesDetails(conflictCountsByPath: conflictCountsByPath, binaryFilePaths: binaryFilePaths)
     }
-
 
     func getConflictDetails(directoryURL: URL,
                             mergeHeadFound: Bool,

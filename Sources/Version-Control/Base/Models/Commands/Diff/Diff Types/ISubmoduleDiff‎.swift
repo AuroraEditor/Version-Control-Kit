@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct ISubmoduleDiff : IDiff {
+public struct ISubmoduleDiff: IDiff {
     public var kind: DiffType = .submodule
 
     /** Full path of the submodule */
@@ -17,14 +17,14 @@ public struct ISubmoduleDiff : IDiff {
     var path: String
 
     /** URL of the submodule */
-    var url: String? = nil
+    var url: String?
 
     /** Status of the submodule */
     var status: SubmoduleStatus
 
     /** Previous SHA of the submodule, or null if it hasn't changed */
-    var oldSHA: String? = nil
+    var oldSHA: String?
 
     /** New SHA of the submodule, or null if it hasn't changed */
-    var newSHA: String? = nil
+    var newSHA: String?
 }

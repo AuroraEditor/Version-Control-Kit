@@ -24,7 +24,6 @@ public struct GitPull {
                      progressCallback: ((IPullProgress) -> Void)? = nil) throws -> [String] {
         let divergentPathArgs = getDefaultPullDivergentBranchArguments(directoryURL: directoryURL)
 
-
         var args = gitNetworkArguments + gitRebaseArguments + ["pull"] + divergentPathArgs
 
         args.append("--recurse-submodules")

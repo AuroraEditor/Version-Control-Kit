@@ -19,7 +19,7 @@ enum UserCanBypass: String, Codable {
 struct IAPIRepoRuleset: Codable {
     /// The ID of the ruleset.
     let id: Int
-    
+
     /**
      Whether the user making the API request can bypass the ruleset.
      

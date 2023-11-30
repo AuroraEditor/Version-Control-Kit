@@ -9,7 +9,7 @@ import Foundation
 
 struct GitlabAPI {
 
-    public init(){}
+    public init() {}
 
     func createRepritory() {
 

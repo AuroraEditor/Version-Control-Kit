@@ -13,12 +13,12 @@ struct IAPIRepoRule: Codable {
      The ID of the ruleset this rule is configured in.
      */
     let ruleset_id: Int
-    
+
     /**
      The type of the rule.
      */
     let type: APIRepoRuleType
-    
+
     /**
      The parameters that apply to the rule if it is a metadata rule.
      Other rule types may have parameters, but they are not used in

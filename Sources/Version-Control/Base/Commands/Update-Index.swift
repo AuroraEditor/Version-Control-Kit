@@ -196,5 +196,4 @@ public struct UpdateIndex {
         }
     }
 
-
 }

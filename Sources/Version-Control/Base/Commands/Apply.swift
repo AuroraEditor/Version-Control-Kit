@@ -47,7 +47,7 @@ public struct Apply {
                     let info = oldFile.stdout.split(separator: "\t",
                                                     maxSplits: 1,
                                                     omittingEmptySubsequences: true)[0]
-                    let components = info.split(separator: " ", 
+                    let components = info.split(separator: " ",
                                                 maxSplits: 3,
                                                 omittingEmptySubsequences: true)
                     let mode = components[0]

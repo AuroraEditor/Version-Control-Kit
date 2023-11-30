@@ -11,7 +11,7 @@ import Foundation
 
 public struct Submodule {
 
-    public init(){}
+    public init() {}
 
     func listSubmodules(directoryURL: URL) throws -> [SubmoduleEntry] {
         let submodulesFile = FileManager.default.fileExists(atPath: directoryURL.appendingPathComponent(".gitmodules").path)

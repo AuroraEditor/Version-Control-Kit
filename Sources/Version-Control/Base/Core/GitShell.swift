@@ -87,12 +87,12 @@ public struct GitShell {
                                 path: path.relativePath.escapedWhiteSpaces())
 
         let exitCode = result.exitCode
-        var gitError: GitError? = nil
+        var gitError: GitError?
         var acceptableExitCode = options?.successExitCodes != nil ? options?.successExitCodes?.contains(exitCode) : false
 
         if !acceptableExitCode! {
             gitError = parseError(stderr: result.stderr)
-            if (gitError == nil) {
+            if gitError == nil {
                 gitError = parseError(stderr: result.stdout)
             }
         }
@@ -113,7 +113,7 @@ public struct GitShell {
             acceptableError = ((options?.expectedErrors?.contains(gitError!)) != nil)
         }
 
-        if ((gitError != nil && acceptableError) || acceptableError) {
+        if (gitError != nil && acceptableError) || acceptableError {
             return gitResult
         }
 

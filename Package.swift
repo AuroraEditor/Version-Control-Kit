@@ -27,6 +27,6 @@ let package = Package(
             dependencies: [
                 "Version-Control"
             ]
-        ),
+        )
     ]
 )

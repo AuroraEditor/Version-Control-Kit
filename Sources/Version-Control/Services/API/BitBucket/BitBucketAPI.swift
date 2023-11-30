@@ -8,8 +8,8 @@
 import Foundation
 
 struct BitBucketAPI {
-    
-    public init(){}
+
+    public init() {}
 
     var bitbucketURL: String = "https://api.bitbucket.org/2.0/"
 

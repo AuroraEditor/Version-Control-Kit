@@ -8,9 +8,9 @@
 import Foundation
 
 public struct GitHubAPI {
-    
+
     public init() {}
-    
+
     /// Creates a new GitHub repository.
     ///
     /// This function allows the user to create a new GitHub repository either under their own account or within an organization. It provides parameters for specifying the repository's name, description, and whether it should be private or public.
@@ -59,7 +59,7 @@ public struct GitHubAPI {
             "description": description,
             "private": isPrivate
         ]
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -80,7 +80,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches branch protection information to determine if a user can push to a given branch.
     ///
     /// - Parameters:
@@ -125,13 +125,13 @@ public struct GitHubAPI {
         guard let branchName = branch.urlEncode() else {
             return
         }
-        
+
         let path = "repos/\(owner)/\(name)/branches/\(branchName)/push_control"
-        
+
         let headers: [String: String] = [
             "Accept": "application/vnd.github.phandalin-preview"
         ]
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -154,7 +154,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches protected branches for the given repository.
     ///
     /// - Parameters:
@@ -186,7 +186,7 @@ public struct GitHubAPI {
         completion: @escaping ([IAPIBranch]?) -> Void
     ) {
         let path = "repos/\(owner)/\(name)/branches?protected=true"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -208,9 +208,9 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     // MARK: - Repository Issues
-    
+
     /**
      * Fetch the issues with the given state that have been created or updated
      * since the given date.
@@ -223,13 +223,13 @@ public struct GitHubAPI {
         completion: @escaping ([IAPIIssue]?) -> Void
     ) {
         var params: [String: String] = ["state": state.rawValue]
-        
+
         if let sinceDate = since {
             params["since"] = Date().toGitHubIsoDateString(sinceDate)
         }
-        
+
         let path = "repos/\(owner)/\(name)/issues".urlEncode(params)
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path!,
@@ -251,7 +251,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /**
      Fetches all comments from a given issue.
      
@@ -269,7 +269,7 @@ public struct GitHubAPI {
         completion: @escaping ([IAPIComment]?) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/issues/\(issueNumber)/comments"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -291,9 +291,9 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     // MARK: - Repository Pull Requests
-    
+
     /**
      Fetches all open pull requests in the given repository.
      
@@ -308,7 +308,7 @@ public struct GitHubAPI {
         name: String,
         completion: @escaping ([IAPIPullRequest]?) -> Void) {
             let path = "repos/\(owner)/\(name)/pulls".urlEncode(["state": "open"])
-            
+
             AuroraNetworking()
                 .request(baseURL: "",
                          path: path!,
@@ -330,7 +330,7 @@ public struct GitHubAPI {
                     }
                 })
         }
-    
+
     /**
      Fetch a single pull request in the given repository.
      
@@ -349,7 +349,7 @@ public struct GitHubAPI {
         completion: @escaping (IAPIPullRequest?) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/pulls/\(prNumber)"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -371,7 +371,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /**
      Fetch a single pull request review in the given repository.
      
@@ -391,7 +391,7 @@ public struct GitHubAPI {
         completion: @escaping (IAPIPullRequestReview?) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/pulls/\(prNumber)/reviews/\(reviewId)"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -413,7 +413,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /**
      Fetches all reviews from a given pull request.
      
@@ -431,7 +431,7 @@ public struct GitHubAPI {
         completion: @escaping ([IAPIPullRequestReview]?) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/pulls/\(prNumber)/reviews"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -453,7 +453,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /**
      Fetches all review comments from a given pull request review.
      
@@ -473,7 +473,7 @@ public struct GitHubAPI {
         completion: @escaping ([IAPIComment]?) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/pulls/\(prNumber)/reviews/\(reviewId)/comments"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -495,7 +495,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /**
      Fetches all review comments from a given pull request.
      
@@ -513,7 +513,7 @@ public struct GitHubAPI {
         completion: @escaping ([IAPIComment]?) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/pulls/\(prNumber)/comments"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -535,9 +535,9 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     // MARK: - Repository Rules
-    
+
     /// Fetches repository rules for a specific branch in a GitHub repository.
     ///
     /// This function retrieves repository rules associated with a specific branch in a GitHub repository. Repository rules are used to define code analysis and linting rules that apply to the repository's codebase on a per-branch basis. It allows you to fetch a list of rules applicable to a particular branch.
@@ -582,7 +582,7 @@ public struct GitHubAPI {
         completion: @escaping ([IAPIRepoRule]?) -> Void
     ) {
         let path = "repos/\(owner)/\(name)/rules/branches/\(branch)"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -604,7 +604,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches all repository rulesets from a GitHub repository.
     ///
     /// This function retrieves all repository rulesets associated with a GitHub repository. Repository rulesets are used to define code analysis and linting rules that apply to the repository. It allows you to fetch a list of all rulesets available in the repository.
@@ -646,7 +646,7 @@ public struct GitHubAPI {
         completion: @escaping ([IAPISlimRepoRuleset]?) -> Void
     ) {
         let path = "repos/\(owner)/\(name)/rulesets"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -668,7 +668,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches a repository ruleset by its ID from a GitHub repository.
     ///
     /// This function retrieves a repository ruleset by its unique identifier (`id`) from a GitHub repository. Repository rulesets are used to define code analysis and linting rules that apply to the repository. This function allows you to fetch the details of a specific ruleset based on its ID.
@@ -710,7 +710,7 @@ public struct GitHubAPI {
         completion: @escaping (IAPIRepoRuleset?) -> Void
     ) {
         let path = "repos/\(owner)/\(name)/rulesets/\(id)"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -732,9 +732,9 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     // MARK: - Workflows
-    
+
     /// Fetches GitHub Actions check runs associated with a specific Git reference (e.g., branch or commit) in a repository.
     ///
     /// This function retrieves information about the GitHub Actions check runs that are associated with a specific Git reference in a GitHub repository. It is typically used to obtain check run details for a particular branch or commit.
@@ -777,13 +777,13 @@ public struct GitHubAPI {
         completion: @escaping (IAPIRefCheckRuns?) -> Void
     ) {
         let safeRef = ref.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? ""
-        
+
         let path = "repos/\(owner)/\(name)/commits/\(safeRef)/check-runs?per_page=100"
-        
+
         let headers = [
             "Accept": "application/vnd.github.antiope-preview+json"
         ]
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -806,7 +806,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches GitHub Actions workflow runs associated with a specific branch name in a repository's pull requests.
     ///
     /// This function retrieves information about the GitHub Actions workflow runs that correspond to a particular branch name in pull requests of a GitHub repository. It is typically used to obtain workflow run details triggered by pull request events.
@@ -848,9 +848,9 @@ public struct GitHubAPI {
         completion: @escaping (IAPIWorkflowRuns?) -> Void
     ) {
         let path = "repos/\(owner)/\(name)/actions/runs?event=pull_request&branch=\(branchName.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "")"
-        
+
         let headers = ["Accept": "application/vnd.github.antiope-preview+json"]
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -873,7 +873,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches the GitHub Actions workflow run associated with a specific check suite ID in a repository.
     ///
     /// This function retrieves information about the GitHub Actions workflow run that corresponds to a particular check suite ID in a GitHub repository. It is typically used to obtain workflow run details triggered by a pull request or a push event.
@@ -915,9 +915,9 @@ public struct GitHubAPI {
         completion: @escaping (IAPIWorkflowRun?) -> Void
     ) {
         let path = "repos/\(owner)/\(name)/actions/runs?event=pull_request&check_suite_id=\(checkSuiteId)"
-        
+
         let headers = ["Accept": "application/vnd.github.antiope-preview+json"]
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -940,7 +940,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches the jobs associated with a specific GitHub Actions workflow run for a repository.
     ///
     /// This function retrieves information about the jobs that were part of a particular workflow run in a GitHub Actions workflow for a specific repository.
@@ -982,9 +982,9 @@ public struct GitHubAPI {
         completion: @escaping (IAPIWorkflowJobs?) -> Void
     ) {
         let path = "repos/\(owner)/\(name)/actions/runs/\(workflowRunId)/jobs"
-        
+
         let headers = ["Accept": "application/vnd.github.antiope-preview+json"]
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -1007,7 +1007,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Rerequests a GitHub check suite for a repository.
     ///
     /// This function triggers the rerequest of a specific GitHub check suite for a repository. It uses the GitHub API to make the request.
@@ -1049,7 +1049,7 @@ public struct GitHubAPI {
         completion: @escaping (Bool) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/check-suites/\(checkSuiteId)/rerequest"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -1065,7 +1065,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Reruns all failed jobs in a GitHub Actions workflow run for a repository.
     ///
     /// This function triggers the rerun of all failed jobs in a specific GitHub Actions workflow run for a repository. It uses the GitHub API to make the request.
@@ -1107,7 +1107,7 @@ public struct GitHubAPI {
         completion: @escaping (Bool) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/actions/runs/\(workflowRunId)/rerun-failed-jobs"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -1123,7 +1123,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Reruns a specific GitHub Actions job for a repository.
     ///
     /// This function triggers the rerun of a GitHub Actions job for a specific repository. It uses the GitHub API to make the request.
@@ -1165,7 +1165,7 @@ public struct GitHubAPI {
         completion: @escaping (Bool) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/actions/jobs/\(jobId)/rerun"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -1181,7 +1181,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches information about a specific GitHub check suite by its identifier.
     ///
     /// This function retrieves details about a GitHub check suite, including its status, associated pull request, and other relevant information. It uses the GitHub API to make the request.
@@ -1221,7 +1221,7 @@ public struct GitHubAPI {
         completion: @escaping (IAPICheckSuite?) -> Void
     ) {
         let path = "/repos/\(owner)/\(name)/check-suites/\(checkSuiteId)"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -1243,11 +1243,9 @@ public struct GitHubAPI {
                 }
             })
     }
-    
-    
-    
+
     // MARK: - Account Information
-    
+
     /// Fetches the account information for the authenticated user.
     ///
     /// This function retrieves the account information for the currently authenticated user. The account information typically includes details such as the user's username, avatar URL, email, and other profile-related information.
@@ -1299,7 +1297,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches the email addresses associated with the authenticated user's GitHub account.
     ///
     /// This function retrieves the email addresses associated with the authenticated user's GitHub account. Users can have one or more email addresses associated with their account, and this function provides access to that information.
@@ -1329,9 +1327,9 @@ public struct GitHubAPI {
     /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/free-pro-team@latest/rest/users/emails?apiVersion=2022-11-28#list-email-addresses-for-the-authenticated-user)
     ///
     /// - SeeAlso: [GitHub Email Settings](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-and-managing-your-github-profile/managing-email-preferences)
-    func fetchEmails(completion: @escaping (IAPIEmail?) -> Void) -> Void {
+    func fetchEmails(completion: @escaping (IAPIEmail?) -> Void) {
         let path = "user/emails"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,
@@ -1352,7 +1350,7 @@ public struct GitHubAPI {
                 }
             })
     }
-    
+
     /// Fetches a list of organizations that the authenticated user belongs to.
     ///
     /// This function retrieves a list of organizations that the authenticated user is a member of on GitHub. It can be used to obtain information about the organizations, such as their names and URLs.
@@ -1382,9 +1380,9 @@ public struct GitHubAPI {
     /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/free-pro-team@latest/rest/orgs/orgs?apiVersion=2022-11-28#list-organizations-for-the-authenticated-user)
     ///
     /// - SeeAlso: [GitHub Organizations](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/listing-the-organizations-a-user-belongs-to)
-    func fetchOrgs(completion: @escaping (IAPIOrganization?) -> Void) -> Void {
+    func fetchOrgs(completion: @escaping (IAPIOrganization?) -> Void) {
         let path = "user/orgs"
-        
+
         AuroraNetworking()
             .request(baseURL: "",
                      path: path,

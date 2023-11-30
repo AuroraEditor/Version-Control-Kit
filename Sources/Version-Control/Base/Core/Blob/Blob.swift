@@ -117,7 +117,7 @@ public struct Blob {
         let errorPipe = Pipe()
 
         process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["git", 
+        process.arguments = ["git",
                              "-C",
                              directoryURL.relativePath.escapedWhiteSpaces(),
                              "show",

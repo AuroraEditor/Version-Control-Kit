@@ -102,7 +102,6 @@ public struct Reflog {
         return Array(branchNames)
     }
 
-
     private let noCommitsOnBranchRe = "fatal: your current branch '.*' does not have any commits yet"
 
     /// Get a distinct list of branches that have been checked out after a specific date in the Git repository.
@@ -186,6 +185,5 @@ public struct Reflog {
 
         return checkouts
     }
-
 
 }

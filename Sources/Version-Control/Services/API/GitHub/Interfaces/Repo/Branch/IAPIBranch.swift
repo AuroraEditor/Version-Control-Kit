@@ -15,7 +15,7 @@ public struct IAPIBranch: Codable {
      NOTE: This is NOT a fully-qualified ref (i.e., `refs/heads/main`).
      */
     public let name: String
-    
+
     /**
      Branch protection settings:
      

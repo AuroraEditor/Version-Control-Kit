@@ -173,7 +173,6 @@ public class ShellClient {
         return (stdoutString, stderrString)
     }
 
-
     /// Shell client
     /// - Returns: description
     public static func live() -> ShellClient {

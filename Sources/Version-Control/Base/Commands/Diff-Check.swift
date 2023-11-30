@@ -10,7 +10,7 @@ import Foundation
 
 public struct DiffCheck {
 
-    public init(){}
+    public init() {}
 
     /// Matches a line reporting a leftover conflict marker
     /// and captures the name of the file
@@ -24,7 +24,6 @@ public struct DiffCheck {
                                         path: directoryURL,
                                         name: #function,
                                         options: IGitExecutionOptions(successExitCodes: Set([0, 2])))
-        
 
         let captures = Regex().getCaptures(text: output.stdout,
                                            expression: try NSRegularExpression(pattern: pattern,
