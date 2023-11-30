@@ -11,4 +11,3 @@ struct CloneOptions {
     let branch: String?
     let defaultBranch: String?
 }
-

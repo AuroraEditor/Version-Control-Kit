@@ -9,7 +9,7 @@ import Foundation
 
 public struct CheckoutIndex {
 
-    public init(){}
+    public init() {}
 
     public func checkoutIndex(directoryURL: URL,
                               paths: [String]) async throws {

@@ -8,7 +8,7 @@
 import Foundation
 
 struct IAPIFullRepository: Codable {
-    
+
     /**
      * The parent repository of a fork.
      *
@@ -34,7 +34,7 @@ struct IAPIFullRepository: Codable {
     let pushedAt: String
     let hasIssues: Bool
     let isArchived: Bool
-    
+
     /**
      * The high-level permissions that the currently authenticated
      * user enjoys for the repository. Undefined if the API call

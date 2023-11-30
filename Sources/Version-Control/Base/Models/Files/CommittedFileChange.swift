@@ -11,9 +11,9 @@ class CommittedFileChange: FileChange {
     let commitish: String
     let parentCommitish: String
 
-    init(path: String, 
+    init(path: String,
          status: AppFileStatus,
-         commitish: String, 
+         commitish: String,
          parentCommitish: String) {
         self.commitish = commitish
         self.parentCommitish = parentCommitish

@@ -9,7 +9,7 @@ import Foundation
 
 public struct BranchUtil {
 
-    public init(){}
+    public init() {}
 
     /**
      Merges local and remote Git branches into a single array of Git branches that includes branches with upstream relationships.

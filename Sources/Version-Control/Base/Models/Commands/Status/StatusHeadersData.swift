@@ -22,7 +22,7 @@ struct StatusHeadersData {
         self.match = nil
     }
 
-    public init(currentBranch: String?, 
+    public init(currentBranch: String?,
                 currentUpstreamBranch: String?,
                 currentTip: String?,
                 branchAheadBehind: IAheadBehind?,

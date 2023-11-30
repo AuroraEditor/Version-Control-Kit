@@ -174,7 +174,6 @@ struct IGitProgressInfo {
 let percentRePattern = "^(\\d{1,3})% \\((\\d+)/(\\d+)\\)$"
 let valueOnlyRePattern = "^\\d+$"
 
-
 /**
  * A utility class for interpreting progress output from `git`
  * and turning that into a percentage value estimating the overall progress
@@ -209,7 +208,7 @@ struct GitProgressParser {
      */
     init(steps: [ProgressStep]) throws {
         if steps.isEmpty {
-            throw NSError(domain: "com.auroraeditor.editor", 
+            throw NSError(domain: "com.auroraeditor.editor",
                           code: 1,
                           userInfo: [NSLocalizedDescriptionKey: "Must specify at least one step"])
         }
@@ -300,4 +299,3 @@ struct GitProgressParser {
         return IGitProgressInfo(title: title, value: value, total: total, percent: percent, done: done, text: line)
     }
 }
-

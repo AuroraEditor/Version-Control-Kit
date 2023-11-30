@@ -8,9 +8,9 @@
 import Foundation
 
 public struct GitHubEmail {
-    
-    public init(){}
-    
+
+    public init() {}
+
     /// Look up the preferred email address for a GitHub account.
     ///
     /// This function determines the preferred email address associated with a GitHub account. It follows a set of prioritized conditions to select the preferred email address.

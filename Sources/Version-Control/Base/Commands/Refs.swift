@@ -92,7 +92,7 @@ public struct Refs {
     ///
     /// - Returns: The canonical ref pointed to by the symbolic ref, or \
     ///            `nil` if the symbolic ref cannot be found or is not a symbolic ref.
-    public func getSymbolicRef(directoryURL: URL, 
+    public func getSymbolicRef(directoryURL: URL,
                                ref: String) throws -> String? {
 
         let result = try GitShell().git(args: ["symbolic-ref", "-q", ref],

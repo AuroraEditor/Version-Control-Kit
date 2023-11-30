@@ -14,14 +14,14 @@ public enum GitHubViewType: String {
 }
 
 public struct GitHubActions {
-    
+
     internal func getBranchName(directoryURL: URL) throws -> String {
         return try Branch().getCurrentBranch(directoryURL: directoryURL)
     }
-    
+
     internal func getCurrentRepositoryGitHubURL(directoryURL: URL) throws -> String {
         let remoteUrls: [GitRemote] = try Remote().getRemotes(directoryURL: directoryURL)
-        
+
         for remote in remoteUrls {
             if remote.url.contains("github.com") {
                 return remote.url
@@ -29,7 +29,7 @@ public struct GitHubActions {
         }
         return ""
     }
-    
+
     /// Open a specific branch of a GitHub repository in a web browser.
     ///
     /// This function constructs the URL for a specific branch of a GitHub repository based on the provided parameters and opens it in the default web browser.
@@ -61,10 +61,10 @@ public struct GitHubActions {
         }
 
         let url = URL(string: "\(htmlURL)/\(viewType)/\(encodedBranchName)")
-        
+
         NSWorkspace.shared.open(url!)
     }
-    
+
     /// Open the GitHub issue creation page for the current repository in a web browser.
     ///
     /// This function constructs the URL for creating a new issue in the current repository on GitHub and opens it in the default web browser.
@@ -83,9 +83,9 @@ public struct GitHubActions {
     ///   }
     public func openIssueCreationOnGitHub(directoryURL: URL) throws {
         let repositoryURL = try getCurrentRepositoryGitHubURL(directoryURL: directoryURL)
-        
+
         let url = URL(string: "\(repositoryURL)/issues/new/choose")
-        
+
         NSWorkspace.shared.open(url!)
     }
 }

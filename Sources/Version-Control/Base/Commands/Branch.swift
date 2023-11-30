@@ -198,7 +198,7 @@ public struct Branch {
             "HEAD",
             "-n",
             "2500",
-            "--",
+            "--"
         ]
 
         let result = try GitShell().git(args: args,
@@ -262,7 +262,7 @@ public struct Branch {
             "--after=\(afterDate.timeIntervalSince1970)",
             "--pretty=%H %gd %gs",
             "--grep-reflog=checkout: moving from .* to .*$",
-            "--",
+            "--"
         ]
 
         let result = try GitShell().git(args: args,
@@ -307,20 +307,20 @@ public struct Branch {
                              startPoint: String?,
                              noTrack: Bool = false) throws {
         var args: [String]
-        
+
         if let startPoint = startPoint {
             args = ["branch", name, startPoint]
         } else {
             args = ["branch", name]
         }
-        
+
         // If we're branching directly from a remote branch, we don't want to track it
         // Tracking it will make the rest of the desktop think we want to push to that
         // remote branch's upstream (which would likely be the upstream of the fork)
         if noTrack {
             args.append("--no-track")
         }
-        
+
         try GitShell().git(args: args,
                            path: directoryURL,
                            name: "createBranch")
@@ -362,12 +362,12 @@ public struct Branch {
             "branch",
             "-D",
             branchName]
-        
+
         /// Prepare and execute the Git command to delete the local branch using a ShellClient.
         try GitShell().git(args: args,
                            path: directoryURL,
                            name: "deleteLocalBranch")
-        
+
         // Return true to indicate that the branch deletion was attempted.
         return true
     }

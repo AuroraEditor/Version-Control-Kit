@@ -24,7 +24,7 @@ public struct GitRevert {
 
         args.append(commit.sha)
 
-        var opts: IGitExecutionOptions? = nil
+        var opts: IGitExecutionOptions?
         if let progressCallback = progressCallback {
             opts = try FromProcess().executionOptionsWithProgress(
                 options: IGitExecutionOptions(trackLFSProgress: true),

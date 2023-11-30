@@ -195,7 +195,7 @@ public struct LFS {
         //
         // README.md: filter: unspecified
         let lfsFilterRegex = try! NSRegularExpression(pattern: ": filter: lfs", options: [])
-        let range = NSRange(result.stdout.startIndex..<result.stdout.endIndex, 
+        let range = NSRange(result.stdout.startIndex..<result.stdout.endIndex,
                             in: result.stdout)
 
         let match = lfsFilterRegex.firstMatch(in: result.stdout,
@@ -250,7 +250,7 @@ public struct LFS {
         // Iterate through the provided relative file paths.
         for filePath in filePaths {
             // Check if the file is tracked by Git LFS.
-            let isTracked = try isTrackedByLFS(directoryURL: directoryURL, 
+            let isTracked = try isTrackedByLFS(directoryURL: directoryURL,
                                                path: filePath)
 
             // If not tracked by Git LFS, add it to the list.

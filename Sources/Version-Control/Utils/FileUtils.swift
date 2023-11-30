@@ -9,7 +9,7 @@ import Foundation
 
 public struct FileUtils {
 
-    func writeToTempFile(content: String, 
+    func writeToTempFile(content: String,
                          tempFileName: String) async throws -> String {
         let tempDir = NSTemporaryDirectory()
         let tempFilePath = (tempDir as NSString).appendingPathComponent(tempFileName)

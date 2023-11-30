@@ -40,4 +40,3 @@ class GitErrorParser: Error {
         self.isRawMessage = rawMessage
     }
 }
-

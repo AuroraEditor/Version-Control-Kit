@@ -138,7 +138,7 @@ public struct Stash {
                             branch: Any,
                             untrackedFilesToStage: [WorkingDirectoryFileChange]) throws -> Bool {
         let fullySelectedUntrackedFiles = untrackedFilesToStage.map { $0.withIncludeAll(include: true) }
-        
+
         try UpdateIndex().stageFiles(directoryURL: directoryURL,
                        files: untrackedFilesToStage)
 

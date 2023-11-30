@@ -29,12 +29,12 @@ struct LFSProgress {
         let lfsProgressURL = tempDirectoryURL.appendingPathComponent("AuroraEditor-lfs-progress-\(UUID().uuidString)")
 
         // Ensure the directory exists
-        try FileManager.default.createDirectory(at: lfsProgressURL.deletingLastPathComponent(), 
+        try FileManager.default.createDirectory(at: lfsProgressURL.deletingLastPathComponent(),
                                                 withIntermediateDirectories: true)
 
         // Create the file if it does not exist
         if !FileManager.default.fileExists(atPath: lfsProgressURL.path) {
-            FileManager.default.createFile(atPath: lfsProgressURL.path, 
+            FileManager.default.createFile(atPath: lfsProgressURL.path,
                                            contents: nil)
         } else {
             // If file exists, throw an error

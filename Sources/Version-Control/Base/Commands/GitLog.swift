@@ -34,7 +34,7 @@ public struct GitLog {
         return nil
     }
 
-    func mapStatus(rawStatus: String, 
+    func mapStatus(rawStatus: String,
                    oldPath: String?,
                    srcMode: String,
                    dstMode: String) -> AppFileStatus {
@@ -63,12 +63,12 @@ public struct GitLog {
                                              oldPath: oldPath ?? "",
                                              submoduleStatus: submoduleStatus)
         default:
-            if status.range(of: #"R[0-9]+"#, options: .regularExpression) != nil, 
+            if status.range(of: #"R[0-9]+"#, options: .regularExpression) != nil,
                 let oldPath = oldPath {
                 return CopiedOrRenamedFileStatus(kind: .renamed,
                                                  oldPath: oldPath,
                                                  submoduleStatus: submoduleStatus)
-            } else if status.range(of: #"C[0-9]+"#, options: .regularExpression) != nil, 
+            } else if status.range(of: #"C[0-9]+"#, options: .regularExpression) != nil,
                         let oldPath = oldPath {
                 return CopiedOrRenamedFileStatus(kind: .copied,
                                                  oldPath: oldPath,
@@ -126,7 +126,7 @@ public struct GitLog {
         args += additionalArgs
         args.append("--")
 
-        let result = try GitShell().git(args: args, 
+        let result = try GitShell().git(args: args,
                                         path: directoryURL,
                                         name: #function)
 
@@ -178,7 +178,7 @@ public struct GitLog {
             "--format=format:",
             "--numstat",
             "-z",
-            "--",
+            "--"
         ]
 
         let result = try GitShell().git(args: args,
@@ -214,7 +214,7 @@ public struct GitLog {
              the total number of lines added and deleted. It returns the parsed information in a tuple.
 
      */
-    func parseRawLogWithNumstat(stdout: String, 
+    func parseRawLogWithNumstat(stdout: String,
                                 sha: String,
                                 parentCommitish: String) throws -> IChangesetData {
         var files = [CommittedFileChange]()

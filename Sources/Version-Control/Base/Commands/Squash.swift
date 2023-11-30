@@ -37,7 +37,7 @@ public struct GitSquash {
 
         do {
             guard toSquash.count > 0 else {
-                throw NSError(domain: "Squash Error", 
+                throw NSError(domain: "Squash Error",
                               code: 1,
                               userInfo: [NSLocalizedDescriptionKey: "No commits provided to squash."])
             }
@@ -55,7 +55,7 @@ public struct GitSquash {
                                                   skip: nil)
 
             guard !commits.isEmpty else {
-                throw NSError(domain: "Squash Error", 
+                throw NSError(domain: "Squash Error",
                               code: 3,
                               userInfo: [NSLocalizedDescriptionKey: "Could not find commits in log for last retained commit ref."])
             }

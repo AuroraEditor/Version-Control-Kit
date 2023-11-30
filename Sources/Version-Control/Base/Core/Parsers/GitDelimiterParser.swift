@@ -74,7 +74,7 @@ struct GitDelimiterParser {
             let records = value.components(separatedBy: "\0")
             var entries = [[T: String]]()
 
-            var entry: [T: String]? = nil
+            var entry: [T: String]?
             var consumed = 0
 
             // start at 1 to avoid 0 modulo X problem. The first record is guaranteed

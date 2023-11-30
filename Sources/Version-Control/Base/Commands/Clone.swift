@@ -41,7 +41,7 @@ public struct Clone {
 
     func clone(directoryURL: URL,
                path: String,
-               options: CloneOptions, 
+               options: CloneOptions,
                progressCallback: ((ICloneProgress) -> Void)? = nil) async throws {
 //        let env = try await envForRemoteOperation(options.account, url)
         let defaultBranch = options.defaultBranch ?? (DefaultBranch().getDefaultBranch())

@@ -22,9 +22,9 @@ struct GitStatusParser {
 
     let changedEntryRegex = try! NSRegularExpression(pattern: "^1 ([MADRCUTX?!.]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([\\s\\S]*?)$",
                                                      options: [])
-    let renamedOrCopiedEntryRegex = try! NSRegularExpression(pattern: "^2 ([MADRCUTX?!.]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([RC]\\d+) ([\\s\\S]*?)$", 
+    let renamedOrCopiedEntryRegex = try! NSRegularExpression(pattern: "^2 ([MADRCUTX?!.]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([RC]\\d+) ([\\s\\S]*?)$",
                                                              options: [])
-    let unmergedEntryRegex = try! NSRegularExpression(pattern: "^u ([DAU]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([a-f0-9]+) ([\\s\\S]*?)$", 
+    let unmergedEntryRegex = try! NSRegularExpression(pattern: "^u ([DAU]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([a-f0-9]+) ([\\s\\S]*?)$",
                                                       options: [])
 
     func parsePorcelainStatus(output: String) -> [StatusItem] {
@@ -92,7 +92,7 @@ struct GitStatusParser {
                             oldPath: nil)
     }
 
-    func parseRenamedOrCopiedEntry(field: String, 
+    func parseRenamedOrCopiedEntry(field: String,
                                    oldPath: String?) -> IStatusEntry? {
         let nsRange = NSRange(field.startIndex..<field.endIndex, in: field)
 
@@ -116,7 +116,7 @@ struct GitStatusParser {
 
         return StatusEntry(kind: .entry,
                             path: path,
-                            statusCode: statusCode, 
+                            statusCode: statusCode,
                             submoduleStatusCode: submoduleStatusCode,
                             oldPath: oldPath)
     }

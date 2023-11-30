@@ -11,7 +11,7 @@ struct WorkingDirectoryStatus {
     let files: [WorkingDirectoryFileChange]
     let includeAll: Bool?
 
-    init(files: [WorkingDirectoryFileChange], 
+    init(files: [WorkingDirectoryFileChange],
          includeAll: Bool? = true) {
         self.files = files
         self.includeAll = includeAll

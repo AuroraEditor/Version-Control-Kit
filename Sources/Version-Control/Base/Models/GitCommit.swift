@@ -108,7 +108,7 @@ public struct Commit: Codable, Equatable, Identifiable {
         self.isMergeCommit = parentShas.count > 1
     }
 
-    public init(sha: String, 
+    public init(sha: String,
                 summary: String) {
         self.sha = sha
         self.summary = summary

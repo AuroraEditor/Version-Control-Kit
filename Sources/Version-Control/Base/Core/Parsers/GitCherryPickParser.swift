@@ -11,7 +11,7 @@ class GitCherryPickParser {
     private let commits: [Commit]
     private var count: Int = 0
 
-    init(commits: [Commit], 
+    init(commits: [Commit],
          count: Int = 0) {
         self.commits = commits
         self.count = count

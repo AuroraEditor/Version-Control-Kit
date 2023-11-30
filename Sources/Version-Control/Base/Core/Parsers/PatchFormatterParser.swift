@@ -267,13 +267,13 @@ struct PatchFormatterParser {
 
             // Add the hunk to the patch
             patch += formatHunkHeader(oldStartLine: hunk.header.oldStartLine,
-                                      oldLineCount: oldCount, 
+                                      oldLineCount: oldCount,
                                       newStartLine: hunk.header.newStartLine,
                                       newLineCount: newCount) + hunkBuf
         }
 
         if patch.isEmpty {
-            throw NSError(domain: "com.yourApp.domain", 
+            throw NSError(domain: "com.yourApp.domain",
                           code: 0,
                           userInfo: [NSLocalizedDescriptionKey: "Could not generate a patch, no changes for file \(file.path)"])
         }

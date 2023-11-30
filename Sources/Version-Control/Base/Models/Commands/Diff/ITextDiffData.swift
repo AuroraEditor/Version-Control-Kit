@@ -35,5 +35,3 @@ public class ITextDiffData {
 public protocol TextDiff: ITextDiffData {
     var kind: DiffType { get set }
 }
-
-
