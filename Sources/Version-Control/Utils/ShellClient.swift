@@ -68,6 +68,11 @@ public class ShellClient {
 
         // Convert data to a string
         if let outputString = String(data: data, encoding: .utf8) {
+            print([
+                "Command: \(args.joined(separator: " "))",
+                "Output: \(outputString)"
+            ].joined(separator: "\n"))
+
             return outputString
         } else {
             throw CommandError.utf8ConversionFailed
