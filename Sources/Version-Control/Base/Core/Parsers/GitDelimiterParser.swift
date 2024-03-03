@@ -83,23 +83,25 @@ struct GitDelimiterParser {
 
             // start at 1 to avoid 0 modulo X problem. The first record is guaranteed
             // to be empty anyway (due to %00 at the start of --format)
-            for i in 1..<(records.count - 1) {
-                if i % (keys.count + 1) == 0 {
-                    if records[i] != "\n" {
-                        fatalError("Expected newline")
+            if records.count > 2 {
+                for i in 1..<(records.count - 1) {
+                    if i % (keys.count + 1) == 0 {
+                        if records[i] != "\n" {
+                            fatalError("Expected newline")
+                        }
+                        continue
                     }
-                    continue
-                }
 
-                entry = entry ?? [T: String]()
-                let key = keys[consumed % keys.count]
-                entry![key] = records[i]
-                consumed += 1
+                    entry = entry ?? [T: String]()
+                    let key = keys[consumed % keys.count]
+                    entry![key] = records[i]
+                    consumed += 1
 
-                if consumed % keys.count == 0 {
-                    print(entry!)
-                    entries.append(entry!)
-                    entry = nil
+                    if consumed % keys.count == 0 {
+                        print(entry!)
+                        entries.append(entry!)
+                        entry = nil
+                    }
                 }
             }
 
