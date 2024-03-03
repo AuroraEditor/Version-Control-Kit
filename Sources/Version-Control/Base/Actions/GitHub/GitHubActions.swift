@@ -32,7 +32,7 @@ public struct GitHubActions {
     /// Open a specific branch of a GitHub repository in a web browser.
     ///
     /// This function constructs the URL for a specific branch of 
-    //  a GitHub repository based on the provided parameters and opens it in the default web browser.
+    /// a GitHub repository based on the provided parameters and opens it in the default web browser.
     ///
     /// - Parameters:
     ///   - viewType: The type of view to open on GitHub (e.g., code, commits, pulls).

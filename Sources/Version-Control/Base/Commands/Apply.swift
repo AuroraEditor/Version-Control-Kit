@@ -29,8 +29,10 @@ public struct Apply {
     /// let fileChange = WorkingDirectoryFileChange(path: "newName.txt", status: .renamed(oldName: "oldName.txt"))
     /// try await applyPatchToIndex(directoryURL: directoryURL, file: fileChange)
     /// ```
-    func applyPatchToIndex(directoryURL: URL,
-                           file: WorkingDirectoryFileChange) throws {
+    func applyPatchToIndex( // swiftlint:disable:this function_body_length
+        directoryURL: URL,
+        file: WorkingDirectoryFileChange
+    ) throws {
         // If the file was a rename we have to recreate that rename since we've
         // just blown away the index.
         if file.status.kind == .renamed {

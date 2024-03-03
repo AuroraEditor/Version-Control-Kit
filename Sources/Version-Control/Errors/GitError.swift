@@ -97,6 +97,7 @@ public let gitErrorRegexes: [String: GitError] = [
             .BranchDeletionFailed,
     "\\[remote rejected\\] (.+) \\(deletion of the current branch prohibited\\)":
             .DefaultBranchDeletionFailed,
+    // swiftlint:disable:next line_length
     "error: could not revert .*\nhint: after resolving the conflicts, mark the corrected paths\nhint: with 'git add <paths>' or 'git rm <paths>'\nhint: and commit the result with 'git commit'":
             .RevertConflicts,
     "Applying: .*\nNo changes - did you forget to use 'git add'\\?\nIf there is nothing left to stage, chances are that something else\n.*":

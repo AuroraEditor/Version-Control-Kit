@@ -32,7 +32,7 @@ public struct GitShell {
 
      */
     @discardableResult
-    public func git( // swiftlint:disable:this function_body_length
+    public func git( // swiftlint:disable:this function_body_length cyclomatic_complexity
         args: [String],
         path: URL,
         name: String,
@@ -94,7 +94,7 @@ public struct GitShell {
 
         let exitCode = result.exitCode
         var gitError: GitError?
-        var acceptableExitCode = options?.successExitCodes != nil
+        let acceptableExitCode = options?.successExitCodes != nil
             ? options?.successExitCodes?.contains(exitCode)
             : false
 
@@ -167,7 +167,9 @@ public struct GitShell {
 
      - Returns: A `GitError` enum value if an error is detected in the standard error output; otherwise, `nil`.
 
-     - Note: This function checks the standard error output for error messages using a set of regular expressions defined in `gitErrorRegexes`. If a matching error message is found, it returns the corresponding `GitError` value. If no match is found, it returns `nil`.
+     - Note: This function checks the standard error output for error messages using a set of regular \
+             expressions defined in `gitErrorRegexes`. If a matching error message is found, it returns \
+             the corresponding `GitError` value. If no match is found, it returns `nil`.
 
      */
     func parseError(stderr: String) -> GitError? {
@@ -292,7 +294,7 @@ public struct GitShell {
     func getFileFromExceedsError(error: String) -> [String] {
         do {
             let beginRegex = try NSRegularExpression(
-                pattern: "(^remote:\\serror:\\sFile\\s)", 
+                pattern: "(^remote:\\serror:\\sFile\\s)",
                 options: []
             )
             let endRegex = try NSRegularExpression(

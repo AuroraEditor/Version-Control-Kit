@@ -88,6 +88,7 @@ public struct GitHubAPI {
                         print("Error: Unable to decode", String(data: data, encoding: .utf8) ?? "")
                     }
                 case .failure(let error):
+                    // swiftlint:disable:next line_length
                     print("Unable to publish repository. Please check if you have an internet connection and try again.", error)
                     completion(nil)
                 }
@@ -100,7 +101,9 @@ public struct GitHubAPI {
     ///   - owner: The owner of the repository.
     ///   - name: The name of the repository.
     ///   - branch: The name of the branch to check.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an `IAPIPushControl` object representing the branch protection settings, or `nil` if the request fails.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an `IAPIPushControl` object representing the branch protection settings, \
+    ///                 or `nil` if the request fails.
     ///
     /// - Returns: A `IAPIPushControl` object representing the branch protection settings.
     ///
@@ -126,9 +129,10 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that the user has the necessary permissions to fetch branch protection settings for the repository.
+    /// - Important: Ensure that the user has the necessary permissions to fetch branch protection settings \
+    ///              for the repository.
     ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/rest/reference/repos#get-branch-protection)
+    /// - SeeAlso: https://docs.github.com/en/rest/reference/repos#get-branch-protection
     func fetchPushControl(
         owner: String,
         name: String,
@@ -173,7 +177,8 @@ public struct GitHubAPI {
     /// - Parameters:
     ///   - owner: The owner of the repository.
     ///   - name: The name of the repository.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an array of protected branches (`[IAPIBranch]`), or `nil` if the request fails.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an array of protected branches (`[IAPIBranch]`), or `nil` if the request fails.
     ///
     /// - Returns: A promise of an array of protected branches (`IAPIBranch`).
     ///
@@ -553,7 +558,9 @@ public struct GitHubAPI {
 
     /// Fetches repository rules for a specific branch in a GitHub repository.
     ///
-    /// This function retrieves repository rules associated with a specific branch in a GitHub repository. Repository rules are used to define code analysis and linting rules that apply to the repository's codebase on a per-branch basis. It allows you to fetch a list of rules applicable to a particular branch.
+    /// This function retrieves repository rules associated with a specific branch in a GitHub repository.
+    /// Repository rules are used to define code analysis and linting rules that apply to the repository's
+    /// codebase on a per-branch basis. It allows you to fetch a list of rules applicable to a particular branch.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
@@ -620,7 +627,9 @@ public struct GitHubAPI {
 
     /// Fetches all repository rulesets from a GitHub repository.
     ///
-    /// This function retrieves all repository rulesets associated with a GitHub repository. Repository rulesets are used to define code analysis and linting rules that apply to the repository. It allows you to fetch a list of all rulesets available in the repository.
+    /// This function retrieves all repository rulesets associated with a GitHub repository.
+    /// Repository rulesets are used to define code analysis and linting rules that apply to the repository.
+    /// It allows you to fetch a list of all rulesets available in the repository.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
@@ -684,13 +693,18 @@ public struct GitHubAPI {
 
     /// Fetches a repository ruleset by its ID from a GitHub repository.
     ///
-    /// This function retrieves a repository ruleset by its unique identifier (`id`) from a GitHub repository. Repository rulesets are used to define code analysis and linting rules that apply to the repository. This function allows you to fetch the details of a specific ruleset based on its ID.
+    /// This function retrieves a repository ruleset by its unique identifier (`id`) from a GitHub repository.
+    /// Repository rulesets are used to define code analysis and linting rules that apply to the repository.
+    /// This function allows you to fetch the details of a specific ruleset based on its ID.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - id: The unique identifier of the repository ruleset to fetch.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an optional `IAPIRepoRuleset` object that contains information about the fetched repository ruleset. If the request is successful and data can be decoded, the closure receives the `IAPIRepoRuleset` object; otherwise, it receives `nil`.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an optional `IAPIRepoRuleset` object that contains information about \
+    ///                 the fetched repository ruleset. If the request is successful and data can be decoded, \
+    ///                 the closure receives the `IAPIRepoRuleset` object; otherwise, it receives `nil`.
     ///
     /// - Note: This function is useful for fetching details about a specific repository ruleset within a GitHub repository.
     ///
@@ -963,7 +977,10 @@ public struct GitHubAPI {
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - workflowRunId: The identifier of the GitHub Actions workflow run for which you want to fetch jobs.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an optional `IAPIWorkflowJobs` object that contains information about the jobs in the workflow run. If the request is successful and data can be decoded, the closure receives the `IAPIWorkflowJobs` object; otherwise, it receives `nil`.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an optional `IAPIWorkflowJobs` object that contains information about \
+    ///                 the jobs in the workflow run. If the request is successful and data can be decoded, \
+    ///                 the closure receives the `IAPIWorkflowJobs` object; otherwise, it receives `nil`.
     ///
     /// - Note: This function is useful for obtaining details about the jobs executed as part of a specific workflow run.
     ///
@@ -1024,15 +1041,19 @@ public struct GitHubAPI {
 
     /// Rerequests a GitHub check suite for a repository.
     ///
-    /// This function triggers the rerequest of a specific GitHub check suite for a repository. It uses the GitHub API to make the request.
+    /// This function triggers the rerequest of a specific GitHub check suite for a repository.
+    /// It uses the GitHub API to make the request.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - checkSuiteId: The identifier of the GitHub check suite to rerequest.
-    ///   - completion: A closure that is called upon completion of the API request. It provides a Boolean value indicating whether the rerequest of the check suite was successful (`true`) or not (`false`).
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides a Boolean value indicating whether the rerequest of the check suite \
+    ///                 was successful (`true`) or not (`false`).
     ///
-    /// - Note: This function is useful for manually triggering the reevaluation of checks and statuses in a check suite.
+    /// - Note: This function is useful for manually triggering the reevaluation of checks and statuses\
+    ///         in a check suite.
     ///
     /// - Example:
     ///   ```swift
@@ -1400,11 +1421,12 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that the user is authenticated and has the necessary permissions to access their organization membership information.
+    /// - Important: Ensure that the user is authenticated and has the necessary permissions to access their \
+    ///              organization membership information.
     ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/free-pro-team@latest/rest/orgs/orgs?apiVersion=2022-11-28#list-organizations-for-the-authenticated-user)
+    /// - SeeAlso: https://docs.github.com/en/free-pro-team@latest/rest/orgs/orgs?apiVersion=2022-11-28#list-organizations-for-the-authenticated-user
     ///
-    /// - SeeAlso: [GitHub Organizations](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/listing-the-organizations-a-user-belongs-to)
+    /// - SeeAlso: https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/listing-the-organizations-a-user-belongs-to
     func fetchOrgs(completion: @escaping (IAPIOrganization?) -> Void) {
         let path = "user/orgs"
 

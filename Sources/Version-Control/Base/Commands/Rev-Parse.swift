@@ -81,7 +81,7 @@ public struct RevParse {
             }
 
             if let unsafeMatch = result.stderr.range(
-                of: "fatal: detected dubious ownership in repository at '(.+)'", 
+                of: "fatal: detected dubious ownership in repository at '(.+)'",
                 options: .regularExpression
             ) {
                 let unsafePath = String(result.stderr[unsafeMatch])
