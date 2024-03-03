@@ -8,6 +8,7 @@ disabled_rules:
   - missing_docs # We miss a lot of docs right now
   - identifier_name # This should be fixed in a future version
   - force_try # This should be fixed in a future version
+
 # Exclude triggering type names.
 type_name:
   excluded:
