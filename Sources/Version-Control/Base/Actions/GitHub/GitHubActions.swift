@@ -9,8 +9,8 @@ import Foundation
 import AppKit
 
 public enum GitHubViewType: String {
-    case tree = "tree"
-    case compare = "compare"
+    case tree
+    case compare
 }
 
 public struct GitHubActions {

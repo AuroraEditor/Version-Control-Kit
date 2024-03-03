@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct RM {
+public struct RM { // swiftlint:disable:this type_name
 
     public init() {}
 

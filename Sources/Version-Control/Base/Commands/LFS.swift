@@ -194,7 +194,9 @@ public struct LFS {
         // the output will look like this
         //
         // README.md: filter: unspecified
-        let lfsFilterRegex = try! NSRegularExpression(pattern: ": filter: lfs", options: [])
+        guard let lfsFilterRegex = try? NSRegularExpression(pattern: ": filter: lfs", options: []) else {
+            fatalError("Failed to create regex for Git LFS filter check")
+        }
         let range = NSRange(result.stdout.startIndex..<result.stdout.endIndex,
                             in: result.stdout)
 

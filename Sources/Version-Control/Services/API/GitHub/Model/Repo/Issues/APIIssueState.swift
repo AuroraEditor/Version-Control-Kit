@@ -8,6 +8,6 @@
 import Foundation
 
 enum APIIssueState: String, Codable {
-    case open = "open"
-    case closed = "closed"
+    case open
+    case closed
 }

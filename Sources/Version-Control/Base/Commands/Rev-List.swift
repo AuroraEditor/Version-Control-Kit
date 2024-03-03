@@ -389,7 +389,13 @@ public struct RevList {
 
         var lines = result.stdout.components(separatedBy: .newlines)
 
-        let commitSummaryRe = try! NSRegularExpression(pattern: "^([a-z0-9]{40}) (.*)$", options: [])
+        guard let commitSummaryRe = try? NSRegularExpression(
+            pattern: "^([a-z0-9]{40}) (.*)$", options: []
+        ) else {
+            print("Failed to create regular expression for commit summary")
+            return nil
+        }
+
         var commits: [Commit] = []
 
         for line in lines {

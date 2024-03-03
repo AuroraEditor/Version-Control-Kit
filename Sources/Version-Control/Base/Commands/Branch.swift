@@ -248,9 +248,14 @@ public struct Branch { // swiftlint:disable:this type_body_length
         return Array(names)
     }
 
-    let noCommitsOnBranchRe = try! NSRegularExpression(
-        pattern: "fatal: your current branch '.*' does not have any commits yet"
-    )
+    func getCommitsOnBranch() {
+        guard let noCommitsOnBranchRe = try? NSRegularExpression(
+            pattern: "fatal: your current branch '.*' does not have any commits yet"
+        ) else {
+            print("Failed to create regular expression")
+            return
+        }
+    }
 
     /// Asynchronously fetches the names and dates of branches checked out after a specified date.
     ///

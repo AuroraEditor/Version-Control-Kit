@@ -168,7 +168,10 @@ public struct Stash {
 
         // Check for specific git errors
         if result.exitCode == 1 {
-            let errorPrefixRe = try! NSRegularExpression(pattern: "^error: ", options: .anchorsMatchLines)
+            guard let errorPrefixRe = try? NSRegularExpression(pattern: "^error: ", options: .anchorsMatchLines) else {
+                print("Failed to create a regular expression for error prefix.")
+                return false
+            }
             let nsRange = NSRange(result.stderr.startIndex..<result.stderr.endIndex, in: result.stderr)
 
             if errorPrefixRe.firstMatch(in: result.stderr, options: [], range: nsRange) != nil {
@@ -179,7 +182,7 @@ public struct Stash {
 
             // If no error messages, log and continue
             print([
-                "[createAEStashEntry] a stash was created successfully but exit code \(result.exitCode) reported."
+                "[createAEStashEntry] a stash was created successfully but exit code \(result.exitCode) reported.",
                 "stderr: \(result.stderr)"
             ].joined())
         }
@@ -244,7 +247,10 @@ public struct Stash {
     }
 
     func extractBranchFromMessage(_ message: String) -> String? {
-        let AEStashEntryMessageRe = try! NSRegularExpression(pattern: "On (.+): ", options: [])
+        guard let AEStashEntryMessageRe = try? NSRegularExpression(pattern: "On (.+): ", options: []) else {
+            print("Failed to create a regular expression for stash entry message.")
+            return nil
+        }
         let range = NSRange(message.startIndex..<message.endIndex, in: message)
 
         if let match = AEStashEntryMessageRe.firstMatch(in: message, options: [], range: range) {
