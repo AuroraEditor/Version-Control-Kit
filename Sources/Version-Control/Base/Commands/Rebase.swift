@@ -245,8 +245,10 @@ public struct Rebase {
         }
 
         if trackedFilesAfter.isEmpty {
-            // swiftlint:disable:next line_length
-            print("[rebase] no tracked changes to commit for \(rebaseCurrentCommit), continuing rebase but skipping this commit")
+            print([
+                "[rebase] no tracked changes to commit for \(rebaseCurrentCommit),",
+                " continuing rebase but skipping this commit"
+            ].joined())
 
             let result = try GitShell().git(args: ["rebase", "--skip"],
                                             path: directoryURL,

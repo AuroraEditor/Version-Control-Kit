@@ -570,7 +570,10 @@ public struct GitDiff { // swiftlint:disable:this type_body_length
     ///   This function uses forced unwrapping after parsing line endings,
     ///   which could lead to runtime crashes if the parsing fails.
     func parseLineEndingsWarning(errorText: String) -> LineEndingsChange? {
-        let regex = try! NSRegularExpression(pattern: lineEndingsChangeRegex, options: [])
+        guard let regex = try? NSRegularExpression(pattern: lineEndingsChangeRegex, options: []) else {
+            print("Failed to create regular expression for line endings change warning")
+            return nil
+        }
 
         let nsRange = NSRange(errorText.startIndex..<errorText.endIndex, in: errorText)
         if let match = regex.firstMatch(in: errorText, options: [], range: nsRange) {
@@ -651,8 +654,16 @@ public struct GitDiff { // swiftlint:disable:this type_body_length
             file.status.kind == .deleted {
             let lines = buffer.split(separator: "\n")
             let baseRegex = "Subproject commit ([^-]+)(-dirty)?$"
-            let oldSHARegex = try! NSRegularExpression(pattern: "-" + baseRegex)
-            let newSHARegex = try! NSRegularExpression(pattern: "\\+" + baseRegex)
+            guard let oldSHARegex = try? NSRegularExpression(pattern: "-" + baseRegex),
+                  let newSHARegex = try? NSRegularExpression(pattern: "\\+" + baseRegex) else {
+                throw NSError(
+                    domain: "com.auroraeditor.versioncontrolkit.diff",
+                    code: -1,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "Failed to create regular expression for submodule diff"
+                    ]
+                )
+            }
 
             let lineMatch = { (regex: NSRegularExpression) -> String? in
                 for line in lines {
@@ -822,7 +833,16 @@ public struct GitDiff { // swiftlint:disable:this type_body_length
         let output = try GitShell().git(args: args,
                                         path: directoryURL,
                                         name: #function)
-        let binaryListRegex = try! NSRegularExpression(pattern: binaryListRegex, options: [])
+
+        guard let binaryListRegex = try? NSRegularExpression(pattern: binaryListRegex, options: []) else {
+            throw NSError(
+                domain: "com.auroraeditor.versioncontrolkit.diff",
+                code: -1,
+                userInfo: [
+                    NSLocalizedDescriptionKey: "Failed to create regular expression for binary file list"
+                ]
+            )
+        }
 
         let nsRange = NSRange(output.stdout.startIndex..<output.stdout.endIndex, in: output.stdout)
         let matches = binaryListRegex.matches(in: output.stdout, options: [], range: nsRange)

@@ -23,7 +23,10 @@ public struct GitStage {
             return
         }
 
-        let conflictedStatus = file.status as! ConflictsWithMarkers
+        guard let conflictedStatus = file.status as? ConflictsWithMarkers else {
+            print("Failed to cast to ConflictsWithMarkers")
+            return
+        }
 
         if isConflictWithMarkers(conflictedStatus) && conflictedStatus.conflictMarkerCount == 0 {
             // If the file was manually resolved, no further action is required.

@@ -7,7 +7,7 @@
 
 import Foundation
 
-public struct GitHubAPI {
+public struct GitHubAPI { // swiftlint:disable:this type_body_length
 
     public init() {}
 
@@ -566,7 +566,11 @@ public struct GitHubAPI {
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - branch: The name of the branch for which to fetch repository rules.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an optional array of `IAPIRepoRule` objects that contain information about repository rules for the specified branch. If the request is successful and data can be decoded, the closure receives the array; otherwise, it receives `nil`.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an optional array of `IAPIRepoRule` objects that contain information \
+    ///                 about repository rules for the specified branch. \
+    ///                 If the request is successful and data can be decoded, the closure receives the array; \
+    ///                 otherwise, it receives `nil`.
     ///
     /// - Note: This function is useful for fetching rules that apply to a specific branch of a GitHub repository.
     ///
@@ -590,11 +594,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access repository rules for the specified branch within the GitHub repository.
-    ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/rest/reference/code-scanning#list-repository-rules-for-a-branch)
-    ///
-    /// - SeeAlso: [GitHub Code Scanning Rules Documentation](https://docs.github.com/en/code-security/advanced-security/code-scanning/working-with-code-scanning/code-scanning-rules)
+    /// - Important: Ensure that you have the necessary permissions to access repository rules for the \
+    ///              specified branch within the GitHub repository.
     func fetchRepoRulesForBranch(
         owner: String,
         name: String,
@@ -634,7 +635,10 @@ public struct GitHubAPI {
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an optional array of `IAPISlimRepoRuleset` objects that contain information about all fetched repository rulesets. If the request is successful and data can be decoded, the closure receives the array; otherwise, it receives `nil`.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an optional array of `IAPISlimRepoRuleset` objects that contain information \
+    ///                 about all fetched repository rulesets. If the request is successful and data can be decoded, \
+    ///                 the closure receives the array; otherwise, it receives `nil`.
     ///
     /// - Note: This function is useful for fetching a list of all repository rulesets within a GitHub repository.
     ///
@@ -657,11 +661,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access repository rulesets within the GitHub repository.
-    ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/rest/reference/code-scanning#list-repository-rulesets)
-    ///
-    /// - SeeAlso: [GitHub Code Scanning Rulesets Documentation](https://docs.github.com/en/code-security/advanced-security/code-scanning/working-with-code-scanning/code-scanning-rulesets)
+    /// - Important: Ensure that you have the necessary permissions to access \
+    ///              repository rulesets within the GitHub repository.
     func fetchAllRepoRulesets(
         owner: String,
         name: String,
@@ -706,7 +707,8 @@ public struct GitHubAPI {
     ///                 the fetched repository ruleset. If the request is successful and data can be decoded, \
     ///                 the closure receives the `IAPIRepoRuleset` object; otherwise, it receives `nil`.
     ///
-    /// - Note: This function is useful for fetching details about a specific repository ruleset within a GitHub repository.
+    /// - Note: This function is useful for fetching details about a specific repository ruleset within \
+    ///         a GitHub repository.
     ///
     /// - Example:
     ///   ```swift
@@ -725,11 +727,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access repository rulesets within the GitHub repository.
-    ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/rest/reference/code-scanning#list-repository-rulesets)
-    ///
-    /// - SeeAlso: [GitHub Code Scanning Rulesets Documentation](https://docs.github.com/en/code-security/advanced-security/code-scanning/working-with-code-scanning/code-scanning-rulesets)
+    /// - Important: Ensure that you have the necessary permissions to access repository \
+    ///              rulesets within the GitHub repository.
     func fetchRepoRuleset(
         owner: String,
         name: String,
@@ -762,18 +761,26 @@ public struct GitHubAPI {
 
     // MARK: - Workflows
 
-    /// Fetches GitHub Actions check runs associated with a specific Git reference (e.g., branch or commit) in a repository.
+    /// Fetches GitHub Actions check runs associated with a specific Git reference in a repository.
     ///
-    /// This function retrieves information about the GitHub Actions check runs that are associated with a specific Git reference in a GitHub repository. It is typically used to obtain check run details for a particular branch or commit.
+    /// This function retrieves information about the GitHub Actions check runs that are associated with 
+    /// a specific Git reference in a GitHub repository. 
+    /// It is typically used to obtain check run details for a particular branch or commit.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - ref: The Git reference (e.g., branch or commit SHA) for which you want to fetch associated check runs.
-    ///   - reloadCache: A flag indicating whether to reload cached data. Set to `true` to bypass the cache and fetch fresh data.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an optional `IAPIRefCheckRuns` object that contains information about the check runs associated with the specified Git reference. If the request is successful and data can be decoded, the closure receives the `IAPIRefCheckRuns` object; otherwise, it receives `nil`.
+    ///   - reloadCache: A flag indicating whether to reload cached data. Set to `true` to bypass \
+    ///                  the cache and fetch fresh data.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an optional `IAPIRefCheckRuns` object that contains information about \
+    ///                 the check runs associated with the specified Git reference. \
+    ///                 If the request is successful and data can be decoded, the closure receives \
+    ///                 the `IAPIRefCheckRuns` object; otherwise, it receives `nil`.
     ///
-    /// - Note: This function is useful for obtaining details about check runs related to a specific Git reference, such as branch or commit.
+    /// - Note: This function is useful for obtaining details about check runs related to a \
+    ///         specific Git reference, such as branch or commit.
     ///
     /// - Example:
     ///   ```swift
@@ -792,11 +799,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access check run details for the GitHub repository.
-    ///
-    /// - SeeAlso: [GitHub Actions API Documentation](https://docs.github.com/en/rest/reference/actions#list-check-runs-for-a-git-reference)
-    ///
-    /// - SeeAlso: [GitHub Actions Check Runs Documentation](https://docs.github.com/en/rest/reference/actions#check-runs)
+    /// - Important: Ensure that you have the necessary permissions to access check\
+    ///              run details for the GitHub repository.
     func fetchRefCheckRuns(
         owner: String,
         name: String,
@@ -836,13 +840,19 @@ public struct GitHubAPI {
 
     /// Fetches GitHub Actions workflow runs associated with a specific branch name in a repository's pull requests.
     ///
-    /// This function retrieves information about the GitHub Actions workflow runs that correspond to a particular branch name in pull requests of a GitHub repository. It is typically used to obtain workflow run details triggered by pull request events.
+    /// This function retrieves information about the GitHub Actions workflow runs that correspond 
+    /// to a particular branch name in pull requests of a GitHub repository. 
+    /// It is typically used to obtain workflow run details triggered by pull request events.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - branchName: The name of the branch for which you want to fetch associated workflow runs in pull requests.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an optional `IAPIWorkflowRuns` object that contains information about the workflow runs associated with the specified branch in pull requests. If the request is successful and data can be decoded, the closure receives the `IAPIWorkflowRuns` object; otherwise, it receives `nil`.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an optional `IAPIWorkflowRuns` object that contains information about \
+    ///                 the workflow runs associated with the specified branch in pull requests. \
+    ///                 If the request is successful and data can be decoded, the closure receives \
+    ///                 the `IAPIWorkflowRuns` object; otherwise, it receives `nil`.
     ///
     /// - Note: This function is useful for obtaining details about workflow runs triggered by events related to a specific branch in pull requests.
     ///
@@ -904,15 +914,23 @@ public struct GitHubAPI {
 
     /// Fetches the GitHub Actions workflow run associated with a specific check suite ID in a repository.
     ///
-    /// This function retrieves information about the GitHub Actions workflow run that corresponds to a particular check suite ID in a GitHub repository. It is typically used to obtain workflow run details triggered by a pull request or a push event.
+    /// This function retrieves information about the GitHub Actions workflow run that corresponds 
+    /// to a particular check suite ID in a GitHub repository. 
+    /// It is typically used to obtain workflow run details triggered by a pull request or a push event.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - checkSuiteId: The identifier of the check suite for which you want to fetch the associated workflow run.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an optional `IAPIWorkflowRun` object that contains information about the workflow run associated with the check suite. If the request is successful and data can be decoded, the closure receives the `IAPIWorkflowRun` object; otherwise, it receives `nil`.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an optional `IAPIWorkflowRun` object that contains information about \
+    ///                 the workflow run associated with the check suite. If the request is successful \
+    ///                 and data can be decoded, the closure receives the `IAPIWorkflowRun` object; \
+    ///                 otherwise, it receives `nil`.
     ///
-    /// - Note: This function is useful for obtaining details about the workflow run triggered by a specific check suite ID, which is often associated with pull requests and continuous integration (CI) workflows.
+    /// - Note: This function is useful for obtaining details about the workflow run triggered by a \
+    ///         specific check suite ID, which is often associated with pull requests and \
+    ///         continuous integration (CI) workflows.
     ///
     /// - Example:
     ///   ```swift
@@ -1109,7 +1127,9 @@ public struct GitHubAPI {
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - workflowRunId: The identifier of the GitHub Actions workflow run for which to rerun failed jobs.
-    ///   - completion: A closure that is called upon completion of the API request. It provides a Boolean value indicating whether the rerun of failed jobs was successful (`true`) or not (`false`).
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides a Boolean value indicating whether the rerun of failed jobs was \
+    ///                 successful (`true`) or not (`false`).
     ///
     /// - Note: This function is useful for automatically rerunning jobs that failed in a workflow run to address issues or retest specific changes.
     ///
@@ -1130,11 +1150,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access the GitHub repository and trigger job reruns.
-    ///
-    /// - SeeAlso: [GitHub Actions API Documentation](https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event)
-    ///
-    /// - SeeAlso: [GitHub Actions Rerun Workflow Documentation](https://docs.github.com/en/actions/guides/rerunning-a-workflow)
+    /// - Important: Ensure that you have the necessary permissions to access \
+    ///              the GitHub repository and trigger job reruns.
     public func rerunFailedJobs(
         owner: String,
         name: String,
@@ -1172,7 +1189,8 @@ public struct GitHubAPI {
     ///                 It provides a Boolean value indicating whether the job rerun \
     ///                 was successful (`true`) or not (`false`).
     ///
-    /// - Note: GitHub Actions allows you to rerun specific jobs within a workflow to address issues or retest specific changes.
+    /// - Note: GitHub Actions allows you to rerun specific jobs within a workflow to \
+    ///         address issues or retest specific changes.
     ///
     /// - Example:
     ///   ```swift
@@ -1190,12 +1208,6 @@ public struct GitHubAPI {
     ///       }
     ///   }
     ///   ```
-    ///
-    /// - Important: Ensure that you have the necessary permissions to access the GitHub repository and trigger job reruns.
-    ///
-    /// - SeeAlso: [GitHub Actions API Documentation](https://docs.github.com/en/rest/reference/actions#create-a-workflow-dispatch-event)
-    ///
-    /// - SeeAlso: [GitHub Actions Rerun Workflow Documentation](https://docs.github.com/en/actions/guides/rerunning-a-workflow)
     public func rerunJob(
         owner: String,
         name: String,
@@ -1287,9 +1299,14 @@ public struct GitHubAPI {
 
     /// Fetches the account information for the authenticated user.
     ///
-    /// This function retrieves the account information for the currently authenticated user. The account information typically includes details such as the user's username, avatar URL, email, and other profile-related information.
+    /// This function retrieves the account information for the currently authenticated user. 
+    /// The account information typically includes details such as the user's username, avatar URL, 
+    /// email, and other profile-related information.
     ///
-    /// - Parameter completion: A closure that is called upon completion of the API request. It provides an optional `IAPIFullIdentity` object that contains information about the authenticated user's account. If the request is successful and data can be decoded, the closure receives the object; otherwise, it receives `nil`.
+    /// - Parameter completion: A closure that is called upon completion of the API request. \
+    ///                         It provides an optional `IAPIFullIdentity` object that contains information \
+    ///                         about the authenticated user's account. If the request is successful and data \
+    ///                         can be decoded, the closure receives the object; otherwise, it receives `nil`.
     ///
     /// - Note: This function is useful for obtaining information about the authenticated user's GitHub account.
     ///
@@ -1309,11 +1326,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that the user is authenticated and has the necessary permissions to access their account information.
-    ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/free-pro-team@latest/rest/users/users?apiVersion=2022-11-28#get-the-authenticated-user)
-    ///
-    /// - SeeAlso: [GitHub User Information](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/reviewing-your-subscriptions)
+    /// - Important: Ensure that the user is authenticated and has the necessary permissions to \
+    ///              access their account information.
     func fetchAccount(completion: @escaping (IAPIFullIdentity?) -> Void) {
         AuroraNetworking()
             .request(baseURL: "",
@@ -1339,11 +1353,18 @@ public struct GitHubAPI {
 
     /// Fetches the email addresses associated with the authenticated user's GitHub account.
     ///
-    /// This function retrieves the email addresses associated with the authenticated user's GitHub account. Users can have one or more email addresses associated with their account, and this function provides access to that information.
+    /// This function retrieves the email addresses associated with the authenticated user's GitHub account.
+    /// Users can have one or more email addresses associated with their account, and this function 
+    /// provides access to that information.
     ///
-    /// - Parameter completion: A closure that is called upon completion of the API request. It provides an optional `IAPIEmail` object that contains information about the authenticated user's email addresses. If the request is successful and data can be decoded, the closure receives the object; otherwise, it receives `nil`.
+    /// - Parameter completion: A closure that is called upon completion of the API request. \
+    ///                         It provides an optional `IAPIEmail` object that contains information about \
+    ///                         the authenticated user's email addresses. \
+    ///                         If the request is successful and data can be decoded, \
+    ///                         the closure receives the object; otherwise, it receives `nil`.
     ///
-    /// - Note: This function is useful for obtaining a list of email addresses associated with the authenticated user's GitHub account.
+    /// - Note: This function is useful for obtaining a list of email addresses associated with the \
+    ///         authenticated user's GitHub account.
     ///
     /// - Example:
     ///   ```swift
@@ -1364,9 +1385,6 @@ public struct GitHubAPI {
     /// - Important: Ensure that the user is authenticated and has the necessary permissions \
     ///              to access their email addresses.
     ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/free-pro-team@latest/rest/users/emails?apiVersion=2022-11-28#list-email-addresses-for-the-authenticated-user)
-    ///
-    /// - SeeAlso: [GitHub Email Settings](https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/setting-up-and-managing-your-github-profile/managing-email-preferences)
     func fetchEmails(completion: @escaping (IAPIEmail?) -> Void) {
         let path = "user/emails"
 
@@ -1423,10 +1441,6 @@ public struct GitHubAPI {
     ///
     /// - Important: Ensure that the user is authenticated and has the necessary permissions to access their \
     ///              organization membership information.
-    ///
-    /// - SeeAlso: https://docs.github.com/en/free-pro-team@latest/rest/orgs/orgs?apiVersion=2022-11-28#list-organizations-for-the-authenticated-user
-    ///
-    /// - SeeAlso: https://docs.github.com/en/account-and-profile/managing-subscriptions-and-notifications-on-github/listing-the-organizations-a-user-belongs-to
     func fetchOrgs(completion: @escaping (IAPIOrganization?) -> Void) {
         let path = "user/orgs"
 
@@ -1451,3 +1465,4 @@ public struct GitHubAPI {
             })
     }
 }
+// swiftlint:disable:this file_length
