@@ -44,7 +44,7 @@ public struct GitShell {
         let process = Process()
         process.launchPath = "/usr/bin/env"
         process.arguments = ["git"] + args
-        process.currentDirectoryPath = path.relativePath.escapedWhiteSpaces()
+        process.currentDirectoryPath = path.relativePath
 
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()
