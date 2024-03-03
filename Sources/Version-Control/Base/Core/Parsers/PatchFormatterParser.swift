@@ -232,7 +232,7 @@ struct PatchFormatterParser {
         var patch = ""
 
         // FIXME: When the index is not used, `.enumerated()` can be removed (unused_enumerated)
-        for (_, hunk) in diff.hunks.enumerated() {
+        for hunk in diff.hunks {
             var hunkBuf = ""
             var oldCount = 0
             var newCount = 0
