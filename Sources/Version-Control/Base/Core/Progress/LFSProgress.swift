@@ -22,7 +22,10 @@ struct LFSProgress {
 
     private var files = [String: IFileProgress]()
 
-    let LFSProgressLineRe = try! NSRegularExpression(pattern: "^(.+?)\\s{1}(\\d+)\\/(\\d+)\\s{1}(\\d+)\\/(\\d+)\\s{1}(.+)$", options: [])
+    let LFSProgressLineRe = try! NSRegularExpression(
+        pattern: "^(.+?)\\s{1}(\\d+)\\/(\\d+)\\s{1}(\\d+)\\/(\\d+)\\s{1}(.+)$",
+        options: []
+    )
 
     func createLFSProgressFile() throws -> String {
         let tempDirectoryURL = FileManager.default.temporaryDirectory
@@ -87,6 +90,7 @@ struct LFSProgress {
                                     total: totalEstimated,
                                     percent: percentComplete,
                                     done: finishedFiles == fileCount,
+                                    // swiftlint:disable:next line_length
                                     text: "\(verb) \(fileName) (\(finishedFiles) out of an estimated \(fileCount) completed, \(transferProgress))")
 
         return IGitProgress(kind: "progress", percent: info.percent ?? 0, details: info)

@@ -122,9 +122,9 @@ public struct DiffIndex {
 
         var map = [String: NoRenameIndexStatus]()
 
-        for i in stride(from: 0, to: pieces.count - 1, by: 2) {
-            let statusString = String(pieces[i])
-            let path = String(pieces[i + 1])
+        for number in stride(from: 0, to: pieces.count - 1, by: 2) {
+            let statusString = String(pieces[number])
+            let path = String(pieces[number + 1])
             let status = try getIndexStatus(status: statusString)
 
             switch status {

@@ -90,16 +90,22 @@ public struct Stash {
             parentArgs += parents.map { "-p \($0)" }
         }
 
-        let commitId = try GitShell().git(args: ["commit-tree"] + parentArgs + ["-m", message, "--no-gpg-sign", stash.tree ?? ""],
-                                          path: directoryURL,
-                                          name: #function)
+        let commitId = try GitShell().git(
+            args: ["commit-tree"] + parentArgs + ["-m", message, "--no-gpg-sign", stash.tree ?? ""],
+            path: directoryURL,
+            name: #function
+        )
 
-        try GitShell().git(args: ["stash", "store", "-m", message, commitId.stdout.trimmingCharacters(in: .whitespacesAndNewlines)],
-                           path: directoryURL,
-                           name: #function)
+        try GitShell().git(
+            args: ["stash", "store", "-m", message, commitId.stdout.trimmingCharacters(in: .whitespacesAndNewlines)],
+            path: directoryURL,
+            name: #function
+        )
 
-        try dropAEStashEntry(directoryURL: directoryURL,
-                             stashSha: stash.stashSha ?? "")
+        try dropAEStashEntry(
+            directoryURL: directoryURL,
+            stashSha: stash.stashSha ?? ""
+        )
     }
 
     func getLastAEStashEntryForBranch(directoryURL: URL,
@@ -162,7 +168,10 @@ public struct Stash {
 
         // Check for specific git errors
         if result.exitCode == 1 {
-            let errorPrefixRe = try! NSRegularExpression(pattern: "^error: ", options: .anchorsMatchLines)
+            guard let errorPrefixRe = try? NSRegularExpression(pattern: "^error: ", options: .anchorsMatchLines) else {
+                print("Failed to create a regular expression for error prefix.")
+                return false
+            }
             let nsRange = NSRange(result.stderr.startIndex..<result.stderr.endIndex, in: result.stderr)
 
             if errorPrefixRe.firstMatch(in: result.stderr, options: [], range: nsRange) != nil {
@@ -172,7 +181,10 @@ public struct Stash {
             }
 
             // If no error messages, log and continue
-            print("[createAEStashEntry] a stash was created successfully but exit code \(result.exitCode) reported. stderr: \(result.stderr)")
+            print([
+                "[createAEStashEntry] a stash was created successfully but exit code \(result.exitCode) reported.",
+                "stderr: \(result.stderr)"
+            ].joined())
         }
 
         // Check if there were no local changes to save
@@ -235,7 +247,10 @@ public struct Stash {
     }
 
     func extractBranchFromMessage(_ message: String) -> String? {
-        let AEStashEntryMessageRe = try! NSRegularExpression(pattern: "On (.+): ", options: [])
+        guard let AEStashEntryMessageRe = try? NSRegularExpression(pattern: "On (.+): ", options: []) else {
+            print("Failed to create a regular expression for stash entry message.")
+            return nil
+        }
         let range = NSRange(message.startIndex..<message.endIndex, in: message)
 
         if let match = AEStashEntryMessageRe.firstMatch(in: message, options: [], range: range) {
@@ -263,7 +278,11 @@ public struct Stash {
         ]
 
         let result = try GitShell().git(args: args, path: directoryURL, name: #function)
-        let files = try GitLog().parseRawLogWithNumstat(stdout: result.stdout, sha: stashSha, parentCommitish: "\(stashSha)^").files
+        let files = try GitLog().parseRawLogWithNumstat(
+            stdout: result.stdout,
+            sha: stashSha,
+            parentCommitish: "\(stashSha)^"
+        ).files
 
         return files
     }

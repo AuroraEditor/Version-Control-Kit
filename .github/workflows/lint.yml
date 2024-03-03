@@ -1,4 +1,4 @@
-name: Build & Lint
+name: SwiftLint
 on:
   push:
     branches: [ main ]

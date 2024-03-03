@@ -27,7 +27,9 @@ struct GitDelimiterParser {
      *
      *                     `let (args, parse) = createLogParser(["sha": "%H"])`
      */
-    func createLogParser<T: Hashable>(_ fields: [T: String]) -> (formatArgs: [String], parse: (String) -> [[T: String]]) {
+    func createLogParser<T: Hashable>(
+        _ fields: [T: String]
+    ) -> (formatArgs: [String], parse: (String) -> [[T: String]]) {
         let keys = Array(fields.keys)
         let format = fields.values.joined(separator: "%x00")
         let formatArgs = ["-z", "--format=\(format)"]
@@ -65,7 +67,9 @@ struct GitDelimiterParser {
      *
      *                     `let (args, parse) = createForEachRefParser(["sha": "%(objectname)"])`
      */
-    func createForEachRefParser<T: Hashable>(_ fields: [T: String]) -> (formatArgs: [String], parse: (String) -> [[T: String]]) {
+    func createForEachRefParser<T: Hashable>(
+        _ fields: [T: String]
+    ) -> (formatArgs: [String], parse: (String) -> [[T: String]]) {
         let keys = Array(fields.keys)
         let format = fields.values.joined(separator: "%00")
         let formatArgs = ["--format=%00\(format)%00"]

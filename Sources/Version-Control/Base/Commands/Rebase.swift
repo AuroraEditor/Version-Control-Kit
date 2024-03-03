@@ -20,14 +20,21 @@ public struct Rebase {
             return nil
         }
 
-        let originalBranchTip = try String(contentsOf: rebaseMergePath.appendingPathComponent("orig-head")).trimmingCharacters(in: .whitespacesAndNewlines)
+        let originalBranchTip = try String(
+            contentsOf: rebaseMergePath.appendingPathComponent("orig-head")
+        ).trimmingCharacters(in: .whitespacesAndNewlines)
 
-        var targetBranch = try String(contentsOf: rebaseMergePath.appendingPathComponent("head-name")).trimmingCharacters(in: .whitespacesAndNewlines)
+        var targetBranch = try String(
+            contentsOf: rebaseMergePath.appendingPathComponent("head-name")
+        ).trimmingCharacters(in: .whitespacesAndNewlines)
+
         if targetBranch.hasPrefix("refs/heads/") {
             targetBranch.removeFirst("refs/heads/".count)
         }
 
-        let baseBranchTip = try String(contentsOf: rebaseMergePath.appendingPathComponent("onto")).trimmingCharacters(in: .whitespacesAndNewlines)
+        let baseBranchTip = try String(
+            contentsOf: rebaseMergePath.appendingPathComponent("onto")
+        ).trimmingCharacters(in: .whitespacesAndNewlines)
 
         return RebaseInternalState(targetBranch: originalBranchTip,
                                    baseBranchTip: targetBranch,
@@ -40,8 +47,12 @@ public struct Rebase {
 
         guard let next = try? Int(String(contentsOf: rebaseMergePath.appendingPathComponent("msgnum"))),
               let last = try? Int(String(contentsOf: rebaseMergePath.appendingPathComponent("end"))),
-              let originalBranchTip = try? String(contentsOf: rebaseMergePath.appendingPathComponent("orig-head")).trimmingCharacters(in: .whitespacesAndNewlines),
-              let baseBranchTip = try? String(contentsOf: rebaseMergePath.appendingPathComponent("onto")).trimmingCharacters(in: .whitespacesAndNewlines),
+              let originalBranchTip = try? String(
+                contentsOf: rebaseMergePath.appendingPathComponent("orig-head")
+              ).trimmingCharacters(in: .whitespacesAndNewlines),
+              let baseBranchTip = try? String(
+                contentsOf: rebaseMergePath.appendingPathComponent("onto")
+              ).trimmingCharacters(in: .whitespacesAndNewlines),
               next > 0,
               last > 0 else {
             return nil
@@ -135,8 +146,9 @@ public struct Rebase {
 
     func parseRebaseResult(result: IGitResult) -> RebaseResult {
         if result.exitCode == 0 {
-            if result.stdout.trimmingCharacters(in: .whitespacesAndNewlines).range(of: #"^Current branch [^ ]+ is up to date.$"#,
-                                                                                   options: .regularExpression) != nil {
+            if result.stdout.trimmingCharacters(in: .whitespacesAndNewlines).range(
+                of: #"^Current branch [^ ]+ is up to date.$"#,
+                options: .regularExpression) != nil {
                 return .alreadyUpToDate
             }
             return .completedWithoutError
@@ -233,7 +245,10 @@ public struct Rebase {
         }
 
         if trackedFilesAfter.isEmpty {
-            print("[rebase] no tracked changes to commit for \(rebaseCurrentCommit), continuing rebase but skipping this commit")
+            print([
+                "[rebase] no tracked changes to commit for \(rebaseCurrentCommit),",
+                " continuing rebase but skipping this commit"
+            ].joined())
 
             let result = try GitShell().git(args: ["rebase", "--skip"],
                                             path: directoryURL,

@@ -23,15 +23,22 @@ public struct GitStage {
             return
         }
 
-        let conflictedStatus = file.status as! ConflictsWithMarkers
+        guard let conflictedStatus = file.status as? ConflictsWithMarkers else {
+            print("Failed to cast to ConflictsWithMarkers")
+            return
+        }
 
         if isConflictWithMarkers(conflictedStatus) && conflictedStatus.conflictMarkerCount == 0 {
             // If the file was manually resolved, no further action is required.
             return
         }
 
-        let chosen = manualResolution == .theirs ? conflictedStatus.entry.details.them : conflictedStatus.entry.details.us
-        let addedInBoth = conflictedStatus.entry.details.us == GitStatusEntry.added && conflictedStatus.entry.details.them == GitStatusEntry.added
+        let chosen = manualResolution == .theirs
+            ? conflictedStatus.entry.details.them
+            : conflictedStatus.entry.details.us
+
+        let addedInBoth = conflictedStatus.entry.details.us == GitStatusEntry.added
+            && conflictedStatus.entry.details.them == GitStatusEntry.added
 
         if chosen == .updatedButUnmerged || addedInBoth {
             try GitCheckout().checkoutConflictedFile(directoryURL: directoryURL,

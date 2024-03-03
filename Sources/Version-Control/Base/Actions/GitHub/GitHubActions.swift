@@ -9,8 +9,8 @@ import Foundation
 import AppKit
 
 public enum GitHubViewType: String {
-    case tree = "tree"
-    case compare = "compare"
+    case tree
+    case compare
 }
 
 public struct GitHubActions {
@@ -22,17 +22,17 @@ public struct GitHubActions {
     internal func getCurrentRepositoryGitHubURL(directoryURL: URL) throws -> String {
         let remoteUrls: [GitRemote] = try Remote().getRemotes(directoryURL: directoryURL)
 
-        for remote in remoteUrls {
-            if remote.url.contains("github.com") {
-                return remote.url
-            }
+        for remote in remoteUrls where remote.url.contains("github.com") {
+            return remote.url
         }
+
         return ""
     }
 
     /// Open a specific branch of a GitHub repository in a web browser.
     ///
-    /// This function constructs the URL for a specific branch of a GitHub repository based on the provided parameters and opens it in the default web browser.
+    /// This function constructs the URL for a specific branch of 
+    /// a GitHub repository based on the provided parameters and opens it in the default web browser.
     ///
     /// - Parameters:
     ///   - viewType: The type of view to open on GitHub (e.g., code, commits, pulls).
@@ -67,7 +67,8 @@ public struct GitHubActions {
 
     /// Open the GitHub issue creation page for the current repository in a web browser.
     ///
-    /// This function constructs the URL for creating a new issue in the current repository on GitHub and opens it in the default web browser.
+    /// This function constructs the URL for creating a new issue in
+    /// the current repository on GitHub and opens it in the default web browser.
     ///
     /// - Parameter directoryURL: The local directory URL of the Git repository.
     ///

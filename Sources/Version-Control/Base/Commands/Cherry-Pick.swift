@@ -49,7 +49,8 @@ public struct CherryPick {
     ///   - baseOptions: The base options for Git execution.
     ///   - commits: An array of `CommitOneLine` representing the commits to be cherry-picked.
     ///   - progressCallback: An escaping closure that is called with the progress of the operation.
-    ///   - cherryPickedCount: An optional integer representing the number of commits already cherry-picked. Defaults to 0.
+    ///   - cherryPickedCount: An optional integer representing the number of commits already cherry-picked. \
+    ///                        Defaults to 0.
     /// - Returns: An `IGitExecutionOptions` instance with the process callback configured.
     internal func configureOptionsWithCallBack(baseOptions: IGitExecutionOptions,
                                                commits: [Commit],
@@ -129,9 +130,11 @@ public struct CherryPick {
         }
 
         guard let gitError = result.gitError else {
-            throw NSError(domain: "com.auroraeditor.editor",
-                          code: 0,
-                          userInfo: [NSLocalizedDescriptionKey: "Unhandled result found: \(result)"])
+            throw NSError(
+                domain: "com.auroraeditor.versioncontrolkit.cherrypickerror",
+                code: 0,
+                userInfo: [NSLocalizedDescriptionKey: "Unhandled result found: \(result)"]
+            )
         }
 
         switch gitError {
@@ -140,9 +143,11 @@ public struct CherryPick {
         case .UnresolvedConflicts:
             return .outstandingFilesNotStaged
         default:
-            throw NSError(domain: "com.auroraeditor.editor",
-                          code: 0,
-                          userInfo: [NSLocalizedDescriptionKey: "Unhandled Git error: \(gitError)"])
+            throw NSError(
+                domain: "com.auroraeditor.versioncontrolkit.cherrypickerror",
+                code: 0,
+                userInfo: [NSLocalizedDescriptionKey: "Unhandled Git error: \(gitError)"]
+            )
         }
     }
 
@@ -208,7 +213,8 @@ public struct CherryPick {
     /// - Parameters:
     ///   - directoryURL: The URL of the directory where the cherry-pick operation is to be continued.
     ///   - files: An array of `WorkingDirectoryFileChange` representing the changes to be staged.
-    ///   - manualResolutions: A dictionary mapping file paths to `ManualConflictResolution` objects. Defaults to an empty dictionary.
+    ///   - manualResolutions: A dictionary mapping file paths to `ManualConflictResolution` objects. \
+    ///                        Defaults to an empty dictionary.
     ///   - progressCallback: An optional closure called with progress information during the operation.
     /// - Throws: An error if the operation cannot start or if a problem occurs during execution.
     /// - Returns: A `CherryPickResult` indicating the outcome of the continued operation.

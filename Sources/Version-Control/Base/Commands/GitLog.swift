@@ -20,14 +20,14 @@ public struct GitLog {
 
     // File mode 160000 is used by git specifically for submodules:
     // https://github.com/git/git/blob/v2.37.3/cache.h#L62-L69
-    let SubmoduleFileMode = "160000"
+    let subModuleFileMode = "160000"
 
     func mapSubmoduleStatusFileModes(status: String, srcMode: String, dstMode: String) -> SubmoduleStatus? {
-        let submoduleFileMode = SubmoduleFileMode // Define SubmoduleFileMode here
+        let subModuleFileMode = subModuleFileMode // Define subModuleFileMode here
 
-        if srcMode == submoduleFileMode && dstMode == submoduleFileMode && status == "M" {
+        if srcMode == subModuleFileMode && dstMode == subModuleFileMode && status == "M" {
             return SubmoduleStatus(commitChanged: true, modifiedChanges: false, untrackedChanges: false)
-        } else if (srcMode == submoduleFileMode && status == "D") || (dstMode == submoduleFileMode && status == "A") {
+        } else if (srcMode == subModuleFileMode && status == "D") || (dstMode == subModuleFileMode && status == "A") {
             return SubmoduleStatus(commitChanged: false, modifiedChanges: false, untrackedChanges: false)
         }
 
@@ -83,7 +83,7 @@ public struct GitLog {
         return status.kind == .copied || status.kind == .renamed
     }
 
-    public func getCommits(
+    public func getCommits( // swiftlint:disable:this function_body_length
         directoryURL: URL,
         revisionRange: String?,
         limit: Int?,
@@ -154,7 +154,9 @@ public struct GitLog {
                 author: try CommitIdentity.parseIdentity(identity: commit["author"] ?? ""),
                 commiter: try CommitIdentity.parseIdentity(identity: commit["comitter"] ?? ""),
                 parentShas: commit["parents"]?.split(separator: " ").map(String.init) ?? [],
-                trailers: InterpretTrailers().parseRawUnfoldedTrailers(trailers: commit["trailers"] ?? "", seperators: ":"),
+                trailers: InterpretTrailers().parseRawUnfoldedTrailers(
+                    trailers: commit["trailers"] ?? "", seperators: ":"
+                ),
                 tags: tags
             )
         }
@@ -209,9 +211,10 @@ public struct GitLog {
 
      - Throws: An error if the log output or numstat information is invalid.
 
-     - Note: This function processes raw Git log output with numstat information and extracts details about file changes 
-             and line modification statistics. It iterates through the lines in the output, identifying file changes and computing
-             the total number of lines added and deleted. It returns the parsed information in a tuple.
+     - Note: This function processes raw Git log output with numstat information and extracts details about \
+             file changes and line modification statistics. It iterates through the lines in the output, \
+             identifying file changes and computing the total number of lines added and deleted. \
+             It returns the parsed information in a tuple.
 
      */
     func parseRawLogWithNumstat(stdout: String,
@@ -224,21 +227,20 @@ public struct GitLog {
 
         let lines = stdout.split(separator: "\0")
 
-        var i = 0
-        while i < lines.count - 1 {
-            let line = lines[i]
+        var number = 0
+        while number < lines.count - 1 {
+            let line = lines[number]
             if line.hasPrefix(":") {
                 let lineComponents = line.split(separator: " ")
                 guard lineComponents.count >= 3 else {
-                    print("Invalid log output (srcMode, dstMode, status)")
-                    throw fatalError()
+                    fatalError("Invalid log output (srcMode, dstMode, status)")
                 }
 
                 let srcMode = String(lineComponents[0].dropFirst())
                 let dstMode = String(lineComponents[1])
                 let status = String(lineComponents.last!)
-                let oldPath: String? = status.hasPrefix("R") || status.hasPrefix("C") ? String(lines[i + 1]) : nil
-                let path = String(lines[i + 2])
+                let oldPath: String? = status.hasPrefix("R") || status.hasPrefix("C") ? String(lines[number + 1]) : nil
+                let path = String(lines[number + 2])
 
                 files.append(CommittedFileChange(path: path,
                                                  status: mapStatus(rawStatus: status,
@@ -247,11 +249,10 @@ public struct GitLog {
                                                                    dstMode: dstMode),
                                                  commitish: sha,
                                                  parentCommitish: parentCommitish))
-                i += oldPath != nil ? 3 : 2
+                number += oldPath != nil ? 3 : 2
             } else {
                 guard let match = line.range(of: "^(\\d+|-)\\t(\\d+|-)", options: .regularExpression) else {
-                    print("Invalid numstat line")
-                    throw fatalError()
+                    fatalError("Invalid numstat line")
                 }
 
                 let added = line[match].split(separator: "\t")[0]
@@ -261,7 +262,7 @@ public struct GitLog {
                 linesDeleted += deleted == "-" ? 0 : Int(deleted)!
 
                 if isCopyOrRename(status: files[numStatCount].status) {
-                    i += 2
+                    number += 2
                 }
                 numStatCount += 1
             }
@@ -300,6 +301,6 @@ public struct GitLog {
                                           skip: nil,
                                           additionalArgs: ["--merges"])
 
-        return mergeCommits.count > 0
+        return !mergeCommits.isEmpty
     }
 }

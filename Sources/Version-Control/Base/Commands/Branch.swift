@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct Branch {
+public struct Branch { // swiftlint:disable:this type_body_length
 
     public init() {}
 
@@ -186,6 +186,7 @@ public struct Branch {
     /// - Throws: An error if the shell command fails.
     public func getRecentBranches(directoryURL: URL, limit: Int) throws -> [String] {
         let regex = try NSRegularExpression(
+            // swiftlint:disable:next line_length
             pattern: #"^.*? (renamed|checkout)(?:: moving from|\s*) (?:refs/heads/|\s*)(.*?) to (?:refs/heads/|\s*)(.*?)$"#,
             options: []
         )
@@ -215,7 +216,11 @@ public struct Branch {
         var excludedNames = Set<String>()
 
         for line in lines {
-            if let match = regex.firstMatch(in: line, options: [], range: NSRange(location: 0, length: line.utf16.count)),
+            if let match = regex.firstMatch(
+                in: line,
+                options: [],
+                range: NSRange(location: 0, length: line.utf16.count)
+               ),
                match.numberOfRanges == 4 {
                 let operationTypeRange = Range(match.range(at: 1), in: line)!
                 let excludeBranchNameRange = Range(match.range(at: 2), in: line)!
@@ -243,7 +248,14 @@ public struct Branch {
         return Array(names)
     }
 
-    let noCommitsOnBranchRe = try! NSRegularExpression(pattern: "fatal: your current branch '.*' does not have any commits yet")
+    func getCommitsOnBranch() {
+        guard let noCommitsOnBranchRe = try? NSRegularExpression(
+            pattern: "fatal: your current branch '.*' does not have any commits yet"
+        ) else {
+            print("Failed to create regular expression")
+            return
+        }
+    }
 
     /// Asynchronously fetches the names and dates of branches checked out after a specified date.
     ///
@@ -277,8 +289,12 @@ public struct Branch {
 
         let lines = result.stdout.components(separatedBy: "\n")
         for line in lines {
-            if let match = regex.firstMatch(in: line, options: [], range: NSRange(location: 0, length: line.utf16.count)),
-               match.numberOfRanges == 3 {
+            if let match = regex.firstMatch(
+                in: line,
+                options: [],
+                range: NSRange(location: 0, length: line.utf16.count)
+            ),
+            match.numberOfRanges == 3 {
                 let timestampRange = Range(match.range(at: 1), in: line)!
                 let branchNameRange = Range(match.range(at: 2), in: line)!
 
@@ -334,8 +350,8 @@ public struct Branch {
     ///   - newName: A string representing the new name of the branch.
     /// - Throws: An error if the shell command fails.
     public func renameBranch(directoryURL: URL,
-                      branch: GitBranch,
-                      newName: String) throws {
+                             branch: GitBranch,
+                             newName: String) throws {
         let args = [
             "branch",
             "-m",
@@ -472,3 +488,4 @@ public struct Branch {
         return mergedBranches
     }
 }
+// swiftlint:disable:this file_length

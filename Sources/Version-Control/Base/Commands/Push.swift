@@ -21,14 +21,20 @@ public struct Push {
 
     public init() {}
 
-    public func push(directoryURL: URL,
-                     remote: IRemote,
-                     localBranch: String,
-                     remoteBranch: String?,
-                     tagsToPush: [String]?,
-                     options: PushOptions,
-                     progressCallback: ((IPushProgress) -> Void)? = nil) throws {
-        var args = gitNetworkArguments + ["push", remote.name, remoteBranch != nil ? "\(localBranch):\(remoteBranch!)" : localBranch]
+    public func push( // swiftlint:disable:this function_parameter_count
+        directoryURL: URL,
+        remote: IRemote,
+        localBranch: String,
+        remoteBranch: String?,
+        tagsToPush: [String]?,
+        options: PushOptions,
+        progressCallback: ((IPushProgress) -> Void)? = nil
+    ) throws {
+        var args = gitNetworkArguments + [
+            "push",
+            remote.name,
+            remoteBranch != nil ? "\(localBranch):\(remoteBranch!)" : localBranch
+        ]
 
         if let tags = tagsToPush {
             args += tags

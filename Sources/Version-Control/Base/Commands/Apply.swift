@@ -19,7 +19,8 @@ public struct Apply {
     ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory containing the git repository.
-    ///   - file: A `WorkingDirectoryFileChange` object representing the file whose changes are to be applied to the index.
+    ///   - file: A `WorkingDirectoryFileChange` object representing the file \ 
+    ///           whose changes are to be applied to the index.
     /// - Throws: An error if the git commands fail to execute.
     ///
     /// # Example:
@@ -28,8 +29,10 @@ public struct Apply {
     /// let fileChange = WorkingDirectoryFileChange(path: "newName.txt", status: .renamed(oldName: "oldName.txt"))
     /// try await applyPatchToIndex(directoryURL: directoryURL, file: fileChange)
     /// ```
-    func applyPatchToIndex(directoryURL: URL,
-                           file: WorkingDirectoryFileChange) throws {
+    func applyPatchToIndex( // swiftlint:disable:this function_body_length
+        directoryURL: URL,
+        file: WorkingDirectoryFileChange
+    ) throws {
         // If the file was a rename we have to recreate that rename since we've
         // just blown away the index.
         if file.status.kind == .renamed {
@@ -79,9 +82,21 @@ public struct Apply {
         if let diff = diff as? TextDiff {
             switch diff.kind {
             case .image, .binary, .submodule:
-                throw NSError(domain: "PatchError", code: 0, userInfo: [NSLocalizedDescriptionKey: "Can't create partial commit in binary file: \(file.path)"])
+                throw NSError(
+                    domain: "com.auroraeditor.versioncontrolkit.patcherror",
+                    code: 0,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "Can't create partial commit in binary file: \(file.path)"
+                    ]
+                )
             case .unrenderable:
-                throw NSError(domain: "PatchError", code: 1, userInfo: [NSLocalizedDescriptionKey: "File diff is too large to generate a partial commit: \(file.path)"])
+                throw NSError(
+                    domain: "com.auroraeditor.versioncontrolkit.patcherror",
+                    code: 1,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "File diff is too large to generate a partial commit: \(file.path)"
+                    ]
+                )
             default:
                 fatalError("Unknown diff kind: \(diff.kind)")
             }

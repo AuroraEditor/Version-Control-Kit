@@ -97,10 +97,13 @@ public let gitErrorRegexes: [String: GitError] = [
             .BranchDeletionFailed,
     "\\[remote rejected\\] (.+) \\(deletion of the current branch prohibited\\)":
             .DefaultBranchDeletionFailed,
+    // swiftlint:disable:next line_length
     "error: could not revert .*\nhint: after resolving the conflicts, mark the corrected paths\nhint: with 'git add <paths>' or 'git rm <paths>'\nhint: and commit the result with 'git commit'":
             .RevertConflicts,
+    // swiftlint:disable:next line_length
     "Applying: .*\nNo changes - did you forget to use 'git add'\\?\nIf there is nothing left to stage, chances are that something else\n.*":
             .EmptyRebasePatch,
+    // swiftlint:disable:next line_length
     "There are no candidates for (rebasing|merging) among the refs that you just fetched.\nGenerally this means that you provided a wildcard refspec which had no\nmatches on the remote end.":
             .NoMatchingRemoteBranch,
     "Your configuration specifies to merge with the ref '(.+)'\nfrom the remote, but no such ref was fetched.":
@@ -135,8 +138,10 @@ public let gitErrorRegexes: [String: GitError] = [
     "Another git process seems to be running in this repository, e.g.":
             .LockFileAlreadyExists,
     "fatal: There is no merge to abort": .NoMergeToAbort,
+    // swiftlint:disable:next line_length
     "error: (?:Your local changes to the following|The following untracked working tree) files would be overwritten by checkout:":
             .LocalChangesOverwritten,
+    // swiftlint:disable:next line_length
     "You must edit all merge conflicts and then\nmark them as resolved using git add|fatal: Exiting because of an unresolved conflict":
             .UnresolvedConflicts,
     "error: gpg failed to sign the data": .GPGFailedToSignData,
@@ -165,6 +170,7 @@ public let gitErrorRegexes: [String: GitError] = [
     "fatal: tag '(.+)' already exists": .TagAlreadyExists,
     "error: Your local changes to the following files would be overwritten by merge:\n":
             .MergeWithLocalChanges,
+    // swiftlint:disable:next line_length
     "error: cannot (pull with rebase|rebase): You have unstaged changes\\.\n\\s*error: [Pp]lease commit or stash them\\.":
             .RebaseWithLocalChanges,
     "error: commit (.+) is a merge but no -m option was given":

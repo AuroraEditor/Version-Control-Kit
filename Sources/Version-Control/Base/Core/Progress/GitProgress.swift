@@ -260,7 +260,10 @@ struct GitProgressParser {
             return nil
         }
 
-        let progressParts = progressText.split(separator: ",", omittingEmptySubsequences: true).map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
+        let progressParts = progressText.split(
+            separator: ",",
+            omittingEmptySubsequences: true
+        ).map { String($0).trimmingCharacters(in: .whitespacesAndNewlines) }
 
         if progressParts.isEmpty {
             return nil
@@ -273,9 +276,17 @@ struct GitProgressParser {
         var total: Int?
         var percent: Int?
 
-        if valueOnlyRe.firstMatch(in: progressParts[0], options: [], range: NSRange(location: 0, length: progressParts[0].utf16.count)) != nil {
+        if valueOnlyRe.firstMatch(
+            in: progressParts[0],
+            options: [],
+            range: NSRange(location: 0, length: progressParts[0].utf16.count)
+        ) != nil {
             value = Int(progressParts[0])!
-        } else if let match = percentRe.firstMatch(in: progressParts[0], options: [], range: NSRange(location: 0, length: progressParts[0].utf16.count)) {
+        } else if let match = percentRe.firstMatch(
+            in: progressParts[0],
+            options: [],
+            range: NSRange(location: 0, length: progressParts[0].utf16.count)
+        ) {
             let percentString = String(progressParts[0][Range(match.range(at: 1), in: progressParts[0])!])
             let valueString = String(progressParts[0][Range(match.range(at: 2), in: progressParts[0])!])
             let totalString = String(progressParts[0][Range(match.range(at: 3), in: progressParts[0])!])
@@ -289,11 +300,9 @@ struct GitProgressParser {
 
         var done = false
 
-        for part in progressParts.dropFirst() {
-            if part == "done." {
-                done = true
-                break
-            }
+        for part in progressParts.dropFirst() where part == "done." {
+            done = true
+            break
         }
 
         return IGitProgressInfo(title: title, value: value, total: total, percent: percent, done: done, text: line)

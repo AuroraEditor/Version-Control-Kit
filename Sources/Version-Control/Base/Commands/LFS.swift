@@ -138,7 +138,7 @@ public struct LFS {
 
         // The result from "git lfs track" contains information about tracked paths.
         // We check if the result is not empty, indicating that paths are being tracked with Git LFS.
-        return result.stdout.count > 0
+        return !result.stdout.isEmpty
     }
 
     /// Check whether the Git repository is configured to track a specific file with Git LFS (Large File Storage).
@@ -194,7 +194,9 @@ public struct LFS {
         // the output will look like this
         //
         // README.md: filter: unspecified
-        let lfsFilterRegex = try! NSRegularExpression(pattern: ": filter: lfs", options: [])
+        guard let lfsFilterRegex = try? NSRegularExpression(pattern: ": filter: lfs", options: []) else {
+            fatalError("Failed to create regex for Git LFS filter check")
+        }
         let range = NSRange(result.stdout.startIndex..<result.stdout.endIndex,
                             in: result.stdout)
 

@@ -23,7 +23,10 @@ class GitRebaseParser {
     }
 
     func parse(line: String) -> MultiCommitOperationProgress? {
-        let rebasingRe = try! NSRegularExpression(pattern: "Rebasing \\((\\d+)/(\\d+)\\)")
+        guard let rebasingRe = try? NSRegularExpression(pattern: "Rebasing \\((\\d+)/(\\d+)\\)") else {
+            print("Failed to create regular expression for rebasing")
+            return nil
+        }
         let range = NSRange(location: 0, length: line.utf16.count)
 
         if let match = rebasingRe.firstMatch(in: line, options: [], range: range),
@@ -33,7 +36,9 @@ class GitRebaseParser {
            let rebasedCommitCount = Int(line[rebasedCommitCountRange]),
            let totalCommitCount = Int(line[totalCommitCountRange]) {
 
-            let currentCommitSummary = commits.indices.contains(rebasedCommitCount - 1) ? commits[rebasedCommitCount - 1].summary : ""
+            let currentCommitSummary = commits.indices.contains(rebasedCommitCount - 1)
+                ? commits[rebasedCommitCount - 1].summary
+                : ""
             let progress = Double(rebasedCommitCount) / Double(totalCommitCount)
             let value = formatRebaseValue(value: progress)
 

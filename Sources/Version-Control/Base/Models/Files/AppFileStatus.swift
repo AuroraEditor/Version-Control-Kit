@@ -135,8 +135,8 @@ struct UntrackedEntry: FileEntry {
 
 struct RenamedOrCopiedEntry: FileEntry {
     enum RenamedOrCopiedEntryType: String {
-        case renamed = "renamed"
-        case copied = "copied"
+        case renamed
+        case copied
     }
 
     let kind: String

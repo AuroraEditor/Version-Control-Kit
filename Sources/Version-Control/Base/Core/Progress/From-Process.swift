@@ -9,9 +9,11 @@ import Foundation
 
 struct FromProcess {
 
-    func executionOptionsWithProgress(options: IGitExecutionOptions,
-                                      parser: GitProgressParser,
-                                      progressCallback: @escaping (GitParsingResult) -> Void) throws -> IGitExecutionOptions {
+    func executionOptionsWithProgress(
+        options: IGitExecutionOptions,
+        parser: GitProgressParser,
+        progressCallback: @escaping (GitParsingResult) -> Void
+    ) throws -> IGitExecutionOptions {
         var lfsProgressPath: String?
         var env = [String: String]()
         if options.trackLFSProgress! {

@@ -71,12 +71,19 @@ public struct RevParse {
             if result.exitCode == 0 {
                 let lines = result.stdout.components(separatedBy: "\n")
                 if let isBare = lines.first, let cdup = lines.dropFirst().first {
-                    return isBare == "true" ? .bare : .regular(topLevelWorkingDirectory: resolve(basePath: directoryURL.relativePath,
-                                                                                                 relativePath: cdup))
+                    return isBare == "true" ? .bare : .regular(
+                        topLevelWorkingDirectory: resolve(
+                            basePath: directoryURL.relativePath,
+                            relativePath: cdup
+                        )
+                    )
                 }
             }
 
-            if let unsafeMatch = result.stderr.range(of: "fatal: detected dubious ownership in repository at '(.+)'", options: .regularExpression) {
+            if let unsafeMatch = result.stderr.range(
+                of: "fatal: detected dubious ownership in repository at '(.+)'",
+                options: .regularExpression
+            ) {
                 let unsafePath = String(result.stderr[unsafeMatch])
                 return .unsafe(path: unsafePath)
             }

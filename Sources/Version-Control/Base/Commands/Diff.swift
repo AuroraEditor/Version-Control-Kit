@@ -9,7 +9,7 @@
 
 import Foundation
 
-public struct GitDiff {
+public struct GitDiff { // swiftlint:disable:this type_body_length
 
     private let binaryListRegex = "/-\t-\t(?:\0.+\0)?([^\0]*)/gi"
 
@@ -190,8 +190,10 @@ public struct GitDiff {
 
     /// Computes a diff for a file across a specified range of commits.
     ///
-    /// This function generates a diff for the specified file, comparing the changes from the parent of the oldest commit
-    /// (or a null tree SHA if specified) to the latest commit in the given range. It includes options to ignore whitespace
+    /// This function generates a diff for the specified file,
+    /// comparing the changes from the parent of the oldest commit
+    /// (or a null tree SHA if specified) to the latest commit in the given range. 
+    /// It includes options to ignore whitespace
     /// in the diff output and to retry with a null tree SHA if the oldest commit has no parent.
     ///
     /// - Parameters:
@@ -199,7 +201,8 @@ public struct GitDiff {
     ///   - file: A `FileChange` object representing the file to diff.
     ///   - commits: An array of commit identifiers, from oldest to newest, to include in the diff.
     ///   - hideWhitespaceInDiff: A Boolean value indicating whether to ignore whitespace when generating the diff.
-    ///   - useNullTreeSHA: A Boolean value indicating whether to use the null tree SHA as the base for the oldest commit.
+    ///   - useNullTreeSHA: A Boolean value indicating whether to use the null tree SHA as \
+    ///                     the base for the oldest commit.
     /// - Returns: An object conforming to the `IDiff` protocol that represents the generated diff.
     /// - Throws: An error if the commit range is empty or invalid, or if the git command fails.
     ///
@@ -219,11 +222,15 @@ public struct GitDiff {
                             hideWhitespaceInDiff: Bool = false,
                             useNullTreeSHA: Bool = false) throws -> IDiff {
         if commits.isEmpty {
+            // FIXME: This should be a more specific error type
+            // Domain: com.auroraeditor.versioncontrolkit.diff
             throw NSError(domain: "No commits to diff...", code: 0)
         }
 
         let oldestCommitRef = useNullTreeSHA ? DiffIndex().nilTreeSHA : "\(commits[0])^"
         guard let latestCommit = commits.last else {
+            // FIXME: This should be a more specific error type
+            // Domain: com.auroraeditor.versioncontrolkit.diff
             throw NSError(domain: "Invalid commit range", code: 0)
         }
 
@@ -352,7 +359,11 @@ public struct GitDiff {
                                     shas: [String],
                                     useNullTreeSHA: Bool = false) throws -> IChangesetData {
         guard !shas.isEmpty else {
-            throw NSError(domain: "com.yourdomain.git", code: -1, userInfo: [NSLocalizedDescriptionKey: "No commits to diff..."])
+            throw NSError(
+                domain: "com.auroraeditor.versioncontrolkit.git",
+                code: -1,
+                userInfo: [NSLocalizedDescriptionKey: "No commits to diff..."]
+            )
         }
 
         let oldestCommitRef = useNullTreeSHA ? DiffIndex().nilTreeSHA : "\\(shas[0])^"
@@ -540,7 +551,8 @@ public struct GitDiff {
     /// `errorText`. If a match is found, it extracts the 'from' and 'to' line ending types from the text and
     /// constructs a `LineEndingsChange` object with this information.
     ///
-    /// - Parameter errorText: A string containing the error text that potentially includes a line endings change warning.
+    /// - Parameter errorText: A string containing the error text that potentially includes a line endings \
+    ///                        change warning.
     /// - Returns: An optional `LineEndingsChange` object if the warning is found; otherwise, `nil`.
     ///
     /// # Example:
@@ -551,11 +563,17 @@ public struct GitDiff {
     /// }
     /// ```
     ///
-    /// - Note: The function assumes that the `errorText` contains a warning about line ending changes in a standard format.
+    /// - Note: The function assumes that the `errorText` contains a warning about line ending changes \ 
+    ///         in a standard format.
+    ///
     ///   If no match is found, or if the `from` and `to` values can't be parsed, the function returns `nil`.
-    ///   This function uses forced unwrapping after parsing line endings, which could lead to runtime crashes if the parsing fails.
+    ///   This function uses forced unwrapping after parsing line endings,
+    ///   which could lead to runtime crashes if the parsing fails.
     func parseLineEndingsWarning(errorText: String) -> LineEndingsChange? {
-        let regex = try! NSRegularExpression(pattern: lineEndingsChangeRegex, options: [])
+        guard let regex = try? NSRegularExpression(pattern: lineEndingsChangeRegex, options: []) else {
+            print("Failed to create regular expression for line endings change warning")
+            return nil
+        }
 
         let nsRange = NSRange(errorText.startIndex..<errorText.endIndex, in: errorText)
         if let match = regex.firstMatch(in: errorText, options: [], range: nsRange) {
@@ -636,16 +654,28 @@ public struct GitDiff {
             file.status.kind == .deleted {
             let lines = buffer.split(separator: "\n")
             let baseRegex = "Subproject commit ([^-]+)(-dirty)?$"
-            let oldSHARegex = try! NSRegularExpression(pattern: "-" + baseRegex)
-            let newSHARegex = try! NSRegularExpression(pattern: "\\+" + baseRegex)
+            guard let oldSHARegex = try? NSRegularExpression(pattern: "-" + baseRegex),
+                  let newSHARegex = try? NSRegularExpression(pattern: "\\+" + baseRegex) else {
+                throw NSError(
+                    domain: "com.auroraeditor.versioncontrolkit.diff",
+                    code: -1,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "Failed to create regular expression for submodule diff"
+                    ]
+                )
+            }
 
             let lineMatch = { (regex: NSRegularExpression) -> String? in
                 for line in lines {
-                    if let match = regex.firstMatch(in: String(line), range: NSRange(location: 0, length: line.utf16.count)),
-                       let range = Range(match.range(at: 1), in: String(line)) {
+                    if let match = regex.firstMatch(
+                        in: String(line),
+                        range: NSRange(location: 0, length: line.utf16.count)
+                    ),
+                    let range = Range(match.range(at: 1), in: String(line)) {
                         return String(line[range])
                     }
                 }
+
                 return nil
             }
 
@@ -713,7 +743,8 @@ public struct GitDiff {
     ///   - directoryURL: The URL of the directory corresponding to the git repository.
     ///   - path: The path to the file within the git repository.
     ///   - commitish: The name of the commit/branch/tag from which to fetch the blob.
-    /// - Returns: A `DiffImage` object containing the base64 encoded contents of the file, its media type, and size in bytes.
+    /// - Returns: A `DiffImage` object containing the base64 encoded contents of the file, \
+    ///            its media type, and size in bytes.
     /// - Throws: An error if the blob contents cannot be retrieved or encoded.
     ///
     /// Example:
@@ -748,10 +779,12 @@ public struct GitDiff {
     /// - Parameters:
     ///   - directoryURL: The URL of the directory where the file resides.
     ///   - file: A `FileChange` object representing the file to be processed.
-    /// - Returns: A `DiffImage` object containing the base64 encoded contents of the file, its media type, and size in bytes.
+    /// - Returns: A `DiffImage` object containing the base64 encoded contents of the file, \
+    ///            its media type, and size in bytes.
     /// - Throws: An error if the data for the file cannot be read.
     ///
-    /// - Note: The media type is determined by a separate function `getMediaType` which should handle various file extensions appropriately.
+    /// - Note: The media type is determined by a separate function `getMediaType`\
+    ///         which should handle various file extensions appropriately.
     ///
     /// Example:
     /// ```
@@ -800,7 +833,16 @@ public struct GitDiff {
         let output = try GitShell().git(args: args,
                                         path: directoryURL,
                                         name: #function)
-        let binaryListRegex = try! NSRegularExpression(pattern: binaryListRegex, options: [])
+
+        guard let binaryListRegex = try? NSRegularExpression(pattern: binaryListRegex, options: []) else {
+            throw NSError(
+                domain: "com.auroraeditor.versioncontrolkit.diff",
+                code: -1,
+                userInfo: [
+                    NSLocalizedDescriptionKey: "Failed to create regular expression for binary file list"
+                ]
+            )
+        }
 
         let nsRange = NSRange(output.stdout.startIndex..<output.stdout.endIndex, in: output.stdout)
         let matches = binaryListRegex.matches(in: output.stdout, options: [], range: nsRange)
@@ -824,3 +866,5 @@ func forceUnwrap<T>(_ message: String, _ optional: T?) -> T {
 enum DiffErrors: Error {
     case noCommits(String)
 }
+
+// swiftlint:disable:this file_length

@@ -343,7 +343,8 @@ public struct Remote {
     /// - Note:
     ///   - This function constructs the reference path for the remote's HEAD using the provided \
     ///     `remote` name and then fetches the reference using the `Refs` utility.
-    ///   - The function returns `nil` if the remote's HEAD reference is not found or if there is an error in the process.
+    ///   - The function returns `nil` if the remote's HEAD reference is not found or \
+    ///     if there is an error in the process.
     public func getRemoteHEAD(directoryURL: URL, remote: String) throws -> String? {
         let remoteNamespace = "refs/remotes/\(remote)/"
         if let match = try Refs().getSymbolicRef(directoryURL: directoryURL, ref: "\(remoteNamespace)HEAD"),

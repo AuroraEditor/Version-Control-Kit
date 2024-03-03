@@ -49,6 +49,7 @@ public struct Reflog {
 
         // Create a regular expression
         guard let regex = try? NSRegularExpression(pattern: regexPattern, options: []) else {
+            // FIXME: a call to a never-returning function
             throw fatalError("Invalid regex")
         }
 
@@ -82,7 +83,11 @@ public struct Reflog {
 
         for line in lines {
             // Try to match the line with the regular expression
-            if let match = regex.firstMatch(in: String(line), options: [], range: NSRange(line.startIndex..., in: line)) {
+            if let match = regex.firstMatch(
+                in: String(line),
+                options: [],
+                range: NSRange(line.startIndex..., in: line)
+            ) {
                 let excludeBranchNameRange = Range(match.range(at: 1), in: line)!
                 let branchNameRange = Range(match.range(at: 2), in: line)!
 
@@ -136,7 +141,9 @@ public struct Reflog {
     func getBranchCheckouts(directoryURL: URL,
                             afterDate: Date) throws -> [String: Date] {
         // Regular expression to match reflog entries
-        let regex = try NSRegularExpression(pattern: #"^[a-z0-9]{40}\sHEAD@{(.*)}\scheckout: moving from\s.*\sto\s(.*)$"#)
+        let regex = try NSRegularExpression(
+            pattern: #"^[a-z0-9]{40}\sHEAD@{(.*)}\scheckout: moving from\s.*\sto\s(.*)$"#
+        )
 
         // Format the afterDate as ISO string
         let dateFormatter = ISO8601DateFormatter()
@@ -168,7 +175,11 @@ public struct Reflog {
 
         for line in lines {
             // Attempt to match the line with the regex
-            if let match = regex.firstMatch(in: String(line), options: [], range: NSRange(line.startIndex..., in: line)) {
+            if let match = regex.firstMatch(
+                in: String(line),
+                options: [],
+                range: NSRange(line.startIndex..., in: line)
+            ) {
                 let timestampRange = Range(match.range(at: 1), in: line)!
                 let branchNameRange = Range(match.range(at: 2), in: line)!
 
