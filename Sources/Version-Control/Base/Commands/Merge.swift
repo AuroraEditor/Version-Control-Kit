@@ -127,7 +127,8 @@ public struct Merge {
     ///   ```
     ///
     /// - Important: This function requires valid commit-ish identifiers as input, \
-    ///              and it may return `nil` if there is no common merge base between the provided commit-ish identifiers.
+    ///              and it may return `nil` if there is no common merge base between the provided \
+    ///              commit-ish identifiers.
     public func getMergeBase(directoryURL: URL,
                              firstCommitish: String,
                              secondCommitish: String) throws -> String? {

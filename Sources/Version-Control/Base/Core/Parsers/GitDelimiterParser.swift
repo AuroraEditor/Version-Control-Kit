@@ -67,7 +67,7 @@ struct GitDelimiterParser {
      *
      *                     `let (args, parse) = createForEachRefParser(["sha": "%(objectname)"])`
      */
-    func createForEachRefParser<T: Hashable>( // swiftlint:disable:this function_body_length
+    func createForEachRefParser<T: Hashable>(
         _ fields: [T: String]
     ) -> (formatArgs: [String], parse: (String) -> [[T: String]]) {
         let keys = Array(fields.keys)

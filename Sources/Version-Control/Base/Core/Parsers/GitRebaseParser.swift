@@ -33,7 +33,9 @@ class GitRebaseParser {
            let rebasedCommitCount = Int(line[rebasedCommitCountRange]),
            let totalCommitCount = Int(line[totalCommitCountRange]) {
 
-            let currentCommitSummary = commits.indices.contains(rebasedCommitCount - 1) ? commits[rebasedCommitCount - 1].summary : ""
+            let currentCommitSummary = commits.indices.contains(rebasedCommitCount - 1)
+                ? commits[rebasedCommitCount - 1].summary
+                : ""
             let progress = Double(rebasedCommitCount) / Double(totalCommitCount)
             let value = formatRebaseValue(value: progress)
 

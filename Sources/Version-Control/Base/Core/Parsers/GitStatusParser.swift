@@ -161,7 +161,7 @@ struct GitStatusParser { // swiftlint:disable:this type_body_length
                             oldPath: nil)
     }
 
-    func mapStatus( // swiftlint:disable:this cyclomatic_complexity
+    func mapStatus( // swiftlint:disable:this cyclomatic_complexity function_body_length
         statusCode: String,
         submoduleStatusCode: String
     ) -> FileEntry {

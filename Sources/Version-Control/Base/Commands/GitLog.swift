@@ -154,7 +154,9 @@ public struct GitLog {
                 author: try CommitIdentity.parseIdentity(identity: commit["author"] ?? ""),
                 commiter: try CommitIdentity.parseIdentity(identity: commit["comitter"] ?? ""),
                 parentShas: commit["parents"]?.split(separator: " ").map(String.init) ?? [],
-                trailers: InterpretTrailers().parseRawUnfoldedTrailers(trailers: commit["trailers"] ?? "", seperators: ":"),
+                trailers: InterpretTrailers().parseRawUnfoldedTrailers(
+                    trailers: commit["trailers"] ?? "", seperators: ":"
+                ),
                 tags: tags
             )
         }
@@ -209,9 +211,10 @@ public struct GitLog {
 
      - Throws: An error if the log output or numstat information is invalid.
 
-     - Note: This function processes raw Git log output with numstat information and extracts details about file changes 
-             and line modification statistics. It iterates through the lines in the output, identifying file changes and computing
-             the total number of lines added and deleted. It returns the parsed information in a tuple.
+     - Note: This function processes raw Git log output with numstat information and extracts details about \
+             file changes and line modification statistics. It iterates through the lines in the output, \
+             identifying file changes and computing the total number of lines added and deleted. \
+             It returns the parsed information in a tuple.
 
      */
     func parseRawLogWithNumstat(stdout: String,
