@@ -81,7 +81,7 @@ public struct RevList {
     ///   to avoid syntax errors when using the resulting string in Git commands.
     ///
     /// - SeeAlso:
-    ///   [Git Inclusive Range](https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefinclusiverangea)
+    ///   https://git-scm.com/docs/gitglossary#Documentation/gitglossary.txt-aiddefinclusiverangea
     private func revRangeInclusive(from: String, to: String) -> String {
         return "\(from)^...\(to)"
     }
@@ -209,7 +209,8 @@ public struct RevList {
     ///   - directoryURL: The URL of the Git repository directory.
     ///   - branch: The local branch for which you want to determine the ahead and behind commits.
     ///
-    /// - Returns: An `IAheadBehind` object that encapsulates the number of commits ahead and behind the upstream branch. \
+    /// - Returns: An `IAheadBehind` object that encapsulates the number of commits ahead and \
+    ///            behind the upstream branch. \
     ///            If the branch type is remote or no upstream branch is set, `nil` is returned.
     ///
     /// - Example:
@@ -231,7 +232,8 @@ public struct RevList {
     ///
     /// - Note:
     ///   This function is useful for tracking the differences between a local branch and its upstream branch. \
-    ///   It calculates the commits that have been added or removed from the local branch compared to its upstream branch.
+    ///   It calculates the commits that have been added or removed from the local branch compared to its \
+    ///   upstream branch.
     ///
     /// - Warning:
     ///   Ensure that the branch provided as a parameter is a valid local branch, and it has an upstream branch set. \
@@ -403,3 +405,5 @@ public struct RevList {
         return commits
     }
 }
+
+// swiftlint:disable:this file_length

@@ -9,9 +9,11 @@ import Foundation
 
 struct GitProcess {
 
-//    func executionOptionsWithProgress(options: IGitExecutionOptions, 
-//                                      parser: GitProgressParser,
-//                                      progressCallback: @escaping (GitProgressKind) -> Void) throws -> IGitExecutionOptions {
+//    func executionOptionsWithProgress(
+//        options: IGitExecutionOptions, 
+//        parser: GitProgressParser,
+//        progressCallback: @escaping (GitProgressKind) -> Void
+//    ) throws -> IGitExecutionOptions {
 //        var lfsProgressPath: String? = nil
 //        var env = [String: String]()
 //
@@ -26,7 +28,11 @@ struct GitProcess {
 //        }
 //
 //        return merge(options, IGitExecutionOptions(
-//            processCallback: createProgressProcessCallback(parser: parser, lfsProgressPath: lfsProgressPath, progressCallback: progressCallback),
+//            processCallback: createProgressProcessCallback(
+//                parser: parser, 
+//                lfsProgressPath: lfsProgressPath,
+//                progressCallback: progressCallback
+//            ),
 //            env: merge(options.env, env)
 //        ))
 //    }

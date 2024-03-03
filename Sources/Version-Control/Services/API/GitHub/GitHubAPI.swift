@@ -13,18 +13,29 @@ public struct GitHubAPI {
 
     /// Creates a new GitHub repository.
     ///
-    /// This function allows the user to create a new GitHub repository either under their own account or within an organization. It provides parameters for specifying the repository's name, description, and whether it should be private or public.
+    /// This function allows the user to create a new GitHub repository either under their 
+    /// own account or within an organization. It provides parameters for specifying the repository's name,
+    /// description, and whether it should be private or public.
     ///
     /// - Parameters:
-    ///   - org: An optional `IAPIOrganization` object representing the organization where the repository should be created. Pass `nil` to create the repository under the authenticated user's account.
+    ///   - org: An optional `IAPIOrganization` object representing the organization where the repository \
+    ///          should be created. Pass `nil` to create the repository under the authenticated user's account.
     ///   - name: The name of the new repository.
     ///   - description: A brief description of the repository.
     ///   - isPrivate: A Boolean flag indicating whether the repository should be private (`true`) or public (`false`).
-    ///   - completion: A closure that is called upon completion of the API request. It provides a `Result` object with either an `IAPIFullRepository` containing information about the created repository (if successful) or an `Error` (if the request fails).
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides a `Result` object with either an `IAPIFullRepository` \
+    ///                 containing information about the created repository (if successful) \
+    ///                 or an `Error` (if the request fails).
     ///
     /// - Example:
     ///   ```swift
-    ///   createRepository(org: organization, name: "my-new-repo", description: "A new repository", isPrivate: true) { result in
+    ///   createRepository(
+    ///       org: organization,
+    ///       name: "my-new-repo",
+    ///       description: "A new repository",
+    ///       isPrivate: true
+    ///   ) { result in
     ///       switch result {
     ///       case .success(let repository):
     ///           print("Repository Created:")
@@ -39,13 +50,15 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that the user is authenticated and has the necessary permissions to create repositories. If creating a repository within an organization, the user should have appropriate organization permissions.
+    /// - Important: Ensure that the user is authenticated and has the necessary permissions to create repositories.\
+    ///              If creating a repository within an organization, \
+    ///              the user should have appropriate organization permissions.
     ///
-    /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/rest/reference/repos#create-a-repository-for-the-authenticated-user)
+    /// - SeeAlso: https://docs.github.com/en/rest/reference/repos#create-a-repository-for-the-authenticated-user
     ///
-    /// - SeeAlso: [GitHub API Documentation (Create Repository for Organization)](https://docs.github.com/en/rest/reference/repos#create-an-organization-repository)
+    /// - SeeAlso: https://docs.github.com/en/rest/reference/repos#create-an-organization-repository
     ///
-    /// - SeeAlso: [GitHub Repository Creation](https://docs.github.com/en/get-started/quickstart/create-a-repo)
+    /// - SeeAlso: https://docs.github.com/en/get-started/quickstart/create-a-repo
     func createRepository(
         org: IAPIOrganization?,
         name: String,
@@ -836,11 +849,12 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access workflow run details for the GitHub repository.
+    /// - Important: Ensure that you have the necessary permissions to access workflow run details \
+    ///              for the GitHub repository.
     ///
-    /// - SeeAlso: [GitHub Actions API Documentation](https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository)
+    /// - SeeAlso: https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository
     ///
-    /// - SeeAlso: [GitHub Actions Workflow Runs Documentation](https://docs.github.com/en/rest/reference/actions#workflow-runs)
+    /// - SeeAlso: https://docs.github.com/en/rest/reference/actions#workflow-runs
     func fetchPRWorkflowRunsByBranchName(
         owner: String,
         name: String,
@@ -1126,13 +1140,16 @@ public struct GitHubAPI {
 
     /// Reruns a specific GitHub Actions job for a repository.
     ///
-    /// This function triggers the rerun of a GitHub Actions job for a specific repository. It uses the GitHub API to make the request.
+    /// This function triggers the rerun of a GitHub Actions job for a specific repository.
+    /// It uses the GitHub API to make the request.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - jobId: The identifier of the GitHub Actions job to rerun.
-    ///   - completion: A closure that is called upon completion of the API request. It provides a Boolean value indicating whether the job rerun was successful (`true`) or not (`false`).
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides a Boolean value indicating whether the job rerun \
+    ///                 was successful (`true`) or not (`false`).
     ///
     /// - Note: GitHub Actions allows you to rerun specific jobs within a workflow to address issues or retest specific changes.
     ///
@@ -1213,7 +1230,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access the GitHub repository and perform API requests.
+    /// - Important: Ensure that you have the necessary permissions \
+    ///              to access the GitHub repository and perform API requests.
     func fetchCheckSuite(
         owner: String,
         name: String,
@@ -1322,7 +1340,8 @@ public struct GitHubAPI {
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that the user is authenticated and has the necessary permissions to access their email addresses.
+    /// - Important: Ensure that the user is authenticated and has the necessary permissions \
+    ///              to access their email addresses.
     ///
     /// - SeeAlso: [GitHub API Documentation](https://docs.github.com/en/free-pro-team@latest/rest/users/emails?apiVersion=2022-11-28#list-email-addresses-for-the-authenticated-user)
     ///
@@ -1353,11 +1372,17 @@ public struct GitHubAPI {
 
     /// Fetches a list of organizations that the authenticated user belongs to.
     ///
-    /// This function retrieves a list of organizations that the authenticated user is a member of on GitHub. It can be used to obtain information about the organizations, such as their names and URLs.
+    /// This function retrieves a list of organizations that the authenticated user is a member of on GitHub.
+    /// It can be used to obtain information about the organizations, such as their names and URLs.
     ///
-    /// - Parameter completion: A closure that is called upon completion of the API request. It provides an optional `IAPIOrganization` object that contains information about the organizations that the authenticated user belongs to. If the request is successful and data can be decoded, the closure receives the object; otherwise, it receives `nil`.
+    /// - Parameter completion: A closure that is called upon completion of the API request. \
+    ///                         It provides an optional `IAPIOrganization` object that contains \
+    ///                         information about the organizations that the authenticated user belongs to. \
+    ///                         If the request is successful and data can be decoded, \
+    ///                         the closure receives the object; otherwise, it receives `nil`.
     ///
-    /// - Note: This function is useful for obtaining a list of organizations associated with the authenticated user's GitHub account.
+    /// - Note: This function is useful for obtaining a list of organizations associated with \
+    ///         the authenticated user's GitHub account.
     ///
     /// - Example:
     ///   ```swift

@@ -14,10 +14,14 @@ public struct Submodule {
     public init() {}
 
     func listSubmodules(directoryURL: URL) throws -> [SubmoduleEntry] {
-        let submodulesFile = FileManager.default.fileExists(atPath: directoryURL.appendingPathComponent(".gitmodules").path)
+        let submodulesFile = FileManager.default.fileExists(
+            atPath: directoryURL.appendingPathComponent(".gitmodules").path
+        )
         var isDirectory: ObjCBool = true
-        let submodulesDir = FileManager.default.fileExists(atPath: directoryURL.appendingPathComponent(".git/modules").path,
-                                                           isDirectory: &isDirectory)
+        let submodulesDir = FileManager.default.fileExists(
+            atPath: directoryURL.appendingPathComponent(".git/modules").path,
+            isDirectory: &isDirectory
+        )
 
         if !submodulesFile && !submodulesDir {
             print("No submodules found. Skipping \"git submodule status\"")
@@ -63,20 +67,18 @@ public struct Submodule {
 
         let matches = statusRe.matches(in: stdout, options: [], range: range)
 
-        for match in matches {
-            if match.numberOfRanges == 4 {
-                let statusRange = match.range(at: 1)
-                let shaRange = match.range(at: 2)
-                let pathRange = match.range(at: 3)
-                let describeRange = match.range(at: 4)
+        for match in matches where match.numberOfRanges == 4 {
+            let statusRange = match.range(at: 1)
+            let shaRange = match.range(at: 2)
+            let pathRange = match.range(at: 3)
+            let describeRange = match.range(at: 4)
 
-                let status = stdout.substring(statusRange.lowerBound)
-                let sha = stdout.substring(shaRange.lowerBound)
-                let path = stdout.substring(pathRange.lowerBound)
-                let describe = stdout.substring(describeRange.lowerBound)
+            let status = stdout.substring(statusRange.lowerBound)
+            let sha = stdout.substring(shaRange.lowerBound)
+            let path = stdout.substring(pathRange.lowerBound)
+            let describe = stdout.substring(describeRange.lowerBound)
 
-                submodules.append(SubmoduleEntry(sha: sha, path: path, describe: describe))
-            }
+            submodules.append(SubmoduleEntry(sha: sha, path: path, describe: describe))
         }
 
         return submodules

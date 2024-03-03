@@ -42,7 +42,10 @@ struct BitBucketAPI {
                         print("Error: Unable to decode", String(data: data, encoding: .utf8) ?? "")
                     }
                 case .failure(let error):
-                    print("Unable to publish repository. Please check if you have an internet connection and try again.", error)
+                    print([
+                        "Unable to publish repository.",
+                        "Please check if you have an internet connection and try again."
+                    ].joined(), error)
                     completion(nil)
                 }
             })

@@ -12,20 +12,28 @@ enum StatusItem {
     case entry(IStatusEntry)
 }
 
-struct GitStatusParser {
-
+struct GitStatusParser { // swiftlint:disable:this type_body_length
     let ChangedEntryType = "1"
     let RenamedOrCopiedEntryType = "2"
     let UnmergedEntryType = "u"
     let UntrackedEntryType = "?"
     let IgnoredEntryType = "!"
 
-    let changedEntryRegex = try! NSRegularExpression(pattern: "^1 ([MADRCUTX?!.]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([\\s\\S]*?)$",
-                                                     options: [])
-    let renamedOrCopiedEntryRegex = try! NSRegularExpression(pattern: "^2 ([MADRCUTX?!.]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([RC]\\d+) ([\\s\\S]*?)$",
-                                                             options: [])
-    let unmergedEntryRegex = try! NSRegularExpression(pattern: "^u ([DAU]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([a-f0-9]+) ([\\s\\S]*?)$",
-                                                      options: [])
+    let changedEntryRegex = try! NSRegularExpression(
+        // swiftlint:disable:next line_length
+        pattern: "^1 ([MADRCUTX?!.]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([\\s\\S]*?)$",
+        options: []
+    )
+    let renamedOrCopiedEntryRegex = try! NSRegularExpression(
+        // swiftlint:disable:next line_length
+        pattern: "^2 ([MADRCUTX?!.]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([RC]\\d+) ([\\s\\S]*?)$",
+        options: []
+    )
+    let unmergedEntryRegex = try! NSRegularExpression(
+        // swiftlint:disable:next line_length
+        pattern: "^u ([DAU]{2}) (N\\\\.\\.\\.|S[C.][M.][U.]) (\\d+) (\\d+) (\\d+) (\\d+) ([a-f0-9]+) ([a-f0-9]+) ([a-f0-9]+) ([\\s\\S]*?)$",
+        options: []
+    )
 
     func parsePorcelainStatus(output: String) -> [StatusItem] {
         var entries = [StatusItem]()
@@ -153,8 +161,10 @@ struct GitStatusParser {
                             oldPath: nil)
     }
 
-    func mapStatus(statusCode: String,
-                   submoduleStatusCode: String) -> FileEntry {
+    func mapStatus( // swiftlint:disable:this cyclomatic_complexity
+        statusCode: String,
+        submoduleStatusCode: String
+    ) -> FileEntry {
 
         var submoduleStatus = mapSubmoduleStatus(submoduleStatusCode: submoduleStatusCode)
 

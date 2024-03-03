@@ -6,6 +6,7 @@
 disabled_rules:
   - todo # New project, we have a lot of // TODO:
   - missing_docs # We miss a lot of docs right now
+  - identifier_name # We have a lot of legacy code
 
 # Exclude triggering type names.
 type_name:

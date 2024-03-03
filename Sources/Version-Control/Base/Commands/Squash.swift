@@ -25,39 +25,51 @@ public struct GitSquash {
     /// Also means if the last 2 commits in history are A, B, whether user squashes A
     /// onto B or B onto A. It will always perform based on log history, thus, B onto
     /// A.
-    func squash(directoryURL: URL,
-                toSquash: [Commit],
-                squashOnto: Commit,
-                lastRetainedCommitRef: String?,
-                commitMessage: String,
-                progressCallback: ((MultiCommitOperationProgress) -> Void)? = nil) async throws -> RebaseResult {
+    func squash( // swiftlint:disable:this function_body_length
+        directoryURL: URL,
+        toSquash: [Commit],
+        squashOnto: Commit,
+        lastRetainedCommitRef: String?,
+        commitMessage: String,
+        progressCallback: ((MultiCommitOperationProgress) -> Void)? = nil
+    ) async throws -> RebaseResult {
         var messagePath: String?
         var todoPath: String?
         var result: RebaseResult = .error
 
         do {
-            guard toSquash.count > 0 else {
-                throw NSError(domain: "Squash Error",
-                              code: 1,
-                              userInfo: [NSLocalizedDescriptionKey: "No commits provided to squash."])
+            guard !toSquash.isEmpty else {
+                throw NSError(
+                    domain: "com.auroraeditor.versioncontrolkit.squash",
+                    code: 1,
+                    userInfo: [NSLocalizedDescriptionKey: "No commits provided to squash."]
+                )
             }
 
             let toSquashShas = Set(toSquash.map { $0.sha })
             guard !toSquashShas.contains(squashOnto.sha) else {
-                throw NSError(domain: "Squash Error",
-                              code: 2,
-                              userInfo: [NSLocalizedDescriptionKey: "The commits to squash cannot contain the commit to squash onto."])
+                throw NSError(
+                    domain: "com.auroraeditor.versioncontrolkit.squash",
+                    code: 2,
+                    userInfo: [
+                        NSLocalizedDescriptionKey: "The commits to squash cannot contain the commit to squash onto."
+                    ]
+                )
             }
 
-            let commits = try GitLog().getCommits(directoryURL: directoryURL,
-                                                  revisionRange: lastRetainedCommitRef == nil ? nil : "\(lastRetainedCommitRef!)..HEAD",
-                                                  limit: nil,
-                                                  skip: nil)
+            let commits = try GitLog().getCommits(
+                directoryURL: directoryURL,
+                revisionRange: lastRetainedCommitRef == nil ? nil : "\(lastRetainedCommitRef!)..HEAD",
+                limit: nil,
+                skip: nil
+            )
 
             guard !commits.isEmpty else {
-                throw NSError(domain: "Squash Error",
-                              code: 3,
-                              userInfo: [NSLocalizedDescriptionKey: "Could not find commits in log for last retained commit ref."])
+                throw NSError(
+                    domain: "com.auroraeditor.versioncontrolkit.squash",
+                    code: 3,
+                    userInfo: [NSLocalizedDescriptionKey: "Could not find commits in log for last retained commit ref."]
+                )
             }
 
             todoPath = try await FileUtils().writeToTempFile(content: "", tempFileName: "squashTodo")
@@ -65,7 +77,10 @@ public struct GitSquash {
             // Logic for building the todoPath content goes here
 
             if !commitMessage.trimmingCharacters(in: .whitespaces).isEmpty {
-                messagePath = try await FileUtils().writeToTempFile(content: commitMessage, tempFileName: "squashCommitMessage")
+                messagePath = try await FileUtils().writeToTempFile(
+                    content: commitMessage,
+                    tempFileName: "squashCommitMessage"
+                )
             }
 
             let gitEditor = messagePath != nil ? "cat \"\(messagePath!)\" >" : nil

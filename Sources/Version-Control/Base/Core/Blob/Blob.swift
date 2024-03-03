@@ -38,7 +38,13 @@ public struct Blob {
         let pipe = Pipe()
 
         process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
-        process.arguments = ["git", "-C", directoryURL.relativePath.escapedWhiteSpaces(), "show", "\(commitish):\(path)"]
+        process.arguments = [
+            "git",
+            "-C",
+            directoryURL.relativePath.escapedWhiteSpaces(),
+            "show",
+            "\(commitish):\(path)"
+        ]
         process.standardOutput = pipe
 
         try process.run()
@@ -62,7 +68,8 @@ public struct Blob {
     ///   - commitish: The name of the commit/branch/tag from which to fetch the file.
     ///   - path: The path to the file within the git repository.
     ///   - length: The maximum length of data to return.
-    /// - Returns: A `Data` object containing up to the specified length of the file's contents, or nil if an error occurred.
+    /// - Returns: A `Data` object containing up to the specified length of the file's contents, \
+    ///            or nil if an error occurred.
     /// - Throws: An error if the internal function call throws.
     ///
     /// # Example:
@@ -73,14 +80,18 @@ public struct Blob {
     ///                                           path: "path/to/file.txt",
     ///                                           length: 1024)
     /// ```
-    func getPartialBlobContents(directoryURL: URL,
-                                commitish: String,
-                                path: String,
-                                length: Int) throws -> Data? {
-        try getPartialBlobContentsCatchPathNotInRef(directoryURL: directoryURL,
-                                                           commitish: commitish,
-                                                           path: path,
-                                                           length: length)
+    func getPartialBlobContents(
+        directoryURL: URL,
+        commitish: String,
+        path: String,
+        length: Int
+    ) throws -> Data? {
+        try getPartialBlobContentsCatchPathNotInRef(
+            directoryURL: directoryURL,
+            commitish: commitish,
+            path: path,
+            length: length
+        )
     }
 
     /// Attempts to retrieve a portion of the contents of a file from a git repository at a specific commitish.

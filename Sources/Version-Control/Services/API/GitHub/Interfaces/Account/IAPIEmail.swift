@@ -23,10 +23,12 @@ public struct IAPIEmail: Codable {
     let primary: Bool
     let visibility: EmailVisibility
 
-    public init(email: String,
-         verified: Bool,
-         primary: Bool,
-         visibility: EmailVisibility) {
+    public init(
+        email: String,
+        verified: Bool,
+        primary: Bool,
+        visibility: EmailVisibility
+    ) {
         self.email = email
         self.verified = verified
         self.primary = primary

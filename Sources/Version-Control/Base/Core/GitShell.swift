@@ -24,18 +24,24 @@ public struct GitShell {
 
      - Throws: An error if the Git command execution encounters issues.
 
-     - Note: This function launches a Git process with the specified arguments and captures its standard output and standard error. It sets the process's environment to ensure consistent output formatting. If the command exits with a non-zero status code, it throws an error. The function returns an `IGitResult` object containing the standard output, standard error, exit code, and other details of the command execution.
+     - Note: This function launches a Git process with the specified arguments and captures its \
+             standard output and standard error. It sets the process's environment to ensure \
+             consistent output formatting. If the command exits with a non-zero status code, it throws an error. \
+             The function returns an `IGitResult` object containing the standard output, standard error, exit code, \
+             and other details of the command execution.
 
      */
     @discardableResult
-    public func git(args: [String],
-                    path: URL,
-                    name: String,
-                    options: IGitExecutionOptions? = nil) throws -> IGitResult {
+    public func git( // swiftlint:disable:this function_body_length
+        args: [String],
+        path: URL,
+        name: String,
+        options: IGitExecutionOptions? = nil
+    ) throws -> IGitResult {
         var stdout = ""
         var stderr = ""
 
-        var process = Process()
+        let process = Process()
         process.launchPath = "/usr/bin/env"
         process.arguments = ["git"] + args
         process.currentDirectoryPath = path.relativePath.escapedWhiteSpaces()
@@ -88,7 +94,9 @@ public struct GitShell {
 
         let exitCode = result.exitCode
         var gitError: GitError?
-        var acceptableExitCode = options?.successExitCodes != nil ? options?.successExitCodes?.contains(exitCode) : false
+        var acceptableExitCode = options?.successExitCodes != nil
+            ? options?.successExitCodes?.contains(exitCode)
+            : false
 
         if !acceptableExitCode! {
             gitError = parseError(stderr: result.stderr)
@@ -97,7 +105,7 @@ public struct GitShell {
             }
         }
 
-        var gitErrorDescription = gitError != nil ? getDescriptionError(gitError!) : nil
+        let gitErrorDescription = gitError != nil ? getDescriptionError(gitError!) : nil
 
         var gitResult = IGitResult(stdout: stdout,
                                    stderr: stderr,
@@ -143,7 +151,7 @@ public struct GitShell {
             let result = getFileFromExceedsError(error: errorMessage.joined())
             let files = result.joined(separator: "\n")
 
-            if files != "" {
+            if !files.isEmpty {
                 gitResult.gitErrorDescription! += "\n\nFile causing error:\n\n" + files
             }
         }
@@ -173,7 +181,7 @@ public struct GitShell {
         return nil
     }
 
-    private func getDescriptionError(_ error: GitError) -> String? {
+    private func getDescriptionError(_ error: GitError) -> String? { // swiftlint:disable:this function_body_length
         switch error {
         case .SSHKeyAuditUnverified:
             return "The SSH key is unverified."
@@ -186,6 +194,7 @@ public struct GitShell {
         case .MergeConflicts:
             return "We found some conflicts while trying to merge. Please resolve the conflicts and commit the changes."
         case .HTTPSRepositoryNotFound, .SSHRepositoryNotFound:
+            // swiftlint:disable:next line_length
             return "The repository does not seem to exist anymore. You may not have access, or it may have been deleted or renamed."
         case .PushNotFastForward:
             return "The repository has been updated since you last pulled. Try pulling before pushing."
@@ -202,6 +211,7 @@ public struct GitShell {
         case .NothingToCommit:
             return "There are no changes to commit."
         case .NoSubmoduleMapping:
+            // swiftlint:disable:next line_length
             return "A submodule was removed from .gitmodules, but the folder still exists in the repository. Delete the folder, commit the change, then try again."
         case .SubmoduleRepositoryDoesNotExist:
             return "A submodule points to a location which does not exist."
@@ -226,10 +236,13 @@ public struct GitShell {
         case .ProtectedBranchForcePush:
             return "This branch is protected from force-push operations."
         case .ProtectedBranchRequiresReview:
+            // swiftlint:disable:next line_length
             return "This branch is protected and any changes require an approved review. Open a pull request with changes targeting this branch instead."
         case .PushWithFileSizeExceedingLimit:
+            // swiftlint:disable:next line_length
             return "The push operation includes a file which exceeds GitHub's file size restriction of 100MB. Please remove the file from history and try again."
         case .HexBranchNameRejected:
+            // swiftlint:disable:next line_length
             return "The branch name cannot be a 40-character string of hexadecimal characters, as this is the format that Git uses for representing objects."
         case .ForcePushRejected:
             return "The force push has been rejected for the current branch."
@@ -238,6 +251,7 @@ public struct GitShell {
         case .CannotMergeUnrelatedHistories:
             return "Unable to merge unrelated histories in this repository."
         case .PushWithPrivateEmail:
+            // swiftlint:disable:next line_length
             return "Cannot push these commits as they contain an email address marked as private on GitHub. To push anyway, visit https://github.com/settings/emails, uncheck 'Keep my email address private', then switch back to GitHub Desktop to push your commits. You can then enable the setting again."
         case .LFSAttributeDoesNotMatch:
             return "Git LFS attribute found in global Git configuration does not match the expected value."
@@ -260,6 +274,7 @@ public struct GitShell {
         case .NoExistingRemoteBranch:
             return "The remote branch does not exist."
         case .LocalChangesOverwritten:
+            // swiftlint:disable:next line_length
             return "Unable to switch branches as there are working directory changes that would be overwritten. Please commit or stash your changes."
         case .UnresolvedConflicts:
             return "There are unresolved conflicts in the working directory."
@@ -276,11 +291,25 @@ public struct GitShell {
 
     func getFileFromExceedsError(error: String) -> [String] {
         do {
-            let beginRegex = try NSRegularExpression(pattern: "(^remote:\\serror:\\sFile\\s)", options: [])
-            let endRegex = try NSRegularExpression(pattern: "(;\\sthis\\sexceeds\\sGitHub's\\sfile\\ssize\\slimit\\sof\\s100.00\\sMB)", options: [])
+            let beginRegex = try NSRegularExpression(
+                pattern: "(^remote:\\serror:\\sFile\\s)", 
+                options: []
+            )
+            let endRegex = try NSRegularExpression(
+                pattern: "(;\\sthis\\sexceeds\\sGitHub's\\sfile\\ssize\\slimit\\sof\\s100.00\\sMB)",
+                options: []
+            )
 
-            let beginMatches = beginRegex.matches(in: error, options: [], range: NSRange(error.startIndex..., in: error))
-            let endMatches = endRegex.matches(in: error, options: [], range: NSRange(error.startIndex..., in: error))
+            let beginMatches = beginRegex.matches(
+                in: error,
+                options: [],
+                range: NSRange(error.startIndex..., in: error)
+            )
+            let endMatches = endRegex.matches(
+                in: error,
+                options: [],
+                range: NSRange(error.startIndex..., in: error)
+            )
 
             if beginMatches.count != endMatches.count {
                 return []

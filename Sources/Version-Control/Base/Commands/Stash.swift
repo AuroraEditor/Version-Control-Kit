@@ -90,16 +90,22 @@ public struct Stash {
             parentArgs += parents.map { "-p \($0)" }
         }
 
-        let commitId = try GitShell().git(args: ["commit-tree"] + parentArgs + ["-m", message, "--no-gpg-sign", stash.tree ?? ""],
-                                          path: directoryURL,
-                                          name: #function)
+        let commitId = try GitShell().git(
+            args: ["commit-tree"] + parentArgs + ["-m", message, "--no-gpg-sign", stash.tree ?? ""],
+            path: directoryURL,
+            name: #function
+        )
 
-        try GitShell().git(args: ["stash", "store", "-m", message, commitId.stdout.trimmingCharacters(in: .whitespacesAndNewlines)],
-                           path: directoryURL,
-                           name: #function)
+        try GitShell().git(
+            args: ["stash", "store", "-m", message, commitId.stdout.trimmingCharacters(in: .whitespacesAndNewlines)],
+            path: directoryURL,
+            name: #function
+        )
 
-        try dropAEStashEntry(directoryURL: directoryURL,
-                             stashSha: stash.stashSha ?? "")
+        try dropAEStashEntry(
+            directoryURL: directoryURL,
+            stashSha: stash.stashSha ?? ""
+        )
     }
 
     func getLastAEStashEntryForBranch(directoryURL: URL,
@@ -172,7 +178,10 @@ public struct Stash {
             }
 
             // If no error messages, log and continue
-            print("[createAEStashEntry] a stash was created successfully but exit code \(result.exitCode) reported. stderr: \(result.stderr)")
+            print([
+                "[createAEStashEntry] a stash was created successfully but exit code \(result.exitCode) reported."
+                "stderr: \(result.stderr)"
+            ].joined())
         }
 
         // Check if there were no local changes to save
@@ -263,7 +272,11 @@ public struct Stash {
         ]
 
         let result = try GitShell().git(args: args, path: directoryURL, name: #function)
-        let files = try GitLog().parseRawLogWithNumstat(stdout: result.stdout, sha: stashSha, parentCommitish: "\(stashSha)^").files
+        let files = try GitLog().parseRawLogWithNumstat(
+            stdout: result.stdout,
+            sha: stashSha,
+            parentCommitish: "\(stashSha)^"
+        ).files
 
         return files
     }

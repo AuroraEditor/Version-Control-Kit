@@ -27,8 +27,10 @@ public struct GitCheckout {
         return args
     }
 
-    public func getBranchCheckoutArgs(branch: GitBranch,
-                               enableRecurseSubmodulesFlag: Bool = false) -> [String] {
+    public func getBranchCheckoutArgs(
+        branch: GitBranch,
+        enableRecurseSubmodulesFlag: Bool = false
+    ) -> [String] {
         var baseArgs: [String] = []
 
         if enableRecurseSubmodulesFlag {
@@ -64,12 +66,14 @@ public struct GitCheckout {
         }
     }
 
-    public func getCheckoutOpts(directoryURL: URL,
-                         account: IGitAccount?,
-                         title: String,
-                         target: String,
-                         progressCallback: ProgressCallback?,
-                         initialDescription: String?) throws -> IGitExecutionOptions {
+    public func getCheckoutOpts( // swiftlint:disable:this function_parameter_count
+        directoryURL: URL,
+        account: IGitAccount?,
+        title: String,
+        target: String,
+        progressCallback: ProgressCallback?,
+        initialDescription: String?
+    ) throws -> IGitExecutionOptions {
         var options: IGitExecutionOptions = IGitExecutionOptions()
 
         guard let progressCallback = progressCallback else {
@@ -129,10 +133,12 @@ public struct GitCheckout {
     /// - Warning:
     ///   Ensure that the specified `directoryURL` exists and is a valid Git repository directory.
     @discardableResult
-    public func checkoutBranch(directoryURL: URL,
-                        account: IGitAccount?,
-                        branch: GitBranch,
-                        progressCallback: ProgressCallback?) throws -> Bool {
+    public func checkoutBranch(
+        directoryURL: URL,
+        account: IGitAccount?,
+        branch: GitBranch,
+        progressCallback: ProgressCallback?
+    ) throws -> Bool {
         let opts = try getCheckoutOpts(
             directoryURL: directoryURL,
             account: account,

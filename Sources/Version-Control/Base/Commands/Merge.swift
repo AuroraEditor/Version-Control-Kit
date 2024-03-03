@@ -107,7 +107,8 @@ public struct Merge {
     ///
     /// - Returns: The commit hash of the merge base if found, or `nil` if there is no common base commit.
     ///
-    /// - Throws: An error if there was an issue calculating the merge base or if the commit-ish identifiers are invalid.
+    /// - Throws: An error if there was an issue calculating the merge base or if the commit-sh \
+    ///           identifiers are invalid.
     ///
     /// - Example:
     ///   ```swift

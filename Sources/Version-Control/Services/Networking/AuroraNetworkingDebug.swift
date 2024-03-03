@@ -86,7 +86,10 @@ extension AuroraNetworking {
     }
 
     private func handleNetworkError(data: Data?) -> String {
-        guard let data = data, let errorData = String(data: data, encoding: .utf8) else { return "Unknown error occurred." }
+        guard let data = data,
+              let errorData = String(data: data, encoding: .utf8) else {
+                return "Unknown error occurred."
+        }
 
         return errorData
             .split(separator: "\n")

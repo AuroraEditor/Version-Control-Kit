@@ -29,7 +29,8 @@ public struct GitDescription {
     ///   - An error of type `Error` if any issues occur during the description retrieval process.
     ///
     /// - Returns:
-    ///   The project's description as a string, or an empty string if the description is not found or cannot be retrieved.
+    ///   The project's description as a string, or an empty string if the description \
+    ///   is not found or cannot be retrieved.
     ///
     /// - Example:
     ///   ```swift

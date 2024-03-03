@@ -7,8 +7,10 @@
 
 let authenticatorAppWelcomeText =
   "Please access the two-factor authentication application on your device in order to retrieve your authentication code and complete the identity verification process."
+// swiftlint:disable:previous line_length
 let smsMessageWelcomeText =
   "We have recently dispatched a message to you via SMS, containing your authentication code. Kindly input this code into the provided form below to authenticate your identity."
+// swiftlint:disable:previous line_length
 
 enum AuthenticationMode {
   /*

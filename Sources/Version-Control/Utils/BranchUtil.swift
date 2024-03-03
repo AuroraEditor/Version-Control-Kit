@@ -12,10 +12,12 @@ public struct BranchUtil {
     public init() {}
 
     /**
-     Merges local and remote Git branches into a single array of Git branches that includes branches with upstream relationships.
+     Merges local and remote Git branches into a single array of Git \
+     branches that includes branches with upstream relationships.
 
      - Parameter branches: An array of `GitBranch` instances to be merged.
-     - Returns: An array of `GitBranch` instances containing both local and remote branches with their respective upstream branches.
+     - Returns: An array of `GitBranch` instances containing both local and \
+                remote branches with their respective upstream branches.
 
      This function takes an array of `GitBranch` instances and categorizes them into local and remote branches. 
      It then creates a merged array that includes both types of branches along with their respective upstream branches.

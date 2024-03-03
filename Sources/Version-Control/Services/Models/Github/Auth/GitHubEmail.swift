@@ -13,7 +13,8 @@ public struct GitHubEmail {
 
     /// Look up the preferred email address for a GitHub account.
     ///
-    /// This function determines the preferred email address associated with a GitHub account. It follows a set of prioritized conditions to select the preferred email address.
+    /// This function determines the preferred email address associated with a GitHub account.
+    /// It follows a set of prioritized conditions to select the preferred email address.
     ///
     /// - Parameters:
     ///   - account: The GitHub account for which to look up the preferred email.
@@ -22,7 +23,12 @@ public struct GitHubEmail {
     ///
     /// - Example:
     ///   ```swift
-    ///   let githubAccount = Account(id: 12345, login: "octocat", endpoint: "users.noreply.github.com", emails: ["octocat@example.com"])
+    ///   let githubAccount = Account(
+    ///       id: 12345,
+    ///       login: "octocat",
+    ///       endpoint: "users.noreply.github.com", 
+    ///       emails: ["octocat@example.com"]
+    ///   )
     ///   let preferredEmail = lookupPreferredEmail(account: githubAccount)
     ///   // preferredEmail is "octocat@example.com" as it's the primary and public email address.
     ///   ```
@@ -79,7 +85,8 @@ public struct GitHubEmail {
 
     /// Generate a legacy "noreply" email address for a GitHub user.
     ///
-    /// This function constructs a legacy "noreply" email address for a GitHub user based on their login and the provided endpoint.
+    /// This function constructs a legacy "noreply" email address for 
+    /// a GitHub user based on their login and the provided endpoint.
     ///
     /// - Parameters:
     ///   - login: The login or username of the GitHub user.
@@ -102,14 +109,16 @@ public struct GitHubEmail {
 
     /// Generate a "noreply" email address for a GitHub user with additional information.
     ///
-    /// This function constructs a "noreply" email address for a GitHub user based on their ID, login, and the provided endpoint.
+    /// This function constructs a "noreply" email address for a GitHub user
+    /// based on their ID, login, and the provided endpoint.
     ///
     /// - Parameters:
     ///   - id: The ID of the GitHub user.
     ///   - login: The login or username of the GitHub user.
     ///   - endpoint: The endpoint associated with the GitHub user.
     ///
-    /// - Returns: A "noreply" email address in the format "<id>+<login>@<endpoint>," which includes additional information and is typically used for GitHub notifications.
+    /// - Returns: A "noreply" email address in the format "<id>+<login>@<endpoint>," \
+    ///   which includes additional information and is typically used for GitHub notifications.
     ///
     /// - Example:
     ///   ```swift
@@ -127,7 +136,8 @@ public struct GitHubEmail {
 
     /// Check if an email address is attributable to a GitHub account.
     ///
-    /// This function checks whether a given email address can be attributed to a specific GitHub account. It does so by comparing the email address with the following:
+    /// This function checks whether a given email address can be attributed 
+    /// to a specific GitHub account. It does so by comparing the email address with the following:
     ///
     /// 1. Email addresses associated with the GitHub account (`account.emails`).
     /// 2. The "noreply" email address generated for the GitHub account.
@@ -141,7 +151,12 @@ public struct GitHubEmail {
     ///
     /// - Example:
     ///   ```swift
-    ///   let githubAccount = Account(id: 12345, login: "octocat", endpoint: "users.noreply.github.com", emails: ["octocat@example.com"])
+    ///   let githubAccount = Account(
+    ///       id: 12345,
+    ///       login: "octocat",
+    ///       endpoint: "users.noreply.github.com",
+    ///       emails: ["octocat@example.com"]
+    ///   )
     ///   let emailToCheck = "12345+octocat@users.noreply.github.com"
     ///   let isAttributable = isAttributableEmailFor(account: githubAccount, email: emailToCheck)
     ///   // isAttributable is true since the email matches the GitHub account's generated "noreply" email.

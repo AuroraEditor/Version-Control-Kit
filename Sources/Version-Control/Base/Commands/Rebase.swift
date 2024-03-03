@@ -20,9 +20,14 @@ public struct Rebase {
             return nil
         }
 
-        let originalBranchTip = try String(contentsOf: rebaseMergePath.appendingPathComponent("orig-head")).trimmingCharacters(in: .whitespacesAndNewlines)
+        let originalBranchTip = try String(
+            contentsOf: rebaseMergePath.appendingPathComponent("orig-head")
+        ).trimmingCharacters(in: .whitespacesAndNewlines)
 
-        var targetBranch = try String(contentsOf: rebaseMergePath.appendingPathComponent("head-name")).trimmingCharacters(in: .whitespacesAndNewlines)
+        var targetBranch = try String(
+            contentsOf: rebaseMergePath.appendingPathComponent("head-name")
+        ).trimmingCharacters(in: .whitespacesAndNewlines)
+
         if targetBranch.hasPrefix("refs/heads/") {
             targetBranch.removeFirst("refs/heads/".count)
         }

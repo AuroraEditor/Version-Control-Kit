@@ -63,7 +63,7 @@ public struct GitStatus {
         }
     }
 
-    func getStatus(directoryURL: URL) async throws -> StatusResult? {
+    func getStatus(directoryURL: URL) async throws -> StatusResult? { // swiftlint:disable:this function_body_length
         let args = [
             "--no-optional-locks",
             "status",
@@ -138,7 +138,10 @@ public struct GitStatus {
         conflictDetails: ConflictFilesDetails
     ) -> [String: WorkingDirectoryFileChange] {
         var files = files
-        let status = GitStatusParser().mapStatus(statusCode: entry.statusCode, submoduleStatusCode: entry.submoduleStatusCode)
+        let status = GitStatusParser().mapStatus(
+            statusCode: entry.statusCode,
+            submoduleStatusCode: entry.submoduleStatusCode
+        )
 
         if let status = status as? OrdinaryEntry {
             if status.index == .added && status.workingTree == .deleted {
