@@ -854,7 +854,8 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
     ///                 If the request is successful and data can be decoded, the closure receives \
     ///                 the `IAPIWorkflowRuns` object; otherwise, it receives `nil`.
     ///
-    /// - Note: This function is useful for obtaining details about workflow runs triggered by events related to a specific branch in pull requests.
+    /// - Note: This function is useful for obtaining details about workflow runs triggered \
+    ///         by events related to a specific branch in pull requests.
     ///
     /// - Example:
     ///   ```swift
@@ -885,6 +886,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
         branchName: String,
         completion: @escaping (IAPIWorkflowRuns?) -> Void
     ) {
+        // swiftlint:disable:next line_length
         let path = "repos/\(owner)/\(name)/actions/runs?event=pull_request&branch=\(branchName.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed) ?? "")"
 
         let headers = ["Accept": "application/vnd.github.antiope-preview+json"]
@@ -949,11 +951,8 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access workflow run details for the GitHub repository.
-    ///
-    /// - SeeAlso: [GitHub Actions API Documentation](https://docs.github.com/en/rest/reference/actions#list-workflow-runs-for-a-repository)
-    ///
-    /// - SeeAlso: [GitHub Actions Workflow Runs Documentation](https://docs.github.com/en/rest/reference/actions#workflow-runs)
+    /// - Important: Ensure that you have the necessary permissions to access workflow run details for \
+    ///              the GitHub repository.
     func fetchWorkflowRunByCheckSuiteId(
         owner: String,
         name: String,
@@ -989,7 +988,8 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
 
     /// Fetches the jobs associated with a specific GitHub Actions workflow run for a repository.
     ///
-    /// This function retrieves information about the jobs that were part of a particular workflow run in a GitHub Actions workflow for a specific repository.
+    /// This function retrieves information about the jobs that were part of a particular workflow run 
+    /// in a GitHub Actions workflow for a specific repository.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
@@ -1000,7 +1000,8 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
     ///                 the jobs in the workflow run. If the request is successful and data can be decoded, \
     ///                 the closure receives the `IAPIWorkflowJobs` object; otherwise, it receives `nil`.
     ///
-    /// - Note: This function is useful for obtaining details about the jobs executed as part of a specific workflow run.
+    /// - Note: This function is useful for obtaining details about the jobs executed as part of a \
+    ///         specific workflow run.
     ///
     /// - Example:
     ///   ```swift
@@ -1019,11 +1020,8 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access workflow run details for the GitHub repository.
-    ///
-    /// - SeeAlso: [GitHub Actions API Documentation](https://docs.github.com/en/rest/reference/actions#list-jobs-for-a-workflow-run)
-    ///
-    /// - SeeAlso: [GitHub Actions Jobs Documentation](https://docs.github.com/en/rest/reference/actions#jobs)
+    /// - Important: Ensure that you have the necessary permissions to access workflow run details \
+    ///              for the GitHub repository.
     func fetchWorkflowRunJobs(
         owner: String,
         name: String,
@@ -1090,11 +1088,8 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
     ///   }
     ///   ```
     ///
-    /// - Important: Ensure that you have the necessary permissions to access the GitHub repository and trigger check suite rerequests.
-    ///
-    /// - SeeAlso: [GitHub Checks API Documentation](https://docs.github.com/en/rest/reference/checks#rerequest-a-check-suite)
-    ///
-    /// - SeeAlso: [GitHub Checks Rerequest Documentation](https://docs.github.com/en/rest/reference/checks#rerequest-a-check-suite)
+    /// - Important: Ensure that you have the necessary permissions to access \
+    ///              the GitHub repository and trigger check suite rerequests.
     public func rerequestCheckSuite(
         owner: String,
         name: String,
@@ -1121,7 +1116,9 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
 
     /// Reruns all failed jobs in a GitHub Actions workflow run for a repository.
     ///
-    /// This function triggers the rerun of all failed jobs in a specific GitHub Actions workflow run for a repository. It uses the GitHub API to make the request.
+    /// This function triggers the rerun of all failed jobs in a specific GitHub Actions workflow
+    /// run for a repository.
+    /// It uses the GitHub API to make the request.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
@@ -1131,7 +1128,8 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
     ///                 It provides a Boolean value indicating whether the rerun of failed jobs was \
     ///                 successful (`true`) or not (`false`).
     ///
-    /// - Note: This function is useful for automatically rerunning jobs that failed in a workflow run to address issues or retest specific changes.
+    /// - Note: This function is useful for automatically rerunning jobs that failed in a workflow run \
+    ///         to address issues or retest specific changes.
     ///
     /// - Example:
     ///   ```swift
@@ -1234,13 +1232,16 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
 
     /// Fetches information about a specific GitHub check suite by its identifier.
     ///
-    /// This function retrieves details about a GitHub check suite, including its status, associated pull request, and other relevant information. It uses the GitHub API to make the request.
+    /// This function retrieves details about a GitHub check suite, including its status,
+    /// associated pull request, and other relevant information. It uses the GitHub API to make the request.
     ///
     /// - Parameters:
     ///   - owner: The owner or organization name of the GitHub repository.
     ///   - name: The name of the GitHub repository.
     ///   - checkSuiteId: The identifier of the GitHub check suite to fetch.
-    ///   - completion: A closure that is called upon completion of the API request. It provides an `IAPICheckSuite` object representing the fetched check suite, or `nil` if the fetch operation fails.
+    ///   - completion: A closure that is called upon completion of the API request. \
+    ///                 It provides an `IAPICheckSuite` object representing the fetched check suite, \
+    ///                 or `nil` if the fetch operation fails.
     ///
     /// - Note: The `IAPICheckSuite` structure represents the data model for a GitHub check suite.
     ///
