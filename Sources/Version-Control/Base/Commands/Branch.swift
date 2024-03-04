@@ -20,7 +20,7 @@ public struct Branch { // swiftlint:disable:this type_body_length
     /// - Throws: An error if the shell command fails.
     public func getCurrentBranch(directoryURL: URL) throws -> String {
         return try ShellClient.live().run(
-            "cd \(directoryURL.relativePath.escapedWhiteSpaces());git rev-parse --abbrev-ref HEAD"
+            "cd \(directoryURL.relativePath.escapedWhiteSpaces());git branch --show-current"
         ).removingNewLines()
     }
 
