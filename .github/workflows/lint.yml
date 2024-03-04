@@ -5,7 +5,7 @@ on:
   pull_request:
     branches: [ main ]
 jobs:
-  build:
+  lint:
     runs-on: macos-12
     timeout-minutes: 10 # If a build exceeds 10 mins, it probably isn't ever going to complete
     steps:
