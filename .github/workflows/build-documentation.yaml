@@ -1,50 +1,17 @@
 name: build-documentation
 
 on:
+  # Run on push to main branch
   push:
     branches:
-      - "main"
+      - main
+
+  # Dispatch if triggered using Github (website)
   workflow_dispatch:
 
 jobs:
-  build-docc:
+  Build-documentation:
     runs-on: macos-latest
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Create folder for generated documentation
-        run: |
-          mkdir documentation
-
-      - name: Add docc plugin
-        run: |
-          echo "package.dependencies.append(" >> package.swift
-          echo "  .package(url: \"https://github.com/apple/swift-docc-plugin\", from: \"1.0.0\")" >> package.swift
-          echo ")" >> package.swift
-
-      - name: Build Documentation
-        run: |
-          swift package --allow-writing-to-directory documentation \
-          generate-documentation \
-          --target Version-Control \
-          --disable-indexing \
-          --output-path documentation \
-          --transform-for-static-hosting \
-          --hosting-base-path `basename ${{ github.repository }}`
-
-      - name: Init new repo in dist folder and commit generated files
-        run: |
-          cd documentation
-          git init -b documentation
-          DOCURL="version_control"
-          echo "{\"meta\":{\"title\":\"$DOCURL Documentation\"}}" > theme-settings.json
-          echo "<script>window.location.href = 'documentation/$DOCURL/'.toLowerCase();</script>" > index.html
-          git add -A .
-          git config user.name github-actions
-          git config user.email github-actions@github.com
-          git commit -m 'Deploy documentation'
-          git push \
-          "https://${{ github.repository_owner }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git" \
-          HEAD:documentation \
-          --force
+      - name: Build documentation
+        uses: 0xWDG/build-documentation@main
