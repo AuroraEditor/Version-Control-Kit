@@ -37,7 +37,7 @@ jobs:
         run: |
           cd documentation
           git init -b documentation
-          DOCURL=`version_control`
+          DOCURL="version_control"
           echo "{\"meta\":{\"title\":\"$DOCURL Documentation\"}}" > theme-settings.json
           echo "<script>window.location.href = 'documentation/$DOCURL/'.toLowerCase();</script>" > index.html
           git add -A .
