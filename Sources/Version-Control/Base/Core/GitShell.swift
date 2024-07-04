@@ -42,122 +42,127 @@ public struct GitShell {
         var stderr = ""
 
         let process = Process()
-        process.launchPath = "/usr/bin/env"
+        process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
         process.arguments = ["git"] + args
-        process.currentDirectoryPath = path.relativePath
+        process.currentDirectoryURL = path
 
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()
         process.standardOutput = stdoutPipe
         process.standardError = stderrPipe
 
-        let environment = ProcessInfo.processInfo.environment
-
-        // Set TERM to 'dumb' in the environment
-        var gitEnvironment = environment
+        var gitEnvironment = ProcessInfo.processInfo.environment
         gitEnvironment["TERM"] = "dumb"
 
         if let environment = options?.env {
-            process.environment = environment
+            gitEnvironment.merge(environment) { (_, new) in new }
         }
 
         process.environment = gitEnvironment
 
-        process.launch()
+        do {
+            try process.run()
+        } catch {
+            throw ProcessError.launchFailed(error.localizedDescription)
+        }
+
+        let stdoutHandle = stdoutPipe.fileHandleForReading
+        let stderrHandle = stderrPipe.fileHandleForReading
+
+        stdoutHandle.readabilityHandler = { handle in
+            let data = handle.availableData
+            if let output = String(data: data, encoding: .utf8) {
+                stdout += output
+            }
+        }
+
+        stderrHandle.readabilityHandler = { handle in
+            let data = handle.availableData
+            if let output = String(data: data, encoding: .utf8) {
+                stderr += output
+            }
+        }
 
         let commandLineURL = "/usr/bin/env git " + args.joined(separator: " ")
         print("Command Line URL: \(commandLineURL)")
 
-        let stdoutData = stdoutPipe.fileHandleForReading.readDataToEndOfFile()
-        if let output = String(data: stdoutData, encoding: .utf8) {
-            stdout = output
+        let timeout: TimeInterval = 30 // Adjust this value as needed
+        let timeoutDate = Date(timeIntervalSinceNow: timeout)
+
+        while process.isRunning && Date() < timeoutDate {
+            Thread.sleep(forTimeInterval: 0.1)
         }
 
-        let stderrData = stderrPipe.fileHandleForReading.readDataToEndOfFile()
-        if let errorOutput = String(data: stderrData, encoding: .utf8) {
-            stderr = errorOutput
+        if process.isRunning {
+            process.terminate()
+            throw ProcessError.timeout
         }
 
-        process.waitUntilExit()
+        stdoutHandle.readabilityHandler = nil
+        stderrHandle.readabilityHandler = nil
 
-        let combinedOuput = stdout + stderr
+        let exitCode = Int(process.terminationStatus)
 
-        print("Function: \(name), Output: \(stdout)")
+        let combinedOutput = stdout + stderr
 
         let result = IGitResult(stdout: stdout,
                                 stderr: stderr,
-                                exitCode: Int(process.terminationStatus),
+                                exitCode: exitCode,
                                 gitError: nil,
                                 gitErrorDescription: nil,
-                                combinedOutput: stdout + stderr,
+                                combinedOutput: combinedOutput,
                                 path: path.relativePath.escapedWhiteSpaces())
 
-        let exitCode = result.exitCode
-        var gitError: GitError?
-        let acceptableExitCode = options?.successExitCodes != nil
-            ? options?.successExitCodes?.contains(exitCode)
-            : false
+        let acceptableExitCode = options?.successExitCodes?.contains(exitCode) ?? (exitCode == 0)
 
-        if !acceptableExitCode! {
-            gitError = parseError(stderr: result.stderr)
-            if gitError == nil {
-                gitError = parseError(stderr: result.stdout)
+        if !acceptableExitCode {
+            let gitError = parseError(stderr: result.stderr) ?? parseError(stderr: result.stdout)
+            let gitErrorDescription = gitError.map { getDescriptionError($0) }
+
+            var gitResult = IGitResult(stdout: stdout,
+                                       stderr: stderr,
+                                       exitCode: exitCode,
+                                       gitError: gitError,
+                                       gitErrorDescription: gitErrorDescription ?? "Unknown error",
+                                       combinedOutput: combinedOutput,
+                                       path: path.relativePath.escapedWhiteSpaces())
+
+            let acceptableError = gitError.map { options?.expectedErrors?.contains($0) ?? false } ?? false
+
+            if acceptableError {
+                return gitResult
             }
-        }
 
-        let gitErrorDescription = gitError != nil ? getDescriptionError(gitError!) : nil
+            var errorMessage = [String]()
+            errorMessage.append("`git \(args.joined(separator: " "))` exited with an unexpected code: \(exitCode)")
 
-        var gitResult = IGitResult(stdout: stdout,
-                                   stderr: stderr,
-                                   exitCode: exitCode,
-                                   gitError: gitError,
-                                   gitErrorDescription: gitErrorDescription,
-                                   combinedOutput: combinedOuput,
-                                   path: path.relativePath.escapedWhiteSpaces())
-
-        var acceptableError = true
-
-        if gitError != nil && options?.expectedErrors != nil {
-            acceptableError = ((options?.expectedErrors?.contains(gitError!)) != nil)
-        }
-
-        if (gitError != nil && acceptableError) || acceptableError {
-            return gitResult
-        }
-
-        var errorMessage = [String]()
-
-        errorMessage.append("`git \(args.joined(separator: " "))` exited with an unexpected code: \(exitCode)")
-
-        if !result.stdout.isEmpty {
-            errorMessage.append("stdout:")
-            errorMessage.append(result.stdout)
-        }
-
-        if !result.stderr.isEmpty {
-            errorMessage.append("stderr:")
-            errorMessage.append(result.stderr)
-        }
-
-        if let gitError = gitError {
-            errorMessage.append("(The error was parsed as \(gitError): \(gitErrorDescription ?? ""))")
-        }
-
-        let errorString = errorMessage.joined(separator: "\n")
-
-        print(errorMessage.joined(separator: "\n"))
-
-        if gitError == GitError.PushWithFileSizeExceedingLimit {
-            let result = getFileFromExceedsError(error: errorMessage.joined())
-            let files = result.joined(separator: "\n")
-
-            if !files.isEmpty {
-                gitResult.gitErrorDescription! += "\n\nFile causing error:\n\n" + files
+            if !result.stdout.isEmpty {
+                errorMessage.append("stdout:")
+                errorMessage.append(result.stdout)
             }
+
+            if !result.stderr.isEmpty {
+                errorMessage.append("stderr:")
+                errorMessage.append(result.stderr)
+            }
+
+            if let gitError = gitError {
+                errorMessage.append("(The error was parsed as \(gitError): \(gitErrorDescription ?? ""))")
+            }
+
+            if gitError == .PushWithFileSizeExceedingLimit {
+                if let files = getFileFromExceedsError(error: errorMessage.joined(separator: "\n")) {
+                    gitResult.gitErrorDescription? += "\n\nFile causing error:\n\n" + files.joined(separator: "\n")
+                }
+            }
+
+            throw ProcessError.unexpectedExitCode(exitCode)
         }
 
-        throw GitErrorParser(result: gitResult,
-                             args: args)
+        try? stdoutHandle.close()
+        try? stderrHandle.close()
+
+        return result
     }
 
     /**
@@ -291,7 +296,7 @@ public struct GitShell {
         }
     }
 
-    func getFileFromExceedsError(error: String) -> [String] {
+    func getFileFromExceedsError(error: String) -> [String]? {
         do {
             let beginRegex = try NSRegularExpression(
                 pattern: "(^remote:\\serror:\\sFile\\s)",
@@ -314,7 +319,7 @@ public struct GitShell {
             )
 
             if beginMatches.count != endMatches.count {
-                return []
+                return nil  // Changed from [] to nil
             }
 
             var files: [String] = []
@@ -328,9 +333,9 @@ public struct GitShell {
                 files.append(file)
             }
 
-            return files
+            return files.isEmpty ? nil : files  // Return nil if no files found
         } catch {
-            return []
+            return nil  // Changed from [] to nil
         }
     }
 }
