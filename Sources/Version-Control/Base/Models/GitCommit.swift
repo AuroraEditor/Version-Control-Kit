@@ -59,7 +59,7 @@ public func extractCoAuthors(trailers: [Trailer]) -> [GitAuthor] {
 }
 
 /// A git commit.
-public struct Commit: Codable, Equatable, Identifiable {
+public struct Commit: Codable, Equatable, Identifiable, Hashable {
     public var id = UUID()
 
     /// A list of co-authors parsed from the commit message

@@ -18,6 +18,28 @@ public struct GitPull {
         ProgressStep(title: "Checking out files", weight: 0.15)
     ]
 
+    /// Generate arguments for the Git pull command.
+    ///
+    /// This function generates the arguments needed for the Git pull command, including handling
+    /// divergent branch arguments, recurse submodules, and progress options.
+    ///
+    /// - Parameters:
+    ///   - directoryURL: The URL of the directory containing the Git repository.
+    ///   - remote: The name of the remote repository to pull from.
+    ///   - account: An optional `IGitAccount` object for authentication.
+    ///   - progressCallback: An optional callback function to handle progress updates.
+    ///
+    /// - Returns: An array of strings representing the arguments for the Git pull command.
+    ///
+    /// - Throws: An error if the arguments cannot be generated.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///   let remote = "origin"
+    ///   let args = try getPullArgs(directoryURL: directoryURL, remote: remote, account: nil, progressCallback: nil)
+    ///   print("Pull args: \(args)")
+    ///   ```
     func getPullArgs(directoryURL: URL,
                      remote: String,
                      account: IGitAccount?,
@@ -37,6 +59,32 @@ public struct GitPull {
         return args
     }
 
+    /// Perform a Git pull operation.
+    ///
+    /// This function performs a Git pull operation for the specified remote repository. It supports progress
+    /// updates through a callback function.
+    ///
+    /// - Parameters:
+    ///   - directoryURL: The URL of the directory containing the Git repository.
+    ///   - account: An optional `IGitAccount` object for authentication.
+    ///   - remote: An `IRemote` object representing the remote repository to pull from.
+    ///   - progressCallback: An optional callback function to handle progress updates.
+    ///
+    /// - Throws: An error if the pull operation fails.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///   let remote = IRemote(name: "origin")
+    ///
+    ///   do {
+    ///       try pull(directoryURL: directoryURL, account: nil, remote: remote, progressCallback: { progress in
+    ///           print("Pull progress: \(progress.value)% - \(progress.description)")
+    ///       })
+    ///   } catch {
+    ///       print("Failed to pull: \(error)")
+    ///   }
+    ///   ```
     func pull(directoryURL: URL,
               account: IGitAccount?,
               remote: IRemote,

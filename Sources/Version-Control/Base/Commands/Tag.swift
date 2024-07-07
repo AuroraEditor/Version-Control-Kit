@@ -148,7 +148,7 @@ public struct Tag {
     /// - Important:
     ///   This function is asynchronous and must be called from within an asynchronous context \
     ///   (e.g., an `async` function).
-    func getAllTags(directoryURL: URL) throws -> [String: String] {
+    public func getAllTags(directoryURL: URL) throws -> [String: String] {
         let args = ["show-ref", "--tags", "-d"]
 
         let tags = try GitShell().git(args: args,
@@ -173,6 +173,8 @@ public struct Tag {
 
                 return (tagName, commitSha)
             }
+
+        print(tagsArray)
 
         return Dictionary(uniqueKeysWithValues: tagsArray)
     }

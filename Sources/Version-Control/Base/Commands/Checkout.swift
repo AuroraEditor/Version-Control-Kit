@@ -16,7 +16,8 @@ public struct GitCheckout {
     public typealias ProgressCallback = (CheckoutProgress) -> Void
 
     public func getCheckoutArgs(progressCallback: ProgressCallback?) -> [String] {
-        var args = gitNetworkArguments
+        // var args = gitNetworkArguments
+        var args: [String] = []
 
         if let callback = progressCallback {
             args += ["checkout", "--progress"]
@@ -68,7 +69,6 @@ public struct GitCheckout {
 
     public func getCheckoutOpts( // swiftlint:disable:this function_parameter_count
         directoryURL: URL,
-        account: IGitAccount?,
         title: String,
         target: String,
         progressCallback: ProgressCallback?,
@@ -141,7 +141,6 @@ public struct GitCheckout {
     ) throws -> Bool {
         let opts = try getCheckoutOpts(
             directoryURL: directoryURL,
-            account: account,
             title: "Checking out branch \(branch.name)",
             target: branch.name,
             progressCallback: progressCallback,
@@ -165,7 +164,6 @@ public struct GitCheckout {
                                progressCallback: ProgressCallback?) async throws -> Bool {
         let opts = try getCheckoutOpts(
             directoryURL: directoryURL,
-            account: account,
             title: "Checking out Commit",
             target: shortenSHA(commit.sha),
             progressCallback: progressCallback,

@@ -55,12 +55,12 @@ public struct ILocalBranch {
 }
 
 /// Struct to hold basic data about the latest commit on a Git branch.
-public struct IBranchTip {
+public struct IBranchTip: Hashable {
     /// The SHA (hash) of the latest commit.
-    let sha: String
+    public let sha: String
 
     /// Information about the author of the latest commit.
-    let author: CommitIdentity
+    public let author: CommitIdentity
 }
 
 /// Enum to represent different starting points for creating a Git branch.
@@ -87,7 +87,7 @@ public enum BranchType: Int {
     case remote = 1
 }
 
-public struct GitBranch {
+public struct GitBranch: Hashable {
     public let name: String
     public let upstream: String?
     public let tip: IBranchTip?

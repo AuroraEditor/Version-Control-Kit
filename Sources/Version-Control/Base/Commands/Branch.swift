@@ -312,12 +312,35 @@ public struct Branch { // swiftlint:disable:this type_body_length
 
     /// Creates a new branch in the specified directory.
     ///
+    /// This function creates a new branch in the specified Git repository directory. It allows
+    /// for an optional starting point for the new branch and an option to prevent tracking the
+    /// new branch.
+    ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory where the Git repository is located.
     ///   - name: A string representing the name of the new branch.
     ///   - startPoint: An optional string representing the starting point for the new branch.
     ///   - noTrack: A boolean indicating whether to track the branch. Defaults to false.
     /// - Throws: An error if the shell command fails.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   do {
+    ///       let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///       let branchName = "new-feature-branch"
+    ///       let startPoint = "main"
+    ///       let noTrack = true
+    ///       try createBranch(directoryURL: directoryURL, name: branchName, startPoint: startPoint, noTrack: noTrack)
+    ///       print("Branch created successfully.")
+    ///   } catch {
+    ///       print("Failed to create branch: \(error)")
+    ///   }
+    ///   ```
+    ///
+    /// - Note:
+    ///   If `noTrack` is set to `true`, the new branch will not track the remote branch from
+    ///   which it was created. This can be useful when branching directly from a remote branch
+    ///   to avoid automatically pushing to the remote branch's upstream.
     public func createBranch(directoryURL: URL,
                              name: String,
                              startPoint: String?,
@@ -382,7 +405,7 @@ public struct Branch { // swiftlint:disable:this type_body_length
         /// Prepare and execute the Git command to delete the local branch using a ShellClient.
         try GitShell().git(args: args,
                            path: directoryURL,
-                           name: "deleteLocalBranch")
+                           name: #function)
 
         // Return true to indicate that the branch deletion was attempted.
         return true
@@ -390,15 +413,40 @@ public struct Branch { // swiftlint:disable:this type_body_length
 
     /// Deletes a remote branch in the specified directory.
     ///
+    /// This function deletes a remote branch in the specified Git repository directory. It uses the `git push`
+    /// command with a colon (`:`) in front of the branch name to delete the branch on the remote repository.
+    ///
+    /// If the deletion fails due to an authentication error or if the branch has already been deleted on the
+    /// remote, the function attempts to delete the local reference to the remote branch.
+    ///
     /// - Parameters:
     ///   - directoryURL: The URL of the directory where the Git repository is located.
     ///   - remoteName: A string representing the name of the remote repository.
     ///   - remoteBranchName: A string representing the name of the branch to delete.
     /// - Throws: An error if the shell command fails.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   do {
+    ///       let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///       let remoteName = "origin"
+    ///       let remoteBranchName = "feature-branch"
+    ///       try deleteRemoteBranch(directoryURL: directoryURL, remoteName: remoteName, remoteBranchName: remoteBranchName)
+    ///       print("Remote branch deleted successfully.")
+    ///   } catch {
+    ///       print("Failed to delete remote branch: \(error)")
+    ///   }
+    ///   ```
+    ///
+    /// - Note:
+    ///   Ensure that you have the necessary permissions to delete branches on the remote repository. If the
+    ///   user is not authenticated or lacks the required permissions, the push operation will fail, and the
+    ///   caller must handle this error appropriately.
     public func deleteRemoteBranch(directoryURL: URL,
                                    remoteName: String,
-                                   remoteBranchName: String) throws {
+                                   remoteBranchName: String) throws -> Bool {
         let args = [
+            gitNetworkArguments.joined(),
             "push",
             remoteName,
             ":\(remoteBranchName)"
@@ -408,7 +456,7 @@ public struct Branch { // swiftlint:disable:this type_body_length
         // Let this propagate and leave it to the caller to handle
         let result = try GitShell().git(args: args,
                                         path: directoryURL,
-                                        name: "deleteRemoteBranch",
+                                        name: #function,
                                         options: IGitExecutionOptions(
                                             expectedErrors: Set([GitError.BranchDeletionFailed])
                                         ))
@@ -421,6 +469,8 @@ public struct Branch { // swiftlint:disable:this type_body_length
             let ref = "refs/remotes/\(remoteName)/\(remoteBranchName)"
             try UpdateRef().deleteRef(directoryURL: directoryURL, ref: ref, reason: nil)
         }
+
+        return true
     }
 
     /// Finds all branches that point at a specific commitish in the given directory.

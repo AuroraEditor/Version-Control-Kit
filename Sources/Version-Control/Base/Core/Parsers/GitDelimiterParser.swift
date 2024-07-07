@@ -98,7 +98,6 @@ struct GitDelimiterParser {
                     consumed += 1
 
                     if consumed % keys.count == 0 {
-                        print(entry!)
                         entries.append(entry!)
                         entry = nil
                     }

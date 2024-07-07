@@ -11,7 +11,7 @@ import Foundation
  * A tuple of name, email, and date for the author or commit
  * info in a commit.
  */
-public struct CommitIdentity: Codable {
+public struct CommitIdentity: Codable, Hashable {
     public let name: String
     public let email: String
     public let date: Date

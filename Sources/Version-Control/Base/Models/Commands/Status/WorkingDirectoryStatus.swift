@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct WorkingDirectoryStatus {
+public struct WorkingDirectoryStatus {
     let files: [WorkingDirectoryFileChange]
     let includeAll: Bool?
 

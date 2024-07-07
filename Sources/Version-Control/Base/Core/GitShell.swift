@@ -44,7 +44,13 @@ public struct GitShell {
         let process = Process()
         process.executableURL = URL(fileURLWithPath: "/usr/bin/env")
         process.arguments = ["git"] + args
-        process.currentDirectoryURL = path
+
+        // Determine the appropriate current directory for the process
+        if path.hasDirectoryPath {
+            process.currentDirectoryURL = path
+        } else {
+            process.currentDirectoryURL = path.deletingLastPathComponent()
+        }
 
         let stdoutPipe = Pipe()
         let stderrPipe = Pipe()
@@ -84,7 +90,6 @@ public struct GitShell {
         }
 
         let commandLineURL = "/usr/bin/env git " + args.joined(separator: " ")
-        print("Command Line URL: \(commandLineURL)")
 
         let timeout: TimeInterval = 30 // Adjust this value as needed
         let timeoutDate = Date(timeIntervalSinceNow: timeout)

@@ -51,7 +51,6 @@ extension String {
                 String(text[Range($0.range, in: text)!])
             }
         } catch let error {
-            print("invalid regex: \(error.localizedDescription)")
             return []
         }
     }

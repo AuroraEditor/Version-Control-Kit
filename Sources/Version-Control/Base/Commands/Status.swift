@@ -1,6 +1,6 @@
 //
-//  File.swift
-//  
+//  GitStatus.swift
+//
 //
 //  Created by Nanashi Li on 2023/11/20.
 //
@@ -14,6 +14,24 @@ public struct GitStatus {
     let MaxStatusBufferSize = 20_000_000 // 20MB in decima
     let conflictStatusCodes = ["DD", "AU", "UD", "UA", "DU", "AA", "UU"]
 
+    /// Parse the conflicted state of a file entry.
+    ///
+    /// This function determines the conflicted state of a file entry based on the provided details.
+    ///
+    /// - Parameters:
+    ///   - entry: The unmerged entry representing the file conflict.
+    ///   - path: The file path.
+    ///   - conflictDetails: The details of the conflicts in the repository.
+    ///
+    /// - Returns: A `ConflictedFileStatus` object representing the conflicted state of the file.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let conflictEntry = TextConflictEntry(details: .init(action: .BothModified))
+    ///   let conflictDetails = ConflictFilesDetails(conflictCountsByPath: ["file.txt": 3], binaryFilePaths: [])
+    ///   let status = parseConflictedState(entry: conflictEntry, path: "file.txt", conflictDetails: conflictDetails)
+    ///   print("Conflict status: \(status)")
+    ///   ```
     func parseConflictedState(
         entry: UnmergedEntry,
         path: String,
@@ -36,6 +54,24 @@ public struct GitStatus {
                               submoduleStatus: nil)
     }
 
+    /// Convert a file entry to an application-specific status.
+    ///
+    /// This function converts a file entry from the Git status to an application-specific status.
+    ///
+    /// - Parameters:
+    ///   - path: The file path.
+    ///   - entry: The file entry from the Git status.
+    ///   - conflictDetails: The details of the conflicts in the repository.
+    ///   - oldPath: The old path of the file if it has been renamed or copied.
+    ///
+    /// - Returns: An `AppFileStatus` object representing the status of the file.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let entry = OrdinaryEntry(type: .added, submoduleStatus: nil)
+    ///   let status = convertToAppStatus(path: "file.txt", entry: entry, conflictDetails: ConflictFilesDetails(), oldPath: nil)
+    ///   print("App status: \(status)")
+    ///   ```
     func convertToAppStatus(
         path: String,
         entry: FileEntry,
@@ -63,7 +99,34 @@ public struct GitStatus {
         }
     }
 
-    func getStatus(directoryURL: URL) async throws -> StatusResult? { // swiftlint:disable:this function_body_length
+    /// Retrieve the status of the working directory in a Git repository.
+    ///
+    /// This function retrieves the status of the working directory in the given Git repository directory.
+    ///
+    /// - Parameter directoryURL: The URL of the directory containing the Git repository.
+    ///
+    /// - Throws: An error of type `GitError` if the Git command fails.
+    ///
+    /// - Returns: A `StatusResult` object representing the status of the working directory.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///
+    ///   Task {
+    ///       do {
+    ///           if let statusResult = try await getStatus(directoryURL: directoryURL) {
+    ///               print("Current branch: \(statusResult.currentBranch)")
+    ///               print("Merge head found: \(statusResult.mergeHeadFound)")
+    ///           } else {
+    ///               print("Not a Git repository.")
+    ///           }
+    ///       } catch {
+    ///           print("Failed to get status: \(error)")
+    ///       }
+    ///   }
+    ///   ```
+    public func getStatus(directoryURL: URL) async throws -> StatusResult? { // swiftlint:disable:this function_body_length
         let args = [
             "--no-optional-locks",
             "status",
@@ -132,6 +195,27 @@ public struct GitStatus {
         )
     }
 
+    /// Build the status map of working directory changes.
+    ///
+    /// This function builds the status map of working directory changes based on the provided entries.
+    ///
+    /// - Parameters:
+    ///   - files: The existing map of working directory changes.
+    ///   - entry: The status entry from the Git status.
+    ///   - conflictDetails: The details of the conflicts in the repository.
+    ///
+    /// - Returns: An updated map of working directory changes.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let entries = [/* array of IStatusEntry */]
+    ///   let files = [String: WorkingDirectoryFileChange]()
+    ///   let conflictDetails = ConflictFilesDetails()
+    ///   for entry in entries {
+    ///       files = buildStatusMap(files: files, entry: entry, conflictDetails: conflictDetails)
+    ///   }
+    ///   print("Status map: \(files)")
+    ///   ```
     func buildStatusMap(
         files: [String: WorkingDirectoryFileChange],
         entry: IStatusEntry,
@@ -169,6 +253,25 @@ public struct GitStatus {
         return files
     }
 
+    /// Parse the status headers from the Git status output.
+    ///
+    /// This function parses the status headers from the Git status output and updates the status header data.
+    ///
+    /// - Parameters:
+    ///   - results: The existing status header data.
+    ///   - header: The status header entry from the Git status output.
+    ///
+    /// - Returns: An updated `StatusHeadersData` object.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let headers = [/* array of IStatusHeader */]
+    ///   var statusHeadersData = StatusHeadersData()
+    ///   for header in headers {
+    ///       statusHeadersData = parseStatusHeader(results: statusHeadersData, header: header)
+    ///   }
+    ///   print("Status headers data: \(statusHeadersData)")
+    ///   ```
     func parseStatusHeader(results: StatusHeadersData,
                            header: IStatusHeader) -> StatusHeadersData {
         var currentBranch = results.currentBranch
@@ -214,18 +317,66 @@ public struct GitStatus {
         )
     }
 
+    /// Get the details of merge conflicts in the repository.
+    ///
+    /// This function retrieves the details of merge conflicts in the given Git repository directory.
+    ///
+    /// - Parameter directoryURL: The URL of the directory containing the Git repository.
+    ///
+    /// - Throws: An error of type `GitError` if the Git command fails.
+    ///
+    /// - Returns: A `ConflictFilesDetails` object containing the details of the merge conflicts.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///   let conflictDetails = try getMergeConflictDetails(directoryURL: directoryURL)
+    ///   print("Merge conflict details: \(conflictDetails)")
+    ///   ```
     func getMergeConflictDetails(directoryURL: URL) throws -> ConflictFilesDetails {
         let conflictCountsByPath = try DiffCheck().getFilesWithConflictMarkers(directoryURL: directoryURL)
         let binaryFilePaths = try GitDiff().getBinaryPaths(directoryURL: directoryURL, ref: "MERGE_HEAD")
         return ConflictFilesDetails(conflictCountsByPath: conflictCountsByPath, binaryFilePaths: binaryFilePaths)
     }
 
+    /// Get the details of rebase conflicts in the repository.
+    ///
+    /// This function retrieves the details of rebase conflicts in the given Git repository directory.
+    ///
+    /// - Parameter directoryURL: The URL of the directory containing the Git repository.
+    ///
+    /// - Throws: An error of type `GitError` if the Git command fails.
+    ///
+    /// - Returns: A `ConflictFilesDetails` object containing the details of the rebase conflicts.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///   let conflictDetails = try getRebaseConflictDetails(directoryURL: directoryURL)
+    ///   print("Rebase conflict details: \(conflictDetails)")
+    ///   ```
     func getRebaseConflictDetails(directoryURL: URL) throws -> ConflictFilesDetails {
         let conflictCountsByPath = try DiffCheck().getFilesWithConflictMarkers(directoryURL: directoryURL)
         let binaryFilePaths = try GitDiff().getBinaryPaths(directoryURL: directoryURL, ref: "REBASE_HEAD")
         return ConflictFilesDetails(conflictCountsByPath: conflictCountsByPath, binaryFilePaths: binaryFilePaths)
     }
 
+    /// Get the details of working directory conflicts in the repository.
+    ///
+    /// This function retrieves the details of working directory conflicts in the given Git repository directory.
+    ///
+    /// - Parameter directoryURL: The URL of the directory containing the Git repository.
+    ///
+    /// - Throws: An error of type `GitError` if the Git command fails.
+    ///
+    /// - Returns: A `ConflictFilesDetails` object containing the details of the working directory conflicts.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///   let conflictDetails = try getWorkingDirectoryConflictDetails(directoryURL: directoryURL)
+    ///   print("Working directory conflict details: \(conflictDetails)")
+    ///   ```
     func getWorkingDirectoryConflictDetails(directoryURL: URL) throws -> ConflictFilesDetails {
         let conflictCountsByPath = try DiffCheck().getFilesWithConflictMarkers(directoryURL: directoryURL)
         var binaryFilePaths: [String] = []
@@ -240,6 +391,31 @@ public struct GitStatus {
         return ConflictFilesDetails(conflictCountsByPath: conflictCountsByPath, binaryFilePaths: binaryFilePaths)
     }
 
+    /// Get the details of conflicts in the repository.
+    ///
+    /// This function retrieves the details of conflicts in the given Git repository directory based on the current state.
+    ///
+    /// - Parameters:
+    ///   - directoryURL: The URL of the directory containing the Git repository.
+    ///   - mergeHeadFound: A boolean indicating if a merge head is found.
+    ///   - lookForStashConflicts: A boolean indicating if stash conflicts should be looked for.
+    ///   - rebaseInternalState: The internal state of a rebase operation.
+    ///
+    /// - Throws: An error of type `GitError` if the Git command fails.
+    ///
+    /// - Returns: A `ConflictFilesDetails` object containing the details of the conflicts.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let directoryURL = URL(fileURLWithPath: "/path/to/repository")
+    ///   let mergeHeadFound = true
+    ///   let rebaseState: RebaseInternalState? = nil
+    ///   let conflictDetails = try getConflictDetails(directoryURL: directoryURL,
+    ///                                                mergeHeadFound: mergeHeadFound,
+    ///                                                lookForStashConflicts: false,
+    ///                                                rebaseInternalState: rebaseState)
+    ///   print("Conflict details: \(conflictDetails)")
+    ///   ```
     func getConflictDetails(directoryURL: URL,
                             mergeHeadFound: Bool,
                             lookForStashConflicts: Bool,

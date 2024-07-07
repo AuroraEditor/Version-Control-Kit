@@ -1457,7 +1457,6 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                     if let fetchedRuleset = try? decoder.decode(IAPIOrganization.self, from: data) {
                         completion(fetchedRuleset)
                     } else {
-                        print("Error: Unable to decode", String(data: data, encoding: .utf8) ?? "")
                         completion(nil)
                     }
                 case .failure:

@@ -9,10 +9,9 @@
 
 import Foundation
 
-public class GitAuthor: Codable {
-
-    var name: String
-    var email: String
+public struct GitAuthor: Codable, Hashable, Equatable {
+    public var name: String
+    public var email: String
 
     public init(name: String?, email: String?) {
         self.name = name ?? "Unknown"
@@ -27,5 +26,9 @@ public class GitAuthor: Codable {
 
     public func toString() -> String {
         return "\(self.name) \(self.email)"
+    }
+
+    public static func == (lhs: GitAuthor, rhs: GitAuthor) -> Bool {
+        lhs.email == rhs.email
     }
 }

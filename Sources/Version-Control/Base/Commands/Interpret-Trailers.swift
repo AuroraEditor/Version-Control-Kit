@@ -15,7 +15,7 @@ public protocol ITrailer {
     var value: String { get }
 }
 
-public class Trailer: Codable, ITrailer {
+public struct Trailer: Codable, ITrailer, Hashable {
     public var token: String = ""
     public var value: String = ""
 
