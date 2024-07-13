@@ -252,14 +252,14 @@ public struct Remote {
     /// - Warning: Be cautious when passing user-provided remote names to this function, \
     ///            as it may execute arbitrary Git commands. \
     ///            Ensure that input is properly validated and sanitized to prevent command injection vulnerabilities.
-    public func getRemoteURL(directoryURL: URL, name: String) throws -> String? {
+    public func getRemoteURL(directoryURL: URL, name: String) async throws -> String? {
 
-        let result = try GitShell().git(args: ["remote",
-                                               "get-url",
-                                               name],
-                                        path: directoryURL,
-                                        name: #function,
-                                        options: IGitExecutionOptions(successExitCodes: Set([0, 2, 128])))
+        let result = try await GitShell().git(args: ["remote",
+                                                     "get-url",
+                                                     name],
+                                              path: directoryURL,
+                                              name: #function,
+                                              options: IGitExecutionOptions(successExitCodes: Set([0, 2, 128])))
 
         if result.exitCode != 0 {
             return nil
@@ -354,5 +354,85 @@ public struct Remote {
         }
 
         return nil
+    }
+
+    /// Retrieve the latest commit hash and reference for a given remote Git repository and branch.
+    ///
+    /// This function executes the `git ls-remote` command to fetch the latest commit hash and reference
+    /// for a specified remote Git repository and branch.
+    ///
+    /// - Parameters:
+    ///   - repoURL: The URL of the remote Git repository.
+    ///   - branch: The branch for which to fetch the latest commit hash and reference.
+    ///
+    /// - Throws: An error if there is a problem accessing the Git repository or executing the Git command.
+    ///
+    /// - Returns: A tuple containing the latest commit hash and reference for the specified branch.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let repoURL = "https://github.com/AuroraEditor/AuroraEditor.git"
+    ///   let branch = "development"
+    ///
+    ///   do {
+    ///       let (commitHash, ref) = try getLatestCommitHashAndRef(repoURL: repoURL, branch: branch)
+    ///       print("Latest Commit Hash: \(commitHash), Reference: \(ref)")
+    ///   } catch {
+    ///       print("Error retrieving latest commit hash and reference: \(error)")
+    ///   }
+    ///   ```
+    ///
+    /// - Note:
+    ///   - The function executes the `git ls-remote` command with the specified repository URL and branch
+    ///     to fetch the latest commit hash and reference.
+    ///   - Ensure that the provided `repoURL` and `branch` are valid and accessible.
+    ///
+    /// - Returns: A tuple containing the latest commit hash and reference for the specified branch.
+    public func getLatestCommitHashAndRef(
+        directoryURL: URL,
+        repoURL: String,
+        branch: String
+    ) async throws -> (commitHash: String, ref: String) {
+        let result = try await GitShell().git(
+            args: [
+                "ls-remote",
+                repoURL,
+                branch
+            ],
+            path: directoryURL,
+            name: #function
+        )
+
+        guard result.exitCode == 0 else {
+            throw NSError(
+                domain: "Remote",
+                code: Int(
+                    result.exitCode
+                ),
+                userInfo: [NSLocalizedDescriptionKey: "Failed to execute git command"]
+            )
+        }
+
+        guard let line = result.stdout.split(separator: "\n").first else {
+            throw NSError(
+                domain: "Remote",
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey: "No output from git command"]
+            )
+        }
+
+        let parts = line.split(separator: "\t")
+        guard parts.count == 2 else {
+            throw NSError(
+                domain: "Remote",
+                code: 2,
+                userInfo: [NSLocalizedDescriptionKey: "Unexpected output format"]
+            )
+        }
+
+        let commitHash = String(parts[0])
+        let ref = String(parts[1])
+
+        return (commitHash, ref)
     }
 }

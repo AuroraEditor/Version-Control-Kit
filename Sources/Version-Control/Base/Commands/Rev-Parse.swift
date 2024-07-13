@@ -56,22 +56,31 @@ public struct RevParse {
     /// - Warning:
     ///   This function assumes that the Git executable is available and accessible in the system's PATH.
     func getRepositoryType(directoryURL: URL) throws -> RepositoryType {
-        if FileManager().directoryExistsAtPath(directoryURL.relativePath) {
+        if FileManager().directoryExistsAtPath(
+            directoryURL.relativePath
+        ) {
             return .missing
         }
 
         do {
-            let result = try GitShell().git(args: ["rev-parse", "--is-bare-repository", "--show-cdup"],
-                                            path: directoryURL,
-                                            name: #function,
-                                            options: IGitExecutionOptions(
-                                                successExitCodes: Set([0, 128])
-                                            ))
+            let result = try GitShell().git(
+                args: [
+                    "rev-parse",
+                    "--is-bare-repository",
+                    "--show-cdup"
+                ],
+                path: directoryURL,
+                name: #function,
+                options: IGitExecutionOptions(
+                    successExitCodes: Set([0, 128])
+                )
+            )
 
             if result.exitCode == 0 {
                 let lines = result.stdout.components(separatedBy: "\n")
                 if let isBare = lines.first, let cdup = lines.dropFirst().first {
-                    return isBare == "true" ? .bare : .regular(
+                    return isBare == "true" ? .bare : 
+                        .regular(
                         topLevelWorkingDirectory: resolve(
                             basePath: directoryURL.relativePath,
                             relativePath: cdup
@@ -84,7 +93,9 @@ public struct RevParse {
                 of: "fatal: detected dubious ownership in repository at '(.+)'",
                 options: .regularExpression
             ) {
-                let unsafePath = String(result.stderr[unsafeMatch])
+                let unsafePath = String(
+                    result.stderr[unsafeMatch]
+                )
                 return .unsafe(path: unsafePath)
             }
 
@@ -97,7 +108,10 @@ public struct RevParse {
         }
     }
 
-    internal func resolve(basePath: String, relativePath: String) -> String {
+    internal func resolve(
+        basePath: String,
+        relativePath: String
+    ) -> String {
         // Check if the relativePath is already an absolute path
         if relativePath.hasPrefix("/") {
             return relativePath
@@ -108,4 +122,55 @@ public struct RevParse {
         return NSString(string: basePath).appendingPathComponent(expandedPath)
     }
 
+    /// Retrieve the latest commit hash of the current branch in a Git repository.
+    ///
+    /// This function executes the `git rev-parse HEAD` command to get the latest commit hash
+    /// of the current branch in the specified Git repository.
+    ///
+    /// - Parameter directoryURL: The URL of the Git repository.
+    ///
+    /// - Returns: A string representing the latest commit hash of the current branch.
+    ///
+    /// - Throws: An error if there is a problem accessing the Git repository or executing the Git command.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let repositoryPath = URL(fileURLWithPath: "/path/to/repo")
+    ///
+    ///   do {
+    ///       let commitHash = try getLatestCommitHash(directoryURL: repositoryPath)
+    ///       print("Latest commit hash: \(commitHash)")
+    ///   } catch {
+    ///       print("Error retrieving the latest commit hash: \(error.localizedDescription)")
+    ///   }
+    ///   ```
+    ///
+    /// - Note:
+    ///   This function uses the `git rev-parse HEAD` command to retrieve the latest commit hash.
+    ///
+    /// - Warning:
+    ///   This function assumes that the Git executable is available and accessible in the system's PATH.
+    public func getLatestCommitHash(
+        directoryURL: URL
+    ) throws -> String {
+        let result = try GitShell().git(
+            args: [
+                "rev-parse",
+                "HEAD"
+            ],
+            path: directoryURL,
+            name: #function
+        )
+
+        guard result.exitCode == 0 else {
+            throw NSError(
+                domain: "RevParse",
+                code: Int(result.exitCode),
+                userInfo: [NSLocalizedDescriptionKey: "Failed to execute git command"]
+            )
+        }
+
+        return result.stdout
+            .trimmingCharacters(in: .whitespacesAndNewlines)
+    }
 }

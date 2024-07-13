@@ -67,13 +67,27 @@ public struct GitLog {
     /// - Note:
     ///   This function checks if the file modes indicate a submodule and then determines the submodule status \
     ///   based on the provided raw Git status string.
-    func mapSubmoduleStatusFileModes(status: String, srcMode: String, dstMode: String) -> SubmoduleStatus? {
+    func mapSubmoduleStatusFileModes(
+        status: String,
+        srcMode: String,
+        dstMode: String
+    ) -> SubmoduleStatus? {
         let subModuleFileMode = subModuleFileMode
 
         if srcMode == subModuleFileMode && dstMode == subModuleFileMode && status == "M" {
-            return SubmoduleStatus(commitChanged: true, modifiedChanges: false, untrackedChanges: false)
-        } else if (srcMode == subModuleFileMode && status == "D") || (dstMode == subModuleFileMode && status == "A") {
-            return SubmoduleStatus(commitChanged: false, modifiedChanges: false, untrackedChanges: false)
+            return SubmoduleStatus(
+                commitChanged: true,
+                modifiedChanges: false,
+                untrackedChanges: false
+            )
+        } else if (
+            srcMode == subModuleFileMode && status == "D"
+        ) || (dstMode == subModuleFileMode && status == "A") {
+            return SubmoduleStatus(
+                commitChanged: false,
+                modifiedChanges: false,
+                untrackedChanges: false
+            )
         }
 
         return nil
@@ -111,7 +125,11 @@ public struct GitLog {
                    srcMode: String,
                    dstMode: String) -> AppFileStatus {
         let status = rawStatus.trimmingCharacters(in: .whitespaces)
-        let submoduleStatus = mapSubmoduleStatusFileModes(status: status, srcMode: srcMode, dstMode: dstMode)
+        let submoduleStatus = mapSubmoduleStatusFileModes(
+            status: status,
+            srcMode: srcMode,
+            dstMode: dstMode
+        )
 
         switch status {
         case "M":
@@ -345,7 +363,11 @@ public struct GitLog {
         let result = try GitShell().git(args: args,
                                     path: directoryURL,
                                     name: #function)
-        let changedData =  try parseRawLogWithNumstat(stdout: result.stdout, sha: sha, parentCommitish: "\(sha)^")
+        let changedData =  try parseRawLogWithNumstat(
+            stdout: result.stdout,
+            sha: sha,
+            parentCommitish: "\(sha)^"
+        )
 
         // Create an instance of IChangesetData from ChangesetData
         let changesetData: IChangesetData = IChangesetData(
@@ -355,6 +377,72 @@ public struct GitLog {
         )
 
         return changesetData
+    }
+
+    /// Retrieve the list of files changed in a specific commit.
+    ///
+    /// This function executes the `git diff-tree` command to fetch the list of files that were changed
+    /// in a specified commit.
+    ///
+    /// - Parameters:
+    ///   - directoryURL: The URL of the local Git repository.
+    ///   - sha: The commit hash for which to fetch the list of changed files.
+    ///
+    /// - Throws: An error if there is a problem accessing the Git repository or executing the Git command.
+    ///
+    /// - Returns: An array of strings representing the file paths that were changed in the specified commit.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let repoURL = URL(fileURLWithPath: "/path/to/local/repository")
+    ///   let commitHash = "1bccee6a2bffabc29971f3af56b05d749afcc966"
+    ///
+    ///   do {
+    ///       let changedFiles = try getChangedFiles(repoURL: repoURL, sha: commitHash)
+    ///       print("Changed files in commit \(commitHash):")
+    ///       changedFiles.forEach { print($0) }
+    ///   } catch {
+    ///       print("Error retrieving changed files: \(error)")
+    ///   }
+    ///   ```
+    ///
+    /// - Note:
+    ///   - The function executes the `git diff-tree` command with the specified commit hash
+    ///     to fetch the list of files that were changed in that commit.
+    ///   - Ensure that the provided `repoURL` and `sha` are valid and accessible.
+    ///
+    /// - Returns: An array of strings representing the file paths that were changed in the specified commit.
+    public func getChangedFilesBetweenRefs(
+        directoryURL: URL,
+        currentSha: String,
+        sha: String
+    ) async throws -> [String] {
+        let result = try await GitShell().git(
+            args: [
+                "diff",
+                "--name-only",
+                currentSha,
+                sha
+            ],
+            path: directoryURL,
+            name: #function
+        )
+
+        guard result.exitCode == 0 else {
+            throw NSError(
+                domain: "GitLog",
+                code: Int(
+                    result.exitCode
+                ),
+                userInfo: [NSLocalizedDescriptionKey: "Failed to execute git command"]
+            )
+        }
+
+        let changedFiles = result.stdout.split(separator: "\n").map {
+            String($0)
+        }
+
+        return changedFiles
     }
 
     /**
@@ -410,7 +498,10 @@ public struct GitLog {
                                                  parentCommitish: parentCommitish))
                 number += oldPath != nil ? 3 : 2
             } else {
-                guard let match = line.range(of: "^(\\d+|-)\\t(\\d+|-)", options: .regularExpression) else {
+                guard let match = line.range(
+                    of: "^(\\d+|-)\\t(\\d+|-)",
+                    options: .regularExpression
+                ) else {
                     fatalError("Invalid numstat line")
                 }
 
@@ -526,5 +617,74 @@ public struct GitLog {
                                           additionalArgs: ["--merges"])
 
         return !mergeCommits.isEmpty
+    }
+
+    /// Retrieve the commit hashes between a given commit and the latest commit on a specified upstream branch.
+    ///
+    /// This function executes the `git log` command to fetch the commit hashes between a given commit SHA
+    /// and the latest commit on the specified upstream branch.
+    ///
+    /// - Parameters:
+    ///   - directoryURL: The URL of the directory containing the Git repository.
+    ///   - sha: The commit SHA from which to start listing commits.
+    ///   - upstreamBranch: The upstream branch to compare against (e.g., "upstream/development").
+    ///
+    /// - Throws: An error if there is a problem accessing the Git repository or executing the Git command.
+    ///
+    /// - Returns: An array of commit hashes between the given SHA and the latest commit on the specified upstream branch.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   let repoURL = "https://github.com/AuroraEditor/AuroraEditor.git"
+    ///   let sha = "1bccee6a2bffabc29971f3af56b05d749afcc966"
+    ///   let upstreamBranch = "upstream/development"
+    ///
+    ///   do {
+    ///       let commits = try getCommitsBetweenSHAAndUpstreamBranch(repoURL: repoURL, sha: sha, upstreamBranch: upstreamBranch)
+    ///       print("Commits between \(sha) and \(upstreamBranch):")
+    ///       for commit in commits {
+    ///           print(commit)
+    ///       }
+    ///   } catch {
+    ///       print("Error retrieving commits: \(error)")
+    ///   }
+    ///   ```
+    ///
+    /// - Note:
+    ///   - The function executes the `git log` command with the specified repository URL, SHA, and upstream branch
+    ///     to fetch the commit hashes.
+    ///   - Ensure that the provided `repoURL`, `sha`, and `upstreamBranch` are valid and accessible.
+    ///
+    /// - Returns: An array of commit hashes between the given SHA and the latest commit on the specified upstream branch.
+    public func getCommitsBetweenSHAAndUpstreamBranch(
+        directoryURL: URL,
+        sha: String,
+        upstreamBranch: String
+    ) throws -> [String] {
+        let result = try GitShell().git(
+            args: [
+                "log",
+                "--oneline",
+                "\(sha)..\(upstreamBranch)",
+                "--pretty=format:%H"
+            ],
+            path: directoryURL,
+            name: #function
+        )
+
+        guard result.exitCode == 0 else {
+            throw NSError(
+                domain: "Remote",
+                code: Int(result.exitCode),
+                userInfo: [NSLocalizedDescriptionKey: "Failed to execute git command"]
+            )
+        }
+
+        let commits = result.stdout.split(
+            separator: "\n"
+        ).map {
+            String($0)
+        }
+        return commits
     }
 }

@@ -18,10 +18,19 @@ public struct Branch { // swiftlint:disable:this type_body_length
     /// - Parameter directoryURL: The URL of the directory where the Git repository is located.
     /// - Returns: A string representing the name of the current branch.
     /// - Throws: An error if the shell command fails.
-    public func getCurrentBranch(directoryURL: URL) throws -> String {
-        return try ShellClient.live().run(
-            "cd \(directoryURL.relativePath.escapedWhiteSpaces());git branch --show-current"
-        ).removingNewLines()
+    public func getCurrentBranch(directoryURL: URL) async throws -> String {
+        let args = [
+            "branch",
+            "--show-current"
+        ]
+
+        let result = try await GitShell().git(
+            args: args,
+            path: directoryURL,
+            name: #function
+        )
+
+        return result.stdout.removingNewLines()
     }
 
     /// Fetches all branches in the given directory, optionally filtering by prefixes.
@@ -31,7 +40,7 @@ public struct Branch { // swiftlint:disable:this type_body_length
     ///   - prefixes: An array of strings representing branch name prefixes to filter by. Defaults to an empty array.
     /// - Returns: An array of `GitBranch` instances representing the fetched branches.
     /// - Throws: An error if the shell command fails.
-    public func getBranches(directoryURL: URL, prefixes: [String] = []) throws -> [GitBranch] {
+    public func getBranches(directoryURL: URL, prefixes: [String] = []) async throws -> [GitBranch] {
         let fields = ["fullName": "%(refname)",
                       "shortName": "%(refname:short)",
                       "upstreamShortName": "%(upstream:short)",
@@ -51,7 +60,7 @@ public struct Branch { // swiftlint:disable:this type_body_length
         let gitCommand = ["for-each-ref"] + args + prefixArgs
 
         // Execute the git command using the GitShell utility
-        let result = try GitShell().git(
+        let result = try await GitShell().git(
             args: gitCommand,
             path: directoryURL,
             name: #function,
@@ -177,77 +186,6 @@ public struct Branch { // swiftlint:disable:this type_body_length
         return eligibleBranches
     }
 
-    /// Retrieves a list of the most recently modified branches, up to a specified limit.
-    ///
-    /// - Parameters:
-    ///   - directoryURL: The URL of the directory where the Git repository is located.
-    ///   - limit: An integer specifying the maximum number of branches to retrieve.
-    /// - Returns: An array of strings representing the names of the recent branches.
-    /// - Throws: An error if the shell command fails.
-    public func getRecentBranches(directoryURL: URL, limit: Int) throws -> [String] {
-        let regex = try NSRegularExpression(
-            // swiftlint:disable:next line_length
-            pattern: #"^.*? (renamed|checkout)(?:: moving from|\s*) (?:refs/heads/|\s*)(.*?) to (?:refs/heads/|\s*)(.*?)$"#,
-            options: []
-        )
-
-        let args = [
-            "log",
-            "-g",
-            "--no-abbrev-commit",
-            "--pretty=oneline",
-            "HEAD",
-            "-n",
-            "2500",
-            "--"
-        ]
-
-        let result = try GitShell().git(args: args,
-                                        path: directoryURL,
-                                        name: #function)
-
-        if result.exitCode == 128 {
-            // error code 128 is returned if the branch is unborn
-            return []
-        }
-
-        let lines = result.stdout.components(separatedBy: "\n")
-        var names = Set<String>()
-        var excludedNames = Set<String>()
-
-        for line in lines {
-            if let match = regex.firstMatch(
-                in: line,
-                options: [],
-                range: NSRange(location: 0, length: line.utf16.count)
-               ),
-               match.numberOfRanges == 4 {
-                let operationTypeRange = Range(match.range(at: 1), in: line)!
-                let excludeBranchNameRange = Range(match.range(at: 2), in: line)!
-                let branchNameRange = Range(match.range(at: 3), in: line)!
-
-                let operationType = String(line[operationTypeRange])
-                let excludeBranchName = String(line[excludeBranchNameRange])
-                let branchName = String(line[branchNameRange])
-
-                if operationType == "renamed" {
-                    // exclude intermediate-state renaming branch from recent branches
-                    excludedNames.insert(excludeBranchName)
-                }
-
-                if !excludedNames.contains(branchName) {
-                    names.insert(branchName)
-                }
-            }
-
-            if names.count >= limit {
-                break
-            }
-        }
-
-        return Array(names)
-    }
-
     func getCommitsOnBranch() {
         guard let noCommitsOnBranchRe = try? NSRegularExpression(
             pattern: "fatal: your current branch '.*' does not have any commits yet"
@@ -255,59 +193,6 @@ public struct Branch { // swiftlint:disable:this type_body_length
             print("Failed to create regular expression")
             return
         }
-    }
-
-    /// Asynchronously fetches the names and dates of branches checked out after a specified date.
-    ///
-    /// - Parameters:
-    ///   - directoryURL: The URL of the directory where the Git repository is located.
-    ///   - afterDate: A `Date` object representing the starting point for the search.
-    /// - Returns: A dictionary mapping branch names to the dates they were checked out.
-    /// - Throws: An error if the shell command fails.
-    func getBranchCheckouts(directoryURL: URL, afterDate: Date) async throws -> [String: Date] {
-        let regexPattern = #"^[a-z0-9]{40}\sHEAD@{(.*)}\scheckout: moving from\s.*\sto\s(.*)$"# // regexr.com/46n1v
-        let regex = try NSRegularExpression(pattern: regexPattern, options: [])
-
-        let args = [
-            "reflog",
-            "--date=iso",
-            "--after=\(afterDate.timeIntervalSince1970)",
-            "--pretty=%H %gd %gs",
-            "--grep-reflog=checkout: moving from .* to .*$",
-            "--"
-        ]
-
-        let result = try GitShell().git(args: args,
-                                        path: directoryURL,
-                                        name: #function)
-
-        var checkouts = [String: Date]()
-
-        if result.exitCode == 128 {
-            return checkouts
-        }
-
-        let lines = result.stdout.components(separatedBy: "\n")
-        for line in lines {
-            if let match = regex.firstMatch(
-                in: line,
-                options: [],
-                range: NSRange(location: 0, length: line.utf16.count)
-            ),
-            match.numberOfRanges == 3 {
-                let timestampRange = Range(match.range(at: 1), in: line)!
-                let branchNameRange = Range(match.range(at: 2), in: line)!
-
-                let timestampString = String(line[timestampRange])
-                let branchName = String(line[branchNameRange])
-
-                if let timestamp = ISO8601DateFormatter().date(from: timestampString) {
-                    checkouts[branchName] = timestamp
-                }
-            }
-        }
-
-        return checkouts
     }
 
     /// Creates a new branch in the specified directory.
@@ -446,7 +331,6 @@ public struct Branch { // swiftlint:disable:this type_body_length
                                    remoteName: String,
                                    remoteBranchName: String) throws -> Bool {
         let args = [
-            gitNetworkArguments.joined(),
             "push",
             remoteName,
             ":\(remoteBranchName)"

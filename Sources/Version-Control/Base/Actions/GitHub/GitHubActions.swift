@@ -15,8 +15,18 @@ public enum GitHubViewType: String {
 
 public struct GitHubActions {
 
-    internal func getBranchName(directoryURL: URL) throws -> String {
-        return try Branch().getCurrentBranch(directoryURL: directoryURL)
+    internal func getBranchName(
+        directoryURL: URL,
+        completion: @escaping (Result<String, Error>) -> Void
+    ) {
+        Task {
+            do {
+                let branchName = try await Branch().getCurrentBranch(directoryURL: directoryURL)
+                completion(.success(branchName))
+            } catch {
+                completion(.failure(error))
+            }
+        }
     }
 
     internal func getCurrentRepositoryGitHubURL(directoryURL: URL) throws -> String {
@@ -52,7 +62,17 @@ public struct GitHubActions {
     public func openBranchOnGitHub(viewType: GitHubViewType,
                                    directoryURL: URL) throws {
         let htmlURL = try getCurrentRepositoryGitHubURL(directoryURL: directoryURL)
-        let branchName = try getBranchName(directoryURL: directoryURL)
+
+        var branchName = ""
+        
+        getBranchName(directoryURL: directoryURL) { result in
+            switch result {
+            case .success(let name):
+                branchName = name
+            case .failure(let error):
+                branchName = ""
+            }
+        }
 
         let urlEncodedBranchName = branchName.addingPercentEncoding(withAllowedCharacters: .urlPathAllowed)
 

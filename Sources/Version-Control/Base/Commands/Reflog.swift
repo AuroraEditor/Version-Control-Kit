@@ -42,16 +42,15 @@ public struct Reflog {
     ///   ```
     ///
     /// - Returns: An array of branch names that were recently checked out or renamed, with a maximum count of `limit`.
-    func getRecentBranches(directoryURL: URL,
-                           limit: Int) throws -> [String] {
-        // Define a regular expression to match branch names in git log entries
-        let regexPattern = #"^\w+ \w+(?:: moving from|\s*) (?:refs/heads/|\s*)(.*?) to (?:refs/heads/|\s*)(.*?)$"#
-
-        // Create a regular expression
-        guard let regex = try? NSRegularExpression(pattern: regexPattern, options: []) else {
-            // FIXME: a call to a never-returning function
-            throw fatalError("Invalid regex")
-        }
+    public func getRecentBranches(
+        directoryURL: URL,
+        limit: Int
+    ) async throws -> [String] {
+        let regex = try NSRegularExpression(
+            // swiftlint:disable:next line_length
+            pattern: #"^.*? (renamed|checkout)(?:: moving from|\s*) (?:refs/heads/|\s*)(.*?) to (?:refs/heads/|\s*)(.*?)$"#,
+            options: []
+        )
 
         let args = [
             "log",
@@ -64,47 +63,66 @@ public struct Reflog {
             "--"
         ]
 
-        let result = try GitShell().git(args: args,
-                                        path: directoryURL,
-                                        name: #function,
-                                        options: IGitExecutionOptions(successExitCodes: Set([0, 128])))
+        let result = try await GitShell().git(
+            args: args,
+            path: directoryURL,
+            name: #function
+        )
 
-        // Check if the git log returned an error code 128 (branch is unborn)
         if result.exitCode == 128 {
+            // error code 128 is returned if the branch is unborn
             return []
         }
 
-        // Split the stdout of git log into lines
-        let lines = result.stdout.split(separator: "\n")
-
-        // Create sets to store branch names and excluded names
-        var branchNames = Set<String>()
+        let lines = result.stdout.components(
+            separatedBy: "\n"
+        )
+        var names = Set<String>()
         var excludedNames = Set<String>()
 
         for line in lines {
-            // Try to match the line with the regular expression
             if let match = regex.firstMatch(
-                in: String(line),
+                in: line,
                 options: [],
-                range: NSRange(line.startIndex..., in: line)
-            ) {
-                let excludeBranchNameRange = Range(match.range(at: 1), in: line)!
-                let branchNameRange = Range(match.range(at: 2), in: line)!
+                range: NSRange(
+                    location: 0,
+                    length: line.utf16.count
+                )
+            ),
+               match.numberOfRanges == 4 {
+                let operationTypeRange = Range(
+                    match.range(at: 1),
+                    in: line
+                )!
+                let excludeBranchNameRange = Range(
+                    match.range(at: 2),
+                    in: line
+                )!
+                let branchNameRange = Range(
+                    match.range(at: 3),
+                    in: line
+                )!
 
+                let operationType = String(line[operationTypeRange])
                 let excludeBranchName = String(line[excludeBranchNameRange])
                 let branchName = String(line[branchNameRange])
 
-                if !excludedNames.contains(excludeBranchName) {
-                    branchNames.insert(branchName)
+                if operationType == "renamed" {
+                    // exclude intermediate-state renaming branch from recent branches
+                    excludedNames.insert(excludeBranchName)
                 }
 
-                if branchNames.count == limit {
-                    break
+                if !excludedNames.contains(branchName) {
+                    names.insert(branchName)
                 }
+            }
+
+            if names.count >= limit {
+                break
             }
         }
 
-        return Array(branchNames)
+        return Array(names)
     }
 
     private let noCommitsOnBranchRe = "fatal: your current branch '.*' does not have any commits yet"
@@ -138,22 +156,20 @@ public struct Reflog {
     ///   ```
     ///
     /// - Returns: A dictionary where keys are branch names, and values are the timestamps of their checkouts.
-    func getBranchCheckouts(directoryURL: URL,
-                            afterDate: Date) throws -> [String: Date] {
-        // Regular expression to match reflog entries
+    func getBranchCheckouts(
+        directoryURL: URL,
+        afterDate: Date
+    ) async throws -> [String: Date] {
+        let regexPattern = #"^[a-z0-9]{40}\sHEAD@{(.*)}\scheckout: moving from\s.*\sto\s(.*)$"#
         let regex = try NSRegularExpression(
-            pattern: #"^[a-z0-9]{40}\sHEAD@{(.*)}\scheckout: moving from\s.*\sto\s(.*)$"#
+            pattern: regexPattern,
+            options: []
         )
 
-        // Format the afterDate as ISO string
-        let dateFormatter = ISO8601DateFormatter()
-        let afterDateString = dateFormatter.string(from: afterDate)
-
-        // Run the Git reflog command
         let args = [
             "reflog",
             "--date=iso",
-            "--after=\(afterDateString)",
+            "--after=\(afterDate.timeIntervalSince1970)",
             "--pretty=%H %gd %gs",
             "--grep-reflog=checkout: moving from .* to .*$",
             "--"
@@ -165,30 +181,28 @@ public struct Reflog {
 
         var checkouts = [String: Date]()
 
-        // Check for the edge case
         if result.exitCode == 128 {
             return checkouts
         }
 
-        // Split the result stdout into lines
-        let lines = result.stdout.split(separator: "\n")
-
+        let lines = result.stdout.components(separatedBy: "\n")
         for line in lines {
-            // Attempt to match the line with the regex
             if let match = regex.firstMatch(
-                in: String(line),
+                in: line,
                 options: [],
-                range: NSRange(line.startIndex..., in: line)
-            ) {
+                range: NSRange(
+                    location: 0,
+                    length: line.utf16.count
+                )
+            ),
+               match.numberOfRanges == 3 {
                 let timestampRange = Range(match.range(at: 1), in: line)!
                 let branchNameRange = Range(match.range(at: 2), in: line)!
 
-                // Extract timestamp and branch name from the matched groups
                 let timestampString = String(line[timestampRange])
                 let branchName = String(line[branchNameRange])
 
-                // Convert the timestamp string to a Date
-                if let timestamp = dateFormatter.date(from: timestampString) {
+                if let timestamp = ISO8601DateFormatter().date(from: timestampString) {
                     checkouts[branchName] = timestamp
                 }
             }
@@ -196,5 +210,4 @@ public struct Reflog {
 
         return checkouts
     }
-
 }

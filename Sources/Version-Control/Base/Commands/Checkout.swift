@@ -32,39 +32,19 @@ public struct GitCheckout {
         branch: GitBranch,
         enableRecurseSubmodulesFlag: Bool = false
     ) -> [String] {
-        var baseArgs: [String] = []
+        var args = [branch.name]
+
+        if branch.type == .remote {
+            args.append(contentsOf: ["-b", branch.nameWithoutRemote])
+        }
 
         if enableRecurseSubmodulesFlag {
-            if branch.type == BranchType.remote {
-                return baseArgs + [
-                    branch.name,
-                    "-b",
-                    branch.nameWithoutRemote,
-                    "--recurse-submodules",
-                    "--"
-                ]
-            } else {
-                return baseArgs + [
-                    branch.name,
-                    "--recurse-submodules",
-                    "--"
-                ]
-            }
-        } else {
-            if branch.type == BranchType.remote {
-                return baseArgs + [
-                    branch.name,
-                    "-b",
-                    branch.nameWithoutRemote,
-                    "--"
-                ]
-            } else {
-                return baseArgs + [
-                    branch.name,
-                    "--"
-                ]
-            }
+            args.append("--recurse-submodules")
         }
+
+        args.append("--")
+
+        return args
     }
 
     public func getCheckoutOpts( // swiftlint:disable:this function_parameter_count
@@ -153,8 +133,7 @@ public struct GitCheckout {
 
         try GitShell().git(args: args,
                            path: directoryURL,
-                           name: #function,
-                           options: opts)
+                           name: #function)
         return true
     }
 
