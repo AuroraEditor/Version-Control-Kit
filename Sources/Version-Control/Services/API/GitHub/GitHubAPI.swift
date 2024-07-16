@@ -80,7 +80,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: requestBody,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIFullRepository.self, from: data) {
                         completion(fetchedRuleset)
@@ -157,7 +157,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIPushControl.self, from: data) {
                         completion(fetchedRuleset)
@@ -212,7 +212,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, headers)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIBranch].self, from: data) {
                         completion(fetchedRuleset)
@@ -225,6 +225,90 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                     completion(nil)
                 }
             })
+    }
+
+    // MARK: - Repository Info
+
+    /// Fetches mentionable users for the given repository.
+    ///
+    /// - Parameters:
+    ///   - owner: The owner of the repository.
+    ///   - name: The name of the repository.
+    ///   - etag: An optional ETag header value to check for changes since the last request.
+    ///   - completion: A closure that is called upon completion of the API request.
+    ///                 It provides an `IAPIMentionableResponse` object containing the ETag
+    ///                 and an array of mentionable users, or `nil` if the request fails.
+    ///
+    /// - Example:
+    ///   ```swift
+    ///   fetchMentionables(owner: "octocat", name: "my-repo", etag: nil) { response in
+    ///       if let response = response {
+    ///           print("ETag: \(response.etag ?? "No ETag")")
+    ///           for user in response.users {
+    ///               print("User: \(user.login)")
+    ///           }
+    ///       } else {
+    ///           print("Failed to fetch mentionable users.")
+    ///       }
+    ///   }
+    ///   ```
+    ///
+    /// - Important: The custom `Accept` header is required for the `mentionables` endpoint.
+    public func fetchMentionables(
+        owner: String,
+        name: String,
+        etag: String?
+    ) throws -> IAPIMentionableResponse? {
+        let path = "repos/\(owner)/\(name)/mentionables/users"
+
+        // Notice: This custom `Accept` is required for the `mentionables` endpoint.
+        var headers = [
+            "Accept": "application/vnd.github.jerry-maguire-preview"
+        ]
+
+        if let etag = etag {
+            headers["If-None-Match"] = etag
+        }
+
+        var result: IAPIMentionableResponse?
+        var requestError: Error?
+        let semaphore = DispatchSemaphore(value: 0)
+
+        AuroraNetworking().request(
+            path: path,
+            headers: headers,
+            method: .GET,
+            parameters: nil,
+            completionHandler: { responseResult in
+                switch responseResult {
+                case .success(let (data, headers)):
+                    print(data)
+                    let decoder = JSONDecoder()
+                    if let mentionables = try? decoder.decode([IAPIMentionableUser].self, from: data) {
+                        print(mentionables)
+                        result = IAPIMentionableResponse(
+                            etag: headers["Etag"] as? String,
+                            users: mentionables
+                        )
+                    } else {
+                        print("Error: Unable to decode", String(data: data, encoding: .utf8) ?? "")
+                        requestError = NSError(domain: "DecodeError", code: 0, userInfo: nil)
+                    }
+                case .failure(let error):
+                    print("Failed to fetch mentionables for \(owner)/\(name)", error)
+                    requestError = error
+                }
+                semaphore.signal()
+            }
+        )
+
+        // Wait for the network request to complete
+        _ = semaphore.wait(timeout: .distantFuture)
+
+        if let error = requestError {
+            throw error
+        }
+        return result
     }
 
     // MARK: - Repository Issues
@@ -255,7 +339,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIIssue].self, from: data) {
                         completion(fetchedRuleset)
@@ -295,7 +379,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIComment].self, from: data) {
                         completion(fetchedRuleset)
@@ -334,7 +418,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                          parameters: nil,
                          completionHandler: { result in
                     switch result {
-                    case .success(let data):
+                    case .success(let (data, _)):
                         let decoder = JSONDecoder()
                         if let fetchedRuleset = try? decoder.decode([IAPIPullRequest].self, from: data) {
                             completion(fetchedRuleset)
@@ -375,7 +459,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIPullRequest.self, from: data) {
                         completion(fetchedRuleset)
@@ -417,7 +501,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIPullRequestReview.self, from: data) {
                         completion(fetchedRuleset)
@@ -457,7 +541,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIPullRequestReview].self, from: data) {
                         completion(fetchedRuleset)
@@ -499,7 +583,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIComment].self, from: data) {
                         completion(fetchedRuleset)
@@ -539,7 +623,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIComment].self, from: data) {
                         completion(fetchedRuleset)
@@ -611,7 +695,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIRepoRule].self, from: data) {
                         completion(fetchedRuleset)
@@ -677,7 +761,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPISlimRepoRuleset].self, from: data) {
                         completion(fetchedRuleset)
@@ -744,7 +828,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIRepoRuleset.self, from: data) {
                         completion(fetchedRuleset)
@@ -823,7 +907,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let runs = try? decoder.decode(IAPIRefCheckRuns.self, from: data) {
                         completion(runs)
@@ -899,7 +983,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let runs = try? decoder.decode(IAPIWorkflowRuns.self, from: data) {
                         completion(runs)
@@ -971,7 +1055,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let runs = try? decoder.decode(IAPIWorkflowRun.self, from: data) {
                         completion(runs)
@@ -1040,7 +1124,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let runs = try? decoder.decode(IAPIWorkflowJobs.self, from: data) {
                         completion(runs)
@@ -1281,7 +1365,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let runs = try? decoder.decode(IAPICheckSuite.self, from: data) {
                         completion(runs)
@@ -1337,7 +1421,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIFullIdentity.self, from: data) {
                         completion(fetchedRuleset)
@@ -1396,7 +1480,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIEmail.self, from: data) {
                         completion(fetchedRuleset)
@@ -1452,7 +1536,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIOrganization.self, from: data) {
                         completion(fetchedRuleset)

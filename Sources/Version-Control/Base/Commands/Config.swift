@@ -55,7 +55,7 @@ public struct Config {
                                name: String,
                                onlyLocal: Bool = false) throws -> String? {
         return try getConfigValueInPath(name: name,
-                                        path: String(contentsOf: directoryURL),
+                                        path: directoryURL,
                                         onlyLocal: onlyLocal,
                                         type: nil)
     }
@@ -181,7 +181,7 @@ public struct Config {
     ///   - If `onlyLocal` is `true`, the global configuration is not considered.
     ///   - The `type` parameter is optional and can be used to specify the expected type of the configuration value.
     public func getConfigValueInPath(name: String,
-                                     path: String?,
+                                     path: URL?,
                                      onlyLocal: Bool = false,
                                      type: Any?) throws -> String? {
 
@@ -201,15 +201,21 @@ public struct Config {
 
         flags.append(name)
 
-        if let path = path {
-            gitCommand = "cd \(path.escapedWhiteSpaces()); git \(flags)"
-        } else {
-            gitCommand = "git \(flags)"
+        let result = try GitShell().git(
+            args: flags,
+            path: path ?? URL(string: "")!,
+            name: #function,
+            options: IGitExecutionOptions(
+                successExitCodes: Set([0, 1])
+            )
+        )
+
+        // Git exits with 1 if the value isn't found. That's OK.
+        if (result.exitCode == 1) {
+            return nil
         }
 
-        let result = try ShellClient.live().run(gitCommand)
-
-        let output = result
+        let output = result.stdout
         let pieces = output.split(separator: "\0")
         return pieces[0].description
     }

@@ -34,7 +34,7 @@ struct BitBucketAPI {
                      parameters: requestBody,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IAPIFullRepository.self, from: data) {
                         completion(fetchedRuleset)
@@ -73,7 +73,7 @@ struct BitBucketAPI {
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIIssue].self, from: data) {
                         completion(fetchedRuleset)
@@ -100,7 +100,7 @@ struct BitBucketAPI {
                                        path: path!,
                                        method: .GET) { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IBitBucketAPIPullRequest].self, from: data) {
                         completion(fetchedRuleset)
@@ -130,7 +130,7 @@ struct BitBucketAPI {
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode(IBitBucketAPIPullRequest.self, from: data) {
                         completion(fetchedRuleset)
@@ -160,7 +160,7 @@ struct BitBucketAPI {
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
-                case .success(let data):
+                case .success(let (data, _)):
                     let decoder = JSONDecoder()
                     if let fetchedRuleset = try? decoder.decode([IAPIComment].self, from: data) {
                         completion(fetchedRuleset)
