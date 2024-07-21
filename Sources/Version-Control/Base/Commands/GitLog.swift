@@ -511,7 +511,16 @@ public struct GitLog {
                 linesAdded += added == "-" ? 0 : Int(added)!
                 linesDeleted += deleted == "-" ? 0 : Int(deleted)!
 
-                if isCopyOrRename(status: files[numStatCount].status) {
+                guard let fileStatus = files[numStatCount].status else {
+                    let missingFileStatusError = NSError(
+                        domain: "com.auroraeditor.fileitem",
+                        code: 1001,
+                        userInfo: [NSLocalizedDescriptionKey: "File status is missing"]
+                    )
+                    throw missingFileStatusError
+                }
+
+                if isCopyOrRename(status: fileStatus) {
                     number += 2
                 }
                 numStatCount += 1

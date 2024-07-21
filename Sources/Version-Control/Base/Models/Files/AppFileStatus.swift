@@ -7,7 +7,7 @@
 
 import Foundation
 
-public enum GitStatusEntry: String {
+public enum GitStatusEntry: String, Codable {
     case modified = "M"
     case added = "A"
     case deleted = "D"
@@ -19,28 +19,28 @@ public enum GitStatusEntry: String {
     case updatedButUnmerged = "U"
 }
 
-public enum AppFileStatusKind {
-    case new
-    case modified
-    case deleted
-    case copied
-    case renamed
-    case conflicted
-    case untracked
+public enum AppFileStatusKind: String, Codable {
+    case new = "New"
+    case modified = "Modified"
+    case deleted = "Deleted"
+    case copied = "Copied"
+    case renamed = "Renamed"
+    case conflicted = "Conflicted"
+    case untracked = "Untracked"
 }
 
-public struct SubmoduleStatus {
+public struct SubmoduleStatus: Codable {
     let commitChanged: Bool
     let modifiedChanges: Bool
     let untrackedChanges: Bool
 }
 
-public struct PlainFileStatus: AppFileStatus {
+public struct PlainFileStatus: AppFileStatus, Codable {
     public var kind: AppFileStatusKind
     public var submoduleStatus: SubmoduleStatus?
 }
 
-public struct CopiedOrRenamedFileStatus: AppFileStatus {
+public struct CopiedOrRenamedFileStatus: AppFileStatus, Codable {
     public var kind: AppFileStatusKind
     let oldPath: String
     public var submoduleStatus: SubmoduleStatus?
@@ -49,14 +49,14 @@ public struct CopiedOrRenamedFileStatus: AppFileStatus {
 // MARK: - Conflicted 
 public protocol ConflictedFileStatus: AppFileStatus {}
 
-public struct ConflictsWithMarkers: ConflictedFileStatus {
+public struct ConflictsWithMarkers: ConflictedFileStatus, Codable {
     public var kind: AppFileStatusKind
     let entry: TextConflictEntry
     let conflictMarkerCount: Int
     public var submoduleStatus: SubmoduleStatus?
 }
 
-public struct ManualConflict: ConflictedFileStatus {
+public struct ManualConflict: ConflictedFileStatus, Codable {
     public var kind: AppFileStatusKind
     let entry: ManualConflictEntry
     public var submoduleStatus: SubmoduleStatus?
@@ -74,17 +74,17 @@ public func isManualConflict(_ conflictedFileStatus: ConflictedFileStatus) -> Bo
     return conflictedFileStatus is ManualConflict
 }
 
-public struct UntrackedFileStatus: AppFileStatus {
+public struct UntrackedFileStatus: AppFileStatus, Codable {
     public var kind: AppFileStatusKind
     public var submoduleStatus: SubmoduleStatus?
 }
 
-public protocol AppFileStatus {
+public protocol AppFileStatus: Codable {
     var kind: AppFileStatusKind { get set }
     var submoduleStatus: SubmoduleStatus? { get set }
 }
 
-public enum UnmergedEntrySummary: String {
+public enum UnmergedEntrySummary: String, Codable {
     case AddedByUs = "added-by-us"
     case DeletedByUs = "deleted-by-us"
     case AddedByThem = "added-by-them"
@@ -94,14 +94,14 @@ public enum UnmergedEntrySummary: String {
     case BothModified = "both-modified"
 }
 
-public struct ManualConflictDetails {
+public struct ManualConflictDetails: Codable {
     let submoduleStatus: SubmoduleStatus?
     let action: UnmergedEntrySummary
     let us: GitStatusEntry
     let them: GitStatusEntry
 }
 
-public struct TextConflictDetails {
+public struct TextConflictDetails: Codable {
     let action: UnmergedEntrySummary
     let us: GitStatusEntry
     let them: GitStatusEntry
@@ -116,13 +116,13 @@ protocol FileEntry {
 
 protocol UnmergedEntry {}
 
-public struct TextConflictEntry: FileEntry, UnmergedEntry {
+public struct TextConflictEntry: Codable, FileEntry, UnmergedEntry {
     let kind: String = "conflicted"
     let submoduleStatus: SubmoduleStatus?
     let details: TextConflictDetails
 }
 
-public struct ManualConflictEntry: FileEntry, UnmergedEntry {
+public struct ManualConflictEntry: Codable, FileEntry, UnmergedEntry {
     let kind: String = "conflicted"
     let submoduleStatus: SubmoduleStatus?
     let details: ManualConflictDetails

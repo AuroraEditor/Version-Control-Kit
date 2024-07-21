@@ -2,7 +2,7 @@
 //  ProcessError.swift
 //  
 //
-//  Created by Tihan-Nico Paxton on 2024/07/02.
+//  Created by Nanashi Li on 2024/07/02.
 //
 
 // Process Specific Errors

@@ -2,7 +2,7 @@
 //  APIRepoRuleType.swift
 //  
 //
-//  Created by Tihan-Nico Paxton on 2023/09/24.
+//  Created by Nanashi Li on 2023/09/24.
 //
 
 import Foundation
@@ -10,15 +10,18 @@ import Foundation
 /**
  Enum representing different types of repository rules that can be configured.
  */
-enum APIRepoRuleType: String, Codable {
+public enum APIRepoRuleType: String, Codable {
     case creation
+    case deletion
     case update
     case required_deployments
     case required_signatures
     case required_status_checks
+    case required_linear_history
     case pull_request
     case commit_message_pattern
     case commit_author_email_pattern
     case committer_email_pattern
     case branch_name_pattern
+    case non_fast_forward
 }

@@ -26,9 +26,12 @@ public struct DefaultBranch {
     public init() {}
 
     /// Returns the configured default branch when creating new repositories
-    public func getConfiguredDefaultBranch() throws -> String? {
+    public func getConfiguredDefaultBranch(path: URL) throws -> String? {
         // TODO: Bug where global config value is not being processed correctly
-        return try Config().getGlobalConfigValue(name: defaultBranchSettingName)
+        return try Config().getGlobalConfigValue(
+            path: path,
+            name: defaultBranchSettingName
+        )
     }
 
     /// Returns the configured default branch when creating new repositories

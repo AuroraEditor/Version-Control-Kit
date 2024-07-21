@@ -35,7 +35,7 @@ public struct Apply {
     ) throws {
         // If the file was a rename we have to recreate that rename since we've
         // just blown away the index.
-        if file.status.kind == .renamed {
+        if file.status?.kind == .renamed {
             if let renamedFile = file.status as? CopiedOrRenamedFileStatus {
                 if renamedFile.kind == .renamed {
                     try GitShell().git(args: ["add", "--u", "--", renamedFile.oldPath],

@@ -432,13 +432,13 @@ public struct GitDiff { // swiftlint:disable:this type_body_length
         ] + (hideWhitespaceInDiff ? ["-w"] : [])
 
         var successExitCodes: Set<Int> = [0]
-        let isSubmodule = file.status.submoduleStatus != nil
+        let isSubmodule = file.status?.submoduleStatus != nil
 
         // If the file is new or untracked, and it's not a submodule, use `--no-index`
-        if !isSubmodule && (file.status.kind == .new || file.status.kind == .untracked) {
+        if !isSubmodule && (file.status?.kind == .new || file.status?.kind == .untracked) {
             args += ["--no-index", "--", "/dev/null", file.path]
             successExitCodes.insert(1) // Exit code 1 is also considered a success in this context
-        } else if file.status.kind == .renamed {
+        } else if file.status?.kind == .renamed {
             args += ["--", file.path]
         } else {
             args += ["HEAD", "--", file.path]
@@ -489,25 +489,25 @@ public struct GitDiff { // swiftlint:disable:this type_body_length
         var current: DiffImage?
         var previous: DiffImage?
 
-        if file.status.kind != .conflicted {
-            if file.status.kind != .deleted {
+        if file.status?.kind != .conflicted {
+            if file.status?.kind != .deleted {
                 current = try getWorkingDirectoryImage(directoryURL: directoryURL, file: file)
             }
 
-            if file.status.kind != .new && file.status.kind != .untracked {
+            if file.status?.kind != .new && file.status?.kind != .untracked {
                 previous = try getBlobImage(directoryURL: directoryURL,
                                             path: FileUtils().getOldPathOrDefault(file: file),
                                             commitish: "HEAD")
             }
         }
 
-        if file.status.kind != .deleted {
+        if file.status?.kind != .deleted {
             current = try getBlobImage(directoryURL: directoryURL,
                                        path: file.path,
                                        commitish: oldestCommitish)
         }
 
-        if file.status.kind != .new && file.status.kind != .untracked {
+        if file.status?.kind != .new && file.status?.kind != .untracked {
             previous = try getBlobImage(directoryURL: directoryURL,
                                         path: FileUtils().getOldPathOrDefault(file: file),
                                         commitish: "\(oldestCommitish)^")
@@ -650,8 +650,8 @@ public struct GitDiff { // swiftlint:disable:this type_body_length
         var newSHA: String?
 
         if status.commitChanged ||
-            file.status.kind == .new ||
-            file.status.kind == .deleted {
+            file.status?.kind == .new ||
+            file.status?.kind == .deleted {
             let lines = buffer.split(separator: "\n")
             let baseRegex = "Subproject commit ([^-]+)(-dirty)?$"
             guard let oldSHARegex = try? NSRegularExpression(pattern: "-" + baseRegex),
@@ -697,11 +697,11 @@ public struct GitDiff { // swiftlint:disable:this type_body_length
                    file: FileChange,
                    oldestCommitish: String,
                    lineEndingChange: LineEndingsChange?) throws -> IDiff {
-        if file.status.submoduleStatus != nil {
+        if file.status?.submoduleStatus != nil {
             return try buildSubmoduleDiff(buffer: buffer,
                                           directoryURL: directoryURL,
                                           file: file,
-                                          status: file.status.submoduleStatus!)
+                                          status: (file.status?.submoduleStatus)!)
         }
 
         if !isValidBuffer(buffer) {

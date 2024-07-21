@@ -7,11 +7,11 @@
 
 import Foundation
 
-public class WorkingDirectoryFileChange: FileChange {
+open class WorkingDirectoryFileChange: FileChange {
     let selection: DiffSelection
 
     public init(path: String,
-                status: AppFileStatus,
+                status: AppFileStatus?,
                 selection: DiffSelection) {
         self.selection = selection
         super.init(path: path, status: status)

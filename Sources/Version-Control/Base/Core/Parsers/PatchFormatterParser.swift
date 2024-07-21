@@ -47,11 +47,13 @@ struct PatchFormatterParser {
     /// The `formatPatchHeader` helper function is used to generate the appropriate header based on the file's status.
 
     func formatPatchHeaderForFile(file: WorkingDirectoryFileChange) -> String {
-        switch file.status.kind {
+        switch file.status?.kind {
         case .new, .untracked:
             return formatPatchHeader(fromPath: nil, toPath: file.path)
         case .renamed, .deleted, .modified, .copied, .conflicted:
             return formatPatchHeader(fromPath: file.path, toPath: file.path)
+        default:
+            return ""
         }
     }
 
@@ -263,7 +265,7 @@ struct PatchFormatterParser {
                     }
 
                     anyAdditionsOrDeletions = true
-                } else if file.status.kind == .new || file.status.kind == .untracked {
+                } else if file.status?.kind == .new || file.status?.kind == .untracked {
                     // Unselected lines in new files are ignored
                     continue
                 } else if line.type == .add {

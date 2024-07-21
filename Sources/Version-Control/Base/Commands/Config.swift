@@ -93,9 +93,12 @@ public struct Config {
     /// - Note:
     ///   This function retrieves a global Git configuration value using the `getConfigValueInPath` 
     ///   function with appropriate parameters.
-    public func getGlobalConfigValue(name: String) throws -> String? {
+    public func getGlobalConfigValue(
+        path: URL,
+        name: String
+    ) throws -> String? {
         return try getConfigValueInPath(name: name,
-                                        path: nil,
+                                        path: path,
                                         onlyLocal: false,
                                         type: nil)
     }
@@ -134,9 +137,12 @@ public struct Config {
     /// - Note:
     ///   This function retrieves and interprets a global Git configuration value as a boolean by
     ///   using the `getConfigValueInPath` function with appropriate parameters.
-    public func getGlobalBooleanConfigValue(name: String) throws -> Bool? {
+    public func getGlobalBooleanConfigValue(
+        path: URL,
+        name: String
+    ) throws -> Bool? {
         let value = try getConfigValueInPath(name: name,
-                                             path: nil,
+                                             path: path,
                                              onlyLocal: false,
                                              type: Bool.self)
         return value == nil ? nil : (value != nil) != false
@@ -181,7 +187,7 @@ public struct Config {
     ///   - If `onlyLocal` is `true`, the global configuration is not considered.
     ///   - The `type` parameter is optional and can be used to specify the expected type of the configuration value.
     public func getConfigValueInPath(name: String,
-                                     path: URL?,
+                                     path: URL,
                                      onlyLocal: Bool = false,
                                      type: Any?) throws -> String? {
 
@@ -189,10 +195,10 @@ public struct Config {
 
         var flags = ["config", "-z"]
 
-        if path == nil {
-            flags.append("--global")
-        } else if onlyLocal {
+        if onlyLocal {
             flags.append("--local")
+        } else {
+            flags.append("--global")
         }
 
         if let type = type {
@@ -203,7 +209,7 @@ public struct Config {
 
         let result = try GitShell().git(
             args: flags,
-            path: path ?? URL(string: "")!,
+            path: path,
             name: #function,
             options: IGitExecutionOptions(
                 successExitCodes: Set([0, 1])

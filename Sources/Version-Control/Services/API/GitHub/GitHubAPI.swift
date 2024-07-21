@@ -680,7 +680,7 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
     ///
     /// - Important: Ensure that you have the necessary permissions to access repository rules for the \
     ///              specified branch within the GitHub repository.
-    func fetchRepoRulesForBranch(
+    public func fetchRepoRulesForBranch(
         owner: String,
         name: String,
         branch: String,
@@ -689,18 +689,21 @@ public struct GitHubAPI { // swiftlint:disable:this type_body_length
         let path = "repos/\(owner)/\(name)/rules/branches/\(branch)"
 
         AuroraNetworking()
-            .request(baseURL: "",
-                     path: path,
+            .request(path: path,
                      method: .GET,
                      parameters: nil,
                      completionHandler: { result in
                 switch result {
                 case .success(let (data, _)):
                     let decoder = JSONDecoder()
-                    if let fetchedRuleset = try? decoder.decode([IAPIRepoRule].self, from: data) {
+                    do {
+                        // Try decoding the data and catch any potential errors
+                        let fetchedRuleset = try decoder.decode([IAPIRepoRule].self, from: data)
                         completion(fetchedRuleset)
-                    } else {
-                        print("Error: Unable to decode", String(data: data, encoding: .utf8) ?? "")
+                    } catch {
+                        // Print the error for debugging purposes
+                        print("Error: Unable to decode \(error)")
+                        print("Data: \(String(data: data, encoding: .utf8) ?? "")")
                         completion(nil)
                     }
                 case .failure(let error):

@@ -19,7 +19,7 @@ public struct Trailer: Codable, ITrailer, Hashable {
     public var token: String = ""
     public var value: String = ""
 
-    init(token: String, value: String) {
+    public init(token: String, value: String) {
         self.token = token
         self.value = value
     }

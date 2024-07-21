@@ -203,7 +203,7 @@ public struct Rebase {
                         progressCallback: ((MultiCommitOperationProgress) -> Void)?,
                         gitEditor: String = ":") async throws -> RebaseResult {
 
-        let trackedFiles = files.filter { $0.status.kind != .untracked }
+        let trackedFiles = files.filter { $0.status?.kind != .untracked }
 
         // Apply conflict resolutions
         for (path, resolution) in manualResolutions {
@@ -228,7 +228,7 @@ public struct Rebase {
             return .aborted
         }
 
-        let trackedFilesAfter = status.workingDirectory.files.filter { $0.status.kind != .untracked }
+        let trackedFilesAfter = status.workingDirectory.files.filter { $0.status?.kind != .untracked }
 
         var options = IGitExecutionOptions(env: ["GIT_EDITOR": gitEditor],
                                            expectedErrors: [.RebaseConflicts, .UnresolvedConflicts])

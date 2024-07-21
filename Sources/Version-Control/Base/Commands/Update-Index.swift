@@ -140,7 +140,7 @@ public struct UpdateIndex {
                 normal.append(file.path)
 
                 guard let fileStatus = file.status as? CopiedOrRenamedFileStatus else {
-                    if file.status.kind == .deleted {
+                    if file.status?.kind == .deleted {
                         deletedFiles.append(file.path)
                     }
                     continue

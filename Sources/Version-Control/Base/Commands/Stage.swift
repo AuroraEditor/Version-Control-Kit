@@ -18,12 +18,16 @@ public struct GitStage {
     func stageManualConflictResolution(directoryURL: URL,
                                        file: WorkingDirectoryFileChange,
                                        manualResolution: ManualConflictResolution) throws {
-        if !isConflictedFileStatus(file.status) {
+        guard let fileStatus = file.status else {
+            print("File status is nil")
+            return
+        }
+        if !isConflictedFileStatus(fileStatus) {
             print("Tried to manually resolve unconflicted file (\(file.path))")
             return
         }
 
-        guard let conflictedStatus = file.status as? ConflictsWithMarkers else {
+        guard let conflictedStatus = fileStatus as? ConflictsWithMarkers else {
             print("Failed to cast to ConflictsWithMarkers")
             return
         }

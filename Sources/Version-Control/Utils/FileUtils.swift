@@ -18,7 +18,7 @@ public struct FileUtils {
     }
 
     func getOldPathOrDefault(file: FileChange) -> String {
-        if file.status.kind == .renamed || file.status.kind == .copied {
+        if file.status?.kind == .renamed || file.status?.kind == .copied {
             if let file = file.status as? CopiedOrRenamedFileStatus {
                 return file.oldPath
             } else {

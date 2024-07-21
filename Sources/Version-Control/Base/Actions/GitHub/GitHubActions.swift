@@ -2,7 +2,7 @@
 //  GitHubActions.swift
 //
 //
-//  Created by Tihan-Nico Paxton on 2023/09/25.
+//  Created by Nanashi Li on 2023/09/25.
 //
 
 import Foundation

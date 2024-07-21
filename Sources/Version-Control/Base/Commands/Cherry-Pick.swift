@@ -225,7 +225,7 @@ public struct CherryPick {
         progressCallback: ((MultiCommitOperationProgress) -> Void)? = nil
     ) throws -> CherryPickResult {
         // Only stage files related to cherry-pick
-        let trackedFiles = files.filter { $0.status.kind != .untracked }
+        let trackedFiles = files.filter { $0.status?.kind != .untracked }
 
         // Apply conflict resolutions
         for (path, resolution) in manualResolutions {

@@ -7,13 +7,13 @@
 
 import Foundation
 
-public class FileChange {
+open class FileChange {
     let id: String
     let path: String
-    let status: AppFileStatus
+    let status: AppFileStatus?
 
     public init(path: String,
-                status: AppFileStatus) {
+                status: AppFileStatus?) {
         self.path = path
         self.status = status
 
